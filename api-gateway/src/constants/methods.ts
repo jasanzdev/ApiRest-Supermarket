@@ -1,0 +1,1 @@
+export const MethodsRequireAuth = ['POST', 'PUT', 'PATCH', 'DELETE']
