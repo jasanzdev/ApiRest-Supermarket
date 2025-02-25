@@ -1,2 +1,12 @@
+node_modules/
+dist/
+logs/
+
 .env
+
+*.log
+*.tmp
+*.swp
+
+.vscode/
 
