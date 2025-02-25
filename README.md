@@ -54,11 +54,37 @@ Before running the application, ensure you have the following installed:
    git clone https://github.com/tu-usuario/tu-repositorio.git
    cd tu-repositorio
 
-### Running with Docker 🐳
-1. Build the Docker images: docker-compose build
-2. Start the containers: docker-compose up
+# API Gateway
+GATEWAY_PORT=3000
 
-### This will start the following services:
+# Authentication Service
+AUTH_SERVICE_PORT=4000
+JWT_SECRET=your_jwt_secret_key
+
+# Products Service
+PRODUCTS_SERVICE_PORT=4001
+
+# Database (PostgreSQL)
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=supermarket_db
+
+Running with Docker 🐳
+To run the application using Docker, follow these steps:
+
+Build the Docker images:
+
+bash
+Copy
+docker-compose build
+Start the containers:
+
+bash
+Copy
+docker-compose up
+This will start the following services:
 
 API Gateway on port 3000
 
@@ -68,21 +94,42 @@ Products Service on port 4001
 
 PostgreSQL database
 
-##API Endpoints 🌐
+Stop the containers:
 
-###API Gateway
+bash
+Copy
+docker-compose down
+
+Logging with Winston 📝
+The application uses Winston for structured logging. Logs are categorized by level (info, error, warn, etc.) and are stored in the logs/ directory. You can customize the logging configuration in the logger.ts file within each service.
+
+Example log entry:
+
+plaintext
+Copy
+2023-10-10T12:00:00.000Z [info]: User successfully authenticated
+Authentication with JWT 🔐
+The Authentication Service uses JWT for secure user authentication. When a user logs in, a JWT token is generated and returned. This token must be included in the Authorization header of subsequent requests to protected endpoints.
+
+Example of a protected request:
+
+bash
+Copy
+curl -H "Authorization: Bearer <your_jwt_token>" http://localhost:3000/api/protected-route
+API Endpoints 🌐
+API Gateway
 GET /products: Fetch all products.
 
 POST /auth/register: Register a new user.
 
 POST /auth/login: Log in and receive a JWT token.
 
-###Authentication Service
-POST /auth/register: Register a new user.
+Authentication Service
+POST /register: Register a new user.
 
-POST /auth/login: Log in and receive a JWT token.
+POST /login: Log in and receive a JWT token.
 
-###Products Service
+Products Service
 GET /products: Fetch all products.
 
 POST /products: Create a new product.
