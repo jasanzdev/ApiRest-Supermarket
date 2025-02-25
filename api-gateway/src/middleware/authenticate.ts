@@ -20,7 +20,11 @@ export const VerifyToken = CatchErrors(async (req: Request, res: Response, next:
         }
 
         if (accessToken) {
-            const response = await axios.get('http://localhost:4000/verify-token', {
+
+            const verifyTokenUrl = process.env.NODE_ENV === 'production'
+                ? 'http://authentication:4000/verify-token' : 'http://localhost:4000/verify-token'
+
+            const response = await axios.get(verifyTokenUrl, {
                 headers: { 'Cookie': `access_token=${accessToken}` }
             })
             const { user } = response.data
@@ -40,7 +44,10 @@ export const VerifyToken = CatchErrors(async (req: Request, res: Response, next:
 const GetNewAccessToken = async (refreshToken: string, userAgent: string, res: Response) => {
     logger.log('info', 'Getting new Access Token')
 
-    const response = await axios.get('http://localhost:4000/refresh-token', {
+    const refreshTokenUrl = process.env.NODE_ENV === 'production'
+        ? 'http://authentication:4000/refresh-token' : 'http://localhost:4000/refresh-token'
+
+    const response = await axios.get(refreshTokenUrl, {
         headers: {
             'Cookie': `refresh_token=${refreshToken}`,
             'User-Agent': userAgent
