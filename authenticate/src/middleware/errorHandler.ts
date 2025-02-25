@@ -4,10 +4,12 @@ import AppError from "../utils/appErrors";
 import { ZodError } from "zod";
 import jwt from "jsonwebtoken";
 import AppErrorCode from "../constants/appErrorCode";
+import logger from "../utils/logger";
 
 const { JsonWebTokenError } = jwt
 
 const HandleAppError = (res: Response, error: AppError) => {
+    logger.log('error', `App Error: ${error.statusCode} ${error.message}`)
     res.status(error.statusCode).json({
         message: error.message,
         errorCode: error.errorCode
@@ -15,6 +17,7 @@ const HandleAppError = (res: Response, error: AppError) => {
 }
 
 const HandleJwtError = (res: Response, error: Error) => {
+    logger.log('error', `JsonWebToken Error: ${AppErrorCode.InvalidToken} ${error.message}`)
     if (error.message === 'jwt expired') {
         res.status(FORBIDDEN).json({
             message: 'Token Expired',
@@ -29,9 +32,11 @@ const HandleJwtError = (res: Response, error: Error) => {
 }
 
 export const HandleError: ErrorRequestHandler = (error, req, res, next) => {
-    console.log('Handle Error', error)
 
     if (error instanceof ZodError) {
+        logger.log('error', `App Error: ${AppErrorCode.BadRequest}
+             ${JSON.stringify(error.flatten().fieldErrors)}`)
+
         res.status(BAD_REQUEST).json({
             message: error.flatten().fieldErrors,
             errorCode: AppErrorCode.BadRequest
@@ -49,8 +54,9 @@ export const HandleError: ErrorRequestHandler = (error, req, res, next) => {
         return
     }
 
+    logger.log('error', `Unknown Error: ${AppErrorCode.InternalServerError} ${error.message}`)
     res.status(INTERNAL_SERVER_ERROR).json({
-        error: 'Internal Server Error',
+        message: 'Internal Server Error',
         errorCode: AppErrorCode.InternalServerError
     })
 

@@ -13,7 +13,8 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "src/middleware/errorHandler/.ts"
   ],
   "exclude": [
     "node_modules"

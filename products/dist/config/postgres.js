@@ -6,13 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
 const pg_1 = __importDefault(require("pg"));
 const { Pool } = pg_1.default;
-exports.db = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASS,
-    port: Number(process.env.DB_PORT),
-});
+exports.db = new Pool(process.env.NODE_ENV === 'production'
+    ? {
+        connectionString: process.env.DATABASE_URL,
+    }
+    : {
+        user: 'postgres',
+        host: 'localhost',
+        database: 'supermarket-dev',
+        password: 'Postgres123',
+        port: 5433,
+    });
 exports.db.query('SELECT NOW()')
     .then((res) => {
     console.log('Connection successfully to PostgreSQL:', res.rows[0]);

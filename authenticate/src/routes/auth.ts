@@ -9,7 +9,7 @@ export const CreateAuthRouter = () => {
 
     router.post('/login', ValidateLogin, AuthenticationController.login)
     router.post('/register', AuthenticationController.register)
-    router.post('/logout', AuthenticationController.logout)
+    router.get('/logout', AuthenticationController.logout)
     router.get('/verify-token', ValidateToken)
     router.get('/refresh-token', RefreshToken)
 

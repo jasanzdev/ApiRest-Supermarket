@@ -11,7 +11,10 @@ export const ValidateToken = CatchErrors(async (req: Request, res: Response) => 
     const user = await UserModel.findById(userId)
 
     if (!user) {
-        res.status(UNAUTHORIZED).json({ user: null })
+        res.status(UNAUTHORIZED).json({
+            message: 'Invalid token',
+            user: null
+        })
         return
     }
 

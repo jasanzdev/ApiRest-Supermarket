@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Postgres123
+      POSTGRES_DB: supermarket
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  authentication:
+    build: ./authenticate
+    ports:
+      - "4000:4000"
+    environment:
+      - DATABASE_URL=postgres://postgres:Postgres123@postgres:5432/supermarket
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  products:
+    build: ./products
+    ports:
+      - "4001:4001"
+    environment:
+      - DATABASE_URL=postgres://postgres:Postgres123@postgres:5432/supermarket
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - authentication
+      - products
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

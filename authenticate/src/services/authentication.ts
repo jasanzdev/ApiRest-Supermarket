@@ -14,11 +14,11 @@ const LoginService = async (user: PublishUser, userAgent: string) => {
 
     const accessPayload = {
         userId: user?.id,
-        sessionId: session.user_id
+        sessionId: session.id
     }
 
     const refreshPayload = {
-        sessionId: session.user_id
+        sessionId: session.id
     }
 
     const accessToken = generateAccessToken(accessPayload)
@@ -39,11 +39,11 @@ const RegisterService = async (input: User, userAgent: string) => {
 
     const accessPayload = {
         userId: user.id,
-        sessionId: session.user_id
+        sessionId: session.id
     }
 
     const refreshPayload = {
-        sessionId: session.user_id
+        sessionId: session.id
     }
 
     const accessToken = generateAccessToken(accessPayload)

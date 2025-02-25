@@ -1,5 +1,5 @@
 import { db } from "../config/postgres";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { PublishUser, User } from "../types/user";
 
 const salt = Number(process.env.SALT_ROUNDS) || 10

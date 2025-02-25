@@ -11,7 +11,7 @@ const UserSchema = z.object({
         .regex(/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@!#$.,/*&%+<>()]).{6,12}$/,
             { message: 'The password to have at least one especial character, letters and numbers' }),
     email: z.string().email({ message: 'Invalid email format' }),
-    role: z.enum(Roles)
+    role: z.enum(Roles).default('USER')
 }).superRefine(async (data, ctx) => {
     const isUsernameUnique = await ValidateUsernameExist(data.username)
     if (!isUsernameUnique) {

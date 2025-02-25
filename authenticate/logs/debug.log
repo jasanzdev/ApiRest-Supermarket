@@ -1,0 +1,2 @@
+{"level":"error","message":"App Error: BadRequest\n             {\"role\":[\"Invalid enum value. Expected 'ADMIN' | 'SUPERVISOR' | 'OPERATOR', received 'OPERATORR'\"]}","timestamp":"2025-02-25T18:49:06.165Z"}
+{"level":"error","message":"Unknown Error: InternalServerError el valor nulo en la columna «role» de la relación «users» viola la restricción de no nulo","timestamp":"2025-02-25T19:00:25.528Z"}

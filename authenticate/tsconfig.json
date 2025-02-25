@@ -3,6 +3,7 @@
     "target": "ES2016",
     "module": "commonjs",
     "outDir": "./dist",
+    "rootDir": "./src",
     "strict": true,
     "typeRoots": [
       "@types",
@@ -13,7 +14,9 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "app.ts",
+    "src/server.ts"
   ],
   "exclude": [
     "node_modules"

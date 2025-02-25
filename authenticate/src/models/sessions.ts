@@ -11,13 +11,19 @@ export class SessionModel {
 
     static async create(data: SessionProps) {
         const { id, userAgent } = data
-        const session = await db.query(`INSERT INTO sessions (user_id, user_agent, expired_at) 
-                VALUES ($1, $2, NOW() + INTERVAL '30 days')
-                ON CONFLICT(user_id,user_agent) DO UPDATE
-                SET expired_at = NOW() + INTERVAL '30 days' 
+        const session = await db.query(`INSERT INTO session (user_id, user_agent) 
+                VALUES ($1, $2)
+                ON CONFLICT(user_id,user_agent) DO NOTHING 
                 RETURNING *`, [id, userAgent])
 
         return session.rows[0] as Sessions
+    }
+
+    static async getById(id: Sessions['id']) {
+        const result = await db.query(
+            `SELECT * FROM session WHERE session.id = $1`, [id])
+
+        return result.rowCount ? result.rows[0] : null
     }
 
     static async getBy(id: User['id'], userAgent: string) {
@@ -27,7 +33,7 @@ export class SessionModel {
         return result.rowCount ? result.rows[0] : null
     }
 
-    static async delete(id: User['id']) {
-        return await db.query(`DELETE FROM sessions WHERE sessions.user_id = $1`, [id])
+    static async delete(id: Sessions['id']) {
+        return await db.query(`DELETE FROM session WHERE session.id = $1`, [id])
     }
-};
+}

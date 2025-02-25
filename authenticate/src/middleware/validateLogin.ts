@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import CatchErrors from "../utils/catchErrors";
 import appAssert from "../utils/appAssert";
 import { BAD_REQUEST } from "../constants/http";

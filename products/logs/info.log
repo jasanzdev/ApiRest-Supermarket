@@ -1,0 +1,12 @@
+{"level":"error","message":"Unknown Error: INTERNAL_SERVER_ERROR:500 Unexpected non-whitespace character after JSON at position 2262 (line 61 column 6)","timestamp":"2025-02-25T18:50:09.635Z"}
+{"level":"error","message":"Zod Error: BAD_REQUEST:400\n             {\"price_purchase\":[\"Required\"],\"price_sale\":[\"Required\"],\"stock\":[\"Required\"],\"active\":[\"Required\"],\"code\":[\"Required\"]}","timestamp":"2025-02-25T19:09:51.357Z"}
+{"level":"error","message":"Unknown Error: INTERNAL_SERVER_ERROR:500 Expected ',' or '}' after property value in JSON at position 268 (line 5 column 3)","timestamp":"2025-02-25T19:10:47.928Z"}
+{"level":"error","message":"Zod Error: BAD_REQUEST:400\n             {\"active\":[\"Required\"]}","timestamp":"2025-02-25T19:11:19.198Z"}
+{"level":"error","message":"Zod Error: BAD_REQUEST:400\n             {\"salePrice\":[\"The sale price must be higher than the purchase price\"]}","timestamp":"2025-02-25T19:11:42.212Z"}
+{"level":"error","message":"Unknown Error: INTERNAL_SERVER_ERROR:500 desbordamiento de campo numeric","timestamp":"2025-02-25T19:11:48.328Z"}
+{"level":"error","message":"Unknown Error: INTERNAL_SERVER_ERROR:500 desbordamiento de campo numeric","timestamp":"2025-02-25T19:14:21.221Z"}
+{"level":"error","message":"SQL Error: 22003 Un campo con precisión 8, escala 2 debe redondear a un valor absoluto menor que 10^6.","timestamp":"2025-02-25T19:19:02.374Z"}
+{"level":"error","message":"Zod Error: BAD_REQUEST:400\n             {\"salePrice\":[\"The sale price must be higher than the purchase price\"]}","timestamp":"2025-02-25T19:19:51.552Z"}
+{"level":"error","message":"SQL Error: 22003 Un campo con precisión 8, escala 2 debe redondear a un valor absoluto menor que 10^6.","timestamp":"2025-02-25T19:19:57.242Z"}
+{"level":"error","message":"SQL Error: 22003 Un campo con precisión 8, escala 2 debe redondear a un valor absoluto menor que 10^6.","timestamp":"2025-02-25T19:20:02.433Z"}
+{"level":"error","message":"SQL Error: 23505 Ya existe la llave (code)=(9261269777547).","timestamp":"2025-02-25T19:20:11.402Z"}

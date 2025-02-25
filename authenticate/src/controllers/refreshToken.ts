@@ -3,29 +3,34 @@ import { generateAccessToken, verifyRefreshToken } from "../config/jwt"
 import { SessionModel } from "../models/sessions"
 import { UserModel } from "../models/users"
 import { Sessions } from "../types/session"
-import { OK } from "../constants/http"
+import { OK, UNAUTHORIZED } from "../constants/http"
 import { getAccessTokenCookieOptions } from "../utils/cookieOptions"
 
 export const RefreshToken = async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refresh_token
-    const userAgent = req.headers['user-agent'] as string
 
     if (!refreshToken) {
-        res.status(OK).json({ user: null })
+        res.status(UNAUTHORIZED).json({
+            message: 'Not token provider',
+            user: null
+        })
         return
     }
 
     const { sessionId } = verifyRefreshToken(refreshToken)
-    const session: Sessions = await SessionModel.getBy(sessionId, userAgent)
+    const session: Sessions = await SessionModel.getById(sessionId)
 
     if (!session) {
-        res.status(OK).json({ user: null })
+        res.status(UNAUTHORIZED).json({
+            message: 'Access denied',
+            user: null
+        })
         return
     }
 
     const accessPayload = {
-        userId: session.user_id,
-        sessionId: session.user_id
+        sessionId: session.id,
+        userId: session.user_id
     }
 
     const newAccessToken = generateAccessToken(accessPayload)

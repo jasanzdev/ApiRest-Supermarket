@@ -2,13 +2,18 @@ import pkg from 'pg';
 const { Pool } = pkg;
 
 
-export const db = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASS,
-    port: Number(process.env.DB_PORT),
-})
+export const db = new Pool(process.env.NODE_ENV === 'production'
+    ? {
+        connectionString: process.env.DATABASE_URL,
+    }
+    : {
+        user: 'postgres',
+        host: 'localhost',
+        database: 'supermarket-dev',
+        password: 'Postgres123',
+        port: 5433,
+    }
+);
 
 db.query('SELECT NOW()')
     .then((res) => {

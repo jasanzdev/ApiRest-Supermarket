@@ -30,4 +30,3 @@ An application built with **Express.js** and **TypeScript**, featuring an API Ga
 - **Axios**: Handles HTTP requests between microservices.
 - **PostgreSQL**: Relational database for storing application data.
 - **Docker** (optional): For containerizing the application.
->>>>>>> 99030e04b0e049b52adb282857e87e76b2508695

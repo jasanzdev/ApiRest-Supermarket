@@ -6,10 +6,11 @@ import { CreateProductsRouter } from './routes/products';
 import HandleError from './middlewares/handleErrors';
 
 const app = express()
+
 app.use(json())
-app.use(CookieParser())
-app.disable('x-powered-by')
 app.use(cors())
+app.disable('x-powered-by')
+app.use(CookieParser())
 
 const port = process.env.PORT ?? 5000;
 
