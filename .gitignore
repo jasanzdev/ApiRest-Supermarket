@@ -1,12 +1,2 @@
-node_modules/
-dist/
-logs/
-.vscode/
-
 .env
-
-*.log
-*.tmp
-*.swp
-.DS_Store
 
