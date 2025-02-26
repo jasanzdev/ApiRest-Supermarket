@@ -1,5 +1,5 @@
 import { CookieOptions } from "express"
-import { FifteenMinutesFromNow, ThirtyDaysFromNow } from "./date"
+import { ThirtyDaysFromNow } from "./date"
 
 const secure = process.env.NODE_ENV === 'production'
 
@@ -9,14 +9,9 @@ const defaults: CookieOptions = {
     secure,
 }
 
-const getAccessTokenCookieOptions = () => ({
-    ...defaults,
-    expires: FifteenMinutesFromNow()
-})
-
-const getRefreshTokenCookieOptions = () => ({
+const getCookieOptions = () => ({
     ...defaults,
     expires: ThirtyDaysFromNow(),
 })
 
-export { getAccessTokenCookieOptions, getRefreshTokenCookieOptions }
+export { getCookieOptions }

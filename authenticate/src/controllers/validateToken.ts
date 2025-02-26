@@ -1,23 +1,27 @@
-import { verifyAccessToken } from '../config/jwt';
-import { UserModel } from '../models/users';
 import { Request, Response } from "express";
 import { OK, UNAUTHORIZED } from '../constants/http';
 import CatchErrors from '../utils/catchErrors';
+import appAssert from '../utils/appAssert';
+import { ValidateTokenServices } from '../services/verifyTokens';
+import AppErrorCode from '../constants/appErrorCode';
+import { getCookieOptions } from "../utils/cookieOptions";
 
 export const ValidateToken = CatchErrors(async (req: Request, res: Response) => {
-    const accessToken = req.cookies.access_token
+    const accessToken = req.headers['authorization']
+    const refreshToken = req.cookies['refresh_token']
 
-    const { userId } = verifyAccessToken(accessToken)
-    const user = await UserModel.findById(userId)
+    appAssert(accessToken,
+        UNAUTHORIZED,
+        'Access denied, No token provider',
+        AppErrorCode.NoTokenProvider)
 
-    if (!user) {
-        res.status(UNAUTHORIZED).json({
-            message: 'Invalid token',
-            user: null
-        })
-        return
+    const { publicUser, newAccessToken, newRefreshToken } = await ValidateTokenServices(accessToken, refreshToken)
+
+    if (newAccessToken && newRefreshToken) {
+        res.setHeader('Authorization', newAccessToken)
+        res.cookie('refresh_token', newRefreshToken, getCookieOptions())
     }
 
-    res.status(OK).json({ user: UserModel.toPublish(user) })
+    res.status(OK).json({ user: publicUser })
 })
 

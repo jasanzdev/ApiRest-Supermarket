@@ -1,9 +1,9 @@
-export const CookiesHandler = (setCookie: string[]) => {
-    if (Array.isArray(setCookie)) {
-        const newAccessTokenCookie = setCookie.find(cookie => cookie.startsWith('access_token='))
-        if (newAccessTokenCookie) {
-            const newAccessToken = newAccessTokenCookie.split(';')[0].split('=')[1]
-            return newAccessToken
+export const CookiesHandler = (setCookie: string[] | undefined) => {
+    if (setCookie && Array.isArray(setCookie)) {
+        const newRefreshTokenCookie = setCookie.find(cookie => cookie.startsWith('refresh_token='))
+        if (newRefreshTokenCookie) {
+            const newRefreshToken = newRefreshTokenCookie.split(';')[0].split('=')[1]
+            return newRefreshToken
         }
     }
     return null

@@ -5,10 +5,10 @@ import cookieParser from 'cookie-parser'
 import { json } from 'express'
 import { ProductProxy } from './proxies/productsProxy'
 import { AuthProxy } from './proxies/authProxy'
-import { VerifyToken } from './middleware/authenticate'
-import { ErrorHandler } from './middleware/ErrorHandler'
+import { VerifyToken } from './middleware/verifyToken'
 import { NotFound } from './middleware/notFound'
 import { HomeController } from './controllers/home'
+import { ErrorHandler } from './middleware/errorHandler'
 
 app.use(cors())
 app.use(helmet())

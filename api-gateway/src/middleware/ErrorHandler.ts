@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { ErrorRequestHandler, Response } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import logger from "../utils/logger";
 import { User } from "../types/user";
 
@@ -9,22 +9,21 @@ interface ResponseData {
     errorCode?: string
 }
 
-const HandleAxiosError = (error: AxiosError, res: Response) => {
+const HandleAxiosError = (error: AxiosError, req: Request, res: Response, next: NextFunction) => {
     const response = error.response
     if (response) {
         const data = response.data as ResponseData
         logger.log('error', `Axios Error: ${response.status} ${response.statusText}`)
-        res.status(401).json(data.message)
+        res.status(response.status).json({ message: data.message, errorCode: data.errorCode })
         return
     }
     logger.log('error', `Axios Error: ${error.code} ${error.message}`)
-    res.status(403).json({ message: 'Access denied' })
+    res.status(401).json({ message: 'Access denied' })
 }
 
-export const ErrorHandler: ErrorRequestHandler = (error, req, res) => {
-
+export const ErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     if (error instanceof AxiosError) {
-        HandleAxiosError(error, res)
+        HandleAxiosError(error, req, res, next)
         return
     }
 
@@ -32,4 +31,5 @@ export const ErrorHandler: ErrorRequestHandler = (error, req, res) => {
     res.status(500).json({
         message: error.message
     })
+    next()
 }

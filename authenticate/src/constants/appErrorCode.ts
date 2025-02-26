@@ -5,6 +5,7 @@ const enum AppErrorCode {
     UserNotExist = 'UserDoesNotExist',
     InvalidId = 'InvalidId',
     BadRequest = 'BadRequest',
+    NoTokenProvider = 'NoTokenProvider',
     InternalServerError = 'InternalServerError'
 }
 

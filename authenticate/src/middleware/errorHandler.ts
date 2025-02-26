@@ -1,10 +1,11 @@
 import { ErrorRequestHandler, Response } from "express";
-import { BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR } from "../constants/http";
+import { INTERNAL_SERVER_ERROR, UNAUTHORIZED, UNPROCESSABLE_CONTENT } from "../constants/http";
 import AppError from "../utils/appErrors";
 import { ZodError } from "zod";
 import jwt from "jsonwebtoken";
 import AppErrorCode from "../constants/appErrorCode";
 import logger from "../utils/logger";
+import { RefreshToken } from "../controllers/refreshToken";
 
 const { JsonWebTokenError } = jwt
 
@@ -19,12 +20,13 @@ const HandleAppError = (res: Response, error: AppError) => {
 const HandleJwtError = (res: Response, error: Error) => {
     logger.log('error', `JsonWebToken Error: ${AppErrorCode.InvalidToken} ${error.message}`)
     if (error.message === 'jwt expired') {
-        res.status(FORBIDDEN).json({
+        res.status(UNAUTHORIZED).json({
             message: 'Token Expired',
             errorCode: AppErrorCode.AccessTokenExpired
         })
+        return RefreshToken
     } else {
-        res.status(FORBIDDEN).json({
+        res.status(UNAUTHORIZED).json({
             message: 'Invalid token provide',
             errorCode: AppErrorCode.InvalidToken
         })
@@ -37,7 +39,7 @@ export const HandleError: ErrorRequestHandler = (error, req, res, next) => {
         logger.log('error', `App Error: ${AppErrorCode.BadRequest}
              ${JSON.stringify(error.flatten().fieldErrors)}`)
 
-        res.status(BAD_REQUEST).json({
+        res.status(UNPROCESSABLE_CONTENT).json({
             message: error.flatten().fieldErrors,
             errorCode: AppErrorCode.BadRequest
         })

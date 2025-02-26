@@ -1,19 +1,19 @@
 import { PublishUser, User } from "../types/user"
 import { SessionModel } from "../models/sessions"
-import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../config/jwt"
 import { UserModel } from "../models/users"
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/jwt"
 
 const LoginService = async (user: PublishUser, userAgent: string) => {
 
     const dataSession = {
-        id: user?.id,
+        userId: user.id,
         userAgent: userAgent,
     }
 
     const session = await SessionModel.create(dataSession)
 
     const accessPayload = {
-        userId: user?.id,
+        userId: user.id,
         sessionId: session.id
     }
 
@@ -31,8 +31,8 @@ const RegisterService = async (input: User, userAgent: string) => {
     const user: User = await UserModel.create(input)
 
     const dataSession = {
-        id: user.id,
-        userAgent: userAgent
+        userId: user.id,
+        userAgent: userAgent,
     }
 
     const session = await SessionModel.create(dataSession)
@@ -50,7 +50,7 @@ const RegisterService = async (input: User, userAgent: string) => {
     const refreshToken = generateRefreshToken(refreshPayload)
     const publicUser = UserModel.toPublish(user)
 
-    return { publicUser, accessToken, refreshToken };
+    return { publicUser, accessToken, refreshToken }
 }
 
 const LogoutService = async (refreshToken: string) => {

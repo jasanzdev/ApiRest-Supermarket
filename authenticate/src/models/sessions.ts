@@ -3,18 +3,19 @@ import { Sessions } from "../types/session";
 import { User } from "../types/user"
 
 interface SessionProps {
-    id: User['id'],
+    userId: User['id'],
     userAgent: string,
 }
 
 export class SessionModel {
 
     static async create(data: SessionProps) {
-        const { id, userAgent } = data
+        const { userId, userAgent } = data
         const session = await db.query(`INSERT INTO session (user_id, user_agent) 
                 VALUES ($1, $2)
-                ON CONFLICT(user_id,user_agent) DO NOTHING 
-                RETURNING *`, [id, userAgent])
+                ON CONFLICT(user_id,user_agent)
+                DO UPDATE SET updated_at = CURRENT_TIMESTAMP 
+                RETURNING *`, [userId, userAgent])
 
         return session.rows[0] as Sessions
     }

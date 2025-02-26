@@ -2,10 +2,11 @@ import { RequestHandler } from "express";
 import CatchErrors from "../utils/catchErrors";
 import { CONFLICT, OK } from "../constants/http";
 import { LoginService, LogoutService, RegisterService } from "../services/authentication";
-import { getAccessTokenCookieOptions, getRefreshTokenCookieOptions } from "../utils/cookieOptions";
+import { getCookieOptions } from "../utils/cookieOptions";
 import appAssert from "../utils/appAssert";
 import { validateUser } from "../schemas/user";
 import { User } from "../types/user";
+import AppErrorCode from "../constants/appErrorCode";
 
 export class AuthenticationController {
 
@@ -13,12 +14,12 @@ export class AuthenticationController {
         const user = req.user
         const userAgent = req.headers['user-agent'] as string
 
-        appAssert(user, CONFLICT, 'User not provide')
+        appAssert(user, CONFLICT, 'User not provide', AppErrorCode.UserNotExist)
 
         const { accessToken, refreshToken } = await LoginService(user, userAgent)
 
-        res.cookie('access_token', accessToken, getAccessTokenCookieOptions())
-        res.cookie('refresh_token', refreshToken, getRefreshTokenCookieOptions())
+        res.setHeader('Authorization', accessToken)
+        res.cookie('refresh_token', refreshToken, getCookieOptions())
 
         res.status(OK).json({ message: 'Login successfully' })
     })
@@ -29,8 +30,8 @@ export class AuthenticationController {
 
         const { publicUser, accessToken, refreshToken } = await RegisterService(validatedData, userAgent)
 
-        res.cookie('access_token', accessToken, getAccessTokenCookieOptions())
-        res.cookie('refresh_token', refreshToken, getRefreshTokenCookieOptions())
+        res.setHeader('Authorization', accessToken)
+        res.cookie('refresh_token', refreshToken, getCookieOptions())
         req.user = publicUser
         res.status(OK).json({ message: 'Register successfully' })
     })
@@ -39,7 +40,6 @@ export class AuthenticationController {
         const refreshToken = req.cookies['refresh_token']
         await LogoutService(refreshToken)
 
-        res.clearCookie('access_token')
         res.clearCookie('refresh_token')
         res.status(200).json({ message: 'Logout successfully' })
     })
