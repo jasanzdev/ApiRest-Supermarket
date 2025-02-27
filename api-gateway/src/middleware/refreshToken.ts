@@ -15,8 +15,7 @@ export const GetNewAccessToken: RequestHandler = CatchErrors(async (req, res, ne
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict'
     })
-
-    req.headers['authorization'] = newAccessToken
+    res.setHeader('Authorization', newAccessToken)
     req.user = user
     next()
 })

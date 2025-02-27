@@ -1,5 +1,4 @@
 import axios from "axios"
-import { CookiesHandler } from "../utils/handlerCookie"
 
 const verifyTokenUrl = process.env.NODE_ENV === 'production'
     ? 'http://authentication:4000/verify-token'

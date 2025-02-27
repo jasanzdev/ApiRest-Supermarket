@@ -23,5 +23,5 @@ app.use(CreateProductsRouter())
 app.use(HandleError)
 
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`)
+    console.log(`Service Products running on http://localhost:${port}`)
 })

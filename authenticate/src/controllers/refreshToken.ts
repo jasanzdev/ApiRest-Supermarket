@@ -7,7 +7,7 @@ import AppErrorCode from "../constants/appErrorCode"
 import CatchErrors from "../utils/catchErrors"
 
 export const RefreshToken = CatchErrors(async (req: Request, res: Response) => {
-    const refreshToken = req.cookies.refresh_token
+    const refreshToken = req.cookies['refresh_token']
 
     appAssert(
         refreshToken,

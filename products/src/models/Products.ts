@@ -41,8 +41,8 @@ export class ProductModel {
             code } = input
 
         const result = await db.query(
-            `INSERT INTO product (name, description, category, price_purchase, price_sale, stock, threshold, active, thumbnail,code) 
-                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
+            `INSERT INTO product (name, description, category, price_purchase, price_sale, stock, threshold, active, thumbnail,code)
+                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *`,
             [name, description, category, price_purchase, price_sale, stock, threshold, active, thumbnail, code])
 
         return result.rows[0]
@@ -53,8 +53,12 @@ export class ProductModel {
     }
 
     static async update({ id, input }: UpdateProps) {
-        const update = Object.keys(input).map((key, index) => `${key} = $${index + 2}`).join(', ')
-        const values = Object.values(input)
+        const inputWithUpdatedAt = {
+            ...input,
+            updated_at: new Date()
+        }
+        const update = Object.keys(inputWithUpdatedAt).map((key, index) => `${key} = $${index + 2}`).join(', ')
+        const values = Object.values(inputWithUpdatedAt)
         const updated = await db.query(
             `UPDATE product SET ${update} WHERE product.id = $1 RETURNING *`,
             [id, ...values])

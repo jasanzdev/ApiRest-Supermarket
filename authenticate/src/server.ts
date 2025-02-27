@@ -10,7 +10,7 @@ const app = express()
 const port = process.env.AUTH_PORT ?? 4000
 
 app.listen(port, () => {
-    console.log(`API Gateway is running on http://localhost:${port}`)
+    console.log(`Service Authentication is running on http://localhost:${port}`)
 })
 
 export default app

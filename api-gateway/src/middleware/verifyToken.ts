@@ -29,9 +29,8 @@ export const VerifyToken: RequestHandler = CatchErrors(async (req, res, next) =>
                     secure: process.env.NODE_ENV === 'production',
                     sameSite: 'strict'
                 })
-                req.headers['authorization'] = newAccessToken
+                res.setHeader('Authorization', newAccessToken)
             }
-
             req.user = user
             next()
         }
