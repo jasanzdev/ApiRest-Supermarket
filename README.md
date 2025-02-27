@@ -166,4 +166,28 @@ To run the application using Docker, follow these steps:
 - **Users Service → http://localhost:4002**
 
 
-### 📖 API Documentation
+### API Endpoints 🌐
+## Products Service
+
+- **GET → http://localhost:3000/products**: Fetch all products.  
+  **Query Parameters**:
+  - `category` (optional): Filter products by category.  
+  - `minStock` (optional): Filter products with stock greater than or equal to this value.  
+  - `minPrice` (optional): Filter products with price greater than or equal to this value.  
+  - `maxPrice` (optional): Filter products with price less than or equal to this value.  
+- **POST → http://localhost:3000/products**: Create a new product.
+- **PATCH → http://localhost:3000/products/:id**: Update a product.
+- **DELETE → http://localhost:3000/products/:id**: Delete a product.
+
+## Authentication Service
+- **POST → http://localhost:3000/auth/login: Authenticate a user and generate a JWT token, Access Token and Refresh Token.  
+- **POST → http://localhost:3000/auth/register: Register a new user and generate a JWT token, Access Token and Refresh Token.
+- **POST → http://localhost:3000/auth/logout: Invalidate the user's current JWT token and delete sessions.
+- **POST → http://localhost:3000/auth/verify-token: Verify the validity of a JWT token.
+- **POST → http://localhost:3000/auth/refresh-token: Generate a new JWT token using a refresh token.
+  
+## Users Service
+- **GET → http://localhost:3000/users**: Fetch all users.
+- **GET → http://localhost:3000/users/:id**: Fetch a specific user by ID.
+- **PATCH → http://localhost:3000/users/:id**: Update a user's profile.
+- **DELETE → http://localhost:3000/users/:id**: Delete a user.
