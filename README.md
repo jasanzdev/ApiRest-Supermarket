@@ -194,5 +194,6 @@ To run the application using Docker, follow these steps:
 #### Users Service
 - **GET → http://localhost:3000/users**: Fetch all users.
 - **GET → http://localhost:3000/users/:id**: Fetch a specific user by ID.
+- **POST → http://localhost:3000/users**: Create a new user.
 - **PATCH → http://localhost:3000/users/:id**: Update a user's profile.
 - **DELETE → http://localhost:3000/users/:id**: Delete a user.
