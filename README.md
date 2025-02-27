@@ -16,7 +16,9 @@ An application built with **Express.js** and **TypeScript**, featuring an API Ga
 - **Microservices Architecture**:
   - `authentication`: Handles user authentication and session management.
   - `products`: Manages product-related operations.
-  - `users`: Manages user-related operations.  
+  - `users`: Manages user-related operations.
+- **Service Communication**:
+  - `axios` is used for microservice-to-microservice communication. 
 - **Security & Logging**:
   - `helmet` for security enhancements.  
   - `winston` and `winston-daily-rotate-file` to log the last 7 days of activity.  
@@ -32,9 +34,7 @@ An application built with **Express.js** and **TypeScript**, featuring an API Ga
   - **Session management** using PostgreSQL.  
   - **Zod is used for validation in all microservices**.  
   - **Access Token** is stored in the `Authorization` header.  
-  - **Refresh Token** is stored in cookies for session continuity.  
-- **Service Communication**:
-  - `axios` is used for microservice-to-microservice communication.  
+  - **Refresh Token** is stored in cookies for session continuity.   
 
 ---
 ## 🏗️ Project Structure 
