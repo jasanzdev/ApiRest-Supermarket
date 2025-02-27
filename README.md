@@ -9,6 +9,7 @@
 
 This project is a **RESTful API**, built with **Express and TypeScript**. It follows a **microservices architecture**, using an **API Gateway** (`http-proxy-middleware`) as the single entry point for managing multiple microservices: **authentication, products, and users**, with **PostgreSQL** as the database.
 The project is **fully containerized with Docker**, but can also be run locally. This project demonstrates a scalable microservices architecture for a supermarket system.
+
 ---
 
 ## Features 🚀
@@ -36,6 +37,7 @@ The project is **fully containerized with Docker**, but can also be run locally.
   - **Zod is used for validation in all microservices**.  
   - **Access Token** is stored in the `Authorization` header.  
   - **Refresh Token** is stored in cookies for session continuity.   
+
 ---
 ## Project Structure 🏗️
 ```
