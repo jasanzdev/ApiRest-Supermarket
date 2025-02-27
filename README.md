@@ -24,8 +24,8 @@ An application built with **Express.js** and **TypeScript**, featuring an API Ga
 - **User Sessions & Roles**:
   - **User sessions are based on the User-Agent**.  
   - **GET requests do not require authentication**.  
-  - **POST, PATCH, DELETE require `ADMIN` or `SUPERVISOR` roles**.  
-  - Available roles: `ADMIN`, `SUPERVISOR`, `OPERATOR`, and `USER`.  
+  - **POST, PATCH, DELETE require `ADMIN` or `MANAGER` roles**.  
+  - Available roles: `ADMIN`, `MANAGER`, and `USER`.  
   - **If no role is specified, the user is created with the `USER` role**.  
 - **Authentication**:
   - **JWT-based authentication** (`jsonwebtoken`).  
@@ -65,16 +65,16 @@ RestFullAPI-Supermarket/
 │── README.md
 ```
 ---
-## Technologies Used 💻
+## 🏗️ Technologies Used
 
-- **Node.js** & **Express.js**: Backend framework for building the API Gateway and microservices.
-- **TypeScript**: Adds type safety and enhances code quality.
-- **http-proxy-middleware**: Used to implement the API Gateway for routing requests.
-- **Axios**: Handles HTTP requests between microservices.
-- **PostgreSQL**: Relational database for storing application data.
-- **JWT**: JSON Web Tokens for secure authentication.
-- **Winston**: Logging library for structured and centralized logs.
-- **Docker**: For containerizing the application and simplifying deployment.
+- **Backend**: Express, TypeScript, Node.js
+- **API Gateway**: http-proxy-middleware
+- **Authentication**: JSON Web Tokens (JWT)
+- **Database**: PostgreSQL
+- **Validation**: Zod
+- **Security**: Helmet
+- **Logging**: Winston, Winston-Daily-Rotate-File
+- **Communication**: Axios
 
 ## Getting Started 🛠️
 
@@ -82,6 +82,7 @@ RestFullAPI-Supermarket/
 
 Before running the application, ensure you have the following installed:
 
+- [Node.js](https://nodejs.org/) (v16 o superior)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 
@@ -93,3 +94,6 @@ Before running the application, ensure you have the following installed:
    git clone https://github.com/tu-usuario/tu-repositorio.git
    cd tu-repositorio
 
+2.**Install dependencies**:
+```bash
+npm install
