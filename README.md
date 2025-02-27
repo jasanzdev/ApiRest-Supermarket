@@ -6,8 +6,8 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 
-An application built with **Express.js** and **TypeScript**, featuring an API Gateway implemented using **http-proxy-middleware** to route requests across microservices. Communication between services is handled via **Axios**. The current microservices include **Authentication**, **Products**, and **Users**, with **PostgreSQL** as the database. This project demonstrates a scalable microservices architecture for a supermarket system.
-
+This project is a **REST FULL API**, built with **Express and TypeScript**. It follows a **microservices architecture**, using an **API Gateway** (`http-proxy-middleware`) as the single entry point for managing multiple microservices: **authentication, products, and users**, with **PostgreSQL** as the database.
+The project is **fully containerized with Docker**, but can also be run locally. This project demonstrates a scalable microservices architecture for a supermarket system.
 ---
 
 ## Features 🚀
@@ -175,6 +175,7 @@ To run the application using Docker, follow these steps:
   - `minStock` (optional): Filter products with stock greater than or equal to this value.  
   - `minPrice` (optional): Filter products with price greater than or equal to this value.  
   - `maxPrice` (optional): Filter products with price less than or equal to this value.  
+- **GET → http://localhost:3000/products/:id**: Fetch a product.
 - **POST → http://localhost:3000/products**: Create a new product.
 - **PATCH → http://localhost:3000/products/:id**: Update a product.
 - **DELETE → http://localhost:3000/products/:id**: Delete a product.
