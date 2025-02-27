@@ -99,9 +99,8 @@ Before running the application, ensure you have the following installed:
 npm install
 ```
 
-3.**Configurar variables de entorno:**:
-Crea un archivo .env en la raíz del proyecto y configura las siguientes variables:
-```bash env
+3.**Configure the environment variables (.env file):**:
+```bash
 # Gateway
 GATEWAY_PORT=3000
 
@@ -116,5 +115,26 @@ PRODUCTS_PORT=4001
 DATABASE_URL='postgres://postgres:Postgres123@postgres:5432/supermarket'
 
 SALT_ROUNDS=10
+```
+## Running with Docker 🐳
+To run the application using Docker, follow these steps:
 
+1. **Build the Docker images**:
+```bash
+   docker-compose build
+```
+2. **Start the containers**:
+   ```bash
+   docker-compose up
 
+#This will start the following services:
+
+- **API Gateway on port 3000**
+- **Authentication Service on port 4000**
+- **Products Service on port 4001**
+- **Users Service on port 4002**
+- **PostgreSQL database**
+   
+3. **Stop the containers**:
+    ```bash
+   docker-compose down
