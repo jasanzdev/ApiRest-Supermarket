@@ -44,7 +44,7 @@ RestFullAPI-Supermarket/
 │ ├── src/
 │ ├── Dockerfile
 │ ├── package.json
-│── authentication/ # Authentication microservice
+│── authenticate/ # Authentication microservice
 │ ├── src/
 │ ├── logs/
 │ ├── Dockerfile
@@ -97,3 +97,25 @@ Before running the application, ensure you have the following installed:
 2.**Install dependencies**:
 ```bash
 npm install
+```
+
+3.**Configurar variables de entorno:**:
+Crea un archivo .env en la raíz del proyecto y configura las siguientes variables:
+```bash
+env                           Copy
+# Gateway
+GATEWAY_PORT=3000
+
+# Authentication Service
+AUTH_PORT=4000
+JWT_ACCESS_SECRET_KEY=tu_secreto_jwt
+JWT_REFRESH_SECRET_KEY=tu_secreto_jwt
+
+# Products Service
+PRODUCTS_PORT=4001
+
+DATABASE_URL='postgres://postgres:Postgres123@postgres:5432/supermarket'
+
+SALT_ROUNDS=10
+
+
