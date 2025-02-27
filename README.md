@@ -101,7 +101,7 @@ npm install
 
 3.**Configurar variables de entorno:**:
 Crea un archivo .env en la raíz del proyecto y configura las siguientes variables:
-```env
+```bash env
 # Gateway
 GATEWAY_PORT=3000
 
