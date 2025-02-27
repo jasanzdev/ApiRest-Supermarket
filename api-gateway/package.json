@@ -2,10 +2,10 @@
   "name": "api-gateway",
   "version": "1.0.0",
   "description": "Api Rest proxy for microservice of supermarket",
-  "main": "app.js",
   "keywords": [],
-  "author": "",
+  "author": "jasanzdev",
   "license": "ISC",
+  "main": "app.js",
   "type": "commonjs",
   "scripts": {
     "build": "npx tsc",

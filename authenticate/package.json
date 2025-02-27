@@ -1,11 +1,11 @@
 {
-  "name": "api-gateway",
+  "name": "authentication-services",
   "version": "1.0.0",
-  "description": "",
+  "description": "Authentication-Services JWT-based",
   "license": "ISC",
-  "author": "",
-  "type": "commonjs",
+  "author": "jasanzdev",
   "main": "app.js",
+  "type": "commonjs",
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/app.js",

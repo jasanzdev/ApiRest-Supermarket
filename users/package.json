@@ -1,0 +1,12 @@
+{
+  "name": "users-services",
+  "version": "1.0.0",
+  "description": "User-Services for manager users",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
