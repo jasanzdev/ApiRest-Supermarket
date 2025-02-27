@@ -39,7 +39,7 @@ The project is **fully containerized with Docker**, but can also be run locally.
 ---
 ## 🏗️ Project Structure 
 ```
-RestFullAPI-Supermarket/
+ApiRest-Supermarket/
 │── api-gateway/ # API Gateway (entry point)
 │ ├── src/
 │ ├── Dockerfile
@@ -69,12 +69,12 @@ RestFullAPI-Supermarket/
 
 - **Backend**: Express, TypeScript, Node.js
 - **API Gateway**: http-proxy-middleware
+- **Communication**: Axios
 - **Authentication**: JSON Web Tokens (JWT)
 - **Database**: PostgreSQL
 - **Validation**: Zod
 - **Security**: Helmet
 - **Logging**: Winston, Winston-Daily-Rotate-File
-- **Communication**: Axios
 
 ## Getting Started 🛠️
 
@@ -167,7 +167,7 @@ To run the application using Docker, follow these steps:
 
 
 ### API Endpoints 🌐
-## Products Service
+#### Products Service
 
 - **GET → http://localhost:3000/products**: Fetch all products.  
   **Query Parameters**:
@@ -180,14 +180,14 @@ To run the application using Docker, follow these steps:
 - **PATCH → http://localhost:3000/products/:id**: Update a product.
 - **DELETE → http://localhost:3000/products/:id**: Delete a product.
 
-## Authentication Service
+#### Authentication Service
 - **POST → http://localhost:3000/auth/login: Authenticate a user and generate a JWT token, Access Token and Refresh Token.  
 - **POST → http://localhost:3000/auth/register: Register a new user and generate a JWT token, Access Token and Refresh Token.
 - **POST → http://localhost:3000/auth/logout: Invalidate the user's current JWT token and delete sessions.
 - **POST → http://localhost:3000/auth/verify-token: Verify the validity of a JWT token.
 - **POST → http://localhost:3000/auth/refresh-token: Generate a new JWT token using a refresh token.
   
-## Users Service
+#### Users Service
 - **GET → http://localhost:3000/users**: Fetch all users.
 - **GET → http://localhost:3000/users/:id**: Fetch a specific user by ID.
 - **PATCH → http://localhost:3000/users/:id**: Update a user's profile.
