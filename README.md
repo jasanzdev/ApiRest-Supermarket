@@ -95,46 +95,72 @@ Before running the application, ensure you have the following installed:
    cd tu-repositorio
 
 2.**Install dependencies**:
-```bash
-npm install
+
+   ```bash
+   cd ./api-gateway
+   npm install
+
+   cd ./authenticate
+   npm install
+
+   cd ./products
+   npm install
+
+   cd ./users
+   npm install
+   ```
+
+3.**Configure the globally environment variables (.env file on the root directory):**:
+   ```bash
+  # Gateway
+    GATEWAY_PORT=3000
+
+  # Authentication Service
+    AUTH_PORT=4000
+    JWT_ACCESS_SECRET_KEY=tu_secreto_jwt
+    JWT_REFRESH_SECRET_KEY=tu_secreto_jwt
+
+  # Products Service
+    PRODUCTS_PORT=4001
+
+  DATABASE_URL='postgres://postgres:Postgres123@postgres:5432/supermarket'
+
+  SALT_ROUNDS=10
 ```
 
-3.**Configure the environment variables (.env file):**:
-```bash
-# Gateway
-GATEWAY_PORT=3000
-
-# Authentication Service
-AUTH_PORT=4000
-JWT_ACCESS_SECRET_KEY=tu_secreto_jwt
-JWT_REFRESH_SECRET_KEY=tu_secreto_jwt
-
-# Products Service
-PRODUCTS_PORT=4001
-
-DATABASE_URL='postgres://postgres:Postgres123@postgres:5432/supermarket'
-
-SALT_ROUNDS=10
-```
 ## Running with Docker 🐳
 To run the application using Docker, follow these steps:
 
 1. **Build the Docker images**:
-```bash
+   ```bash
    docker-compose build
-```
+   ```
+   
 2. **Start the containers**:
    ```bash
    docker-compose up
 
-#This will start the following services:
-
-- **API Gateway on port 3000**
-- **Authentication Service on port 4000**
-- **Products Service on port 4001**
-- **Users Service on port 4002**
-- **PostgreSQL database**
+**Services will be available at:**:
+- **A PostgreSQL database named supermarket will be created automatically**.
+- **API Gateway → http://localhost:3000**
+- **Authentication Service → http://localhost:4000**
+- **Products Service → http://localhost:4001**
+- **Users Service → http://localhost:4002**
    
 3. **Stop the containers**:
     ```bash
    docker-compose down
+
+## Running Locally (Without Docker)
+
+1. **Start all services at once**:
+   ```bash
+   npm run build
+   npm run start
+   
+**Services will be available at:**:
+- **A PostgreSQL database named supermarket will be created automatically**.
+- **API Gateway → http://localhost:3000**
+- **Authentication Service → http://localhost:4000**
+- **Products Service → http://localhost:4001**
+- **Users Service → http://localhost:4002**
