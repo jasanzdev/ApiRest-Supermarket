@@ -168,6 +168,7 @@ To run the application using Docker, follow these steps:
 
 
 ### API Endpoints 🌐
+---
 #### Products Service
 
 - **GET → http://localhost:3000/products**: Fetch all products.  
