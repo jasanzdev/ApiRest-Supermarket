@@ -91,8 +91,8 @@ Before running the application, ensure you have the following installed:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/jasanzdev/apiRest-supermarket.git
-   cd apiRest-supermarket
+   git clone https://github.com/jasanzdev/ApiRest-Supermarket.git
+   cd ApiRest-Supermarket
 
 2.**Install dependencies**:
 
@@ -166,4 +166,4 @@ To run the application using Docker, follow these steps:
 - **Users Service → http://localhost:4002**
 
 
-##📖 API Documentation
+### 📖 API Documentation
