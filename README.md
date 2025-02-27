@@ -36,7 +36,6 @@ The project is **fully containerized with Docker**, but can also be run locally.
   - **Zod is used for validation in all microservices**.  
   - **Access Token** is stored in the `Authorization` header.  
   - **Refresh Token** is stored in cookies for session continuity.   
-
 ---
 ## Project Structure 🏗️
 ```
@@ -77,6 +76,7 @@ ApiRest-Supermarket/
 - **Security**: Helmet
 - **Logging**: Winston, Winston-Daily-Rotate-File
 
+---
 ## Getting Started 🛠️
 
 ### Prerequisites
@@ -166,9 +166,9 @@ To run the application using Docker, follow these steps:
 - **Products Service → http://localhost:4001**
 - **Users Service → http://localhost:4002**
 
-
-### API Endpoints 🌐
 ---
+### API Endpoints 🌐
+
 #### Products Service
 
 - **GET → http://localhost:3000/products**: Fetch all products.  
