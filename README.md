@@ -38,7 +38,7 @@ The project is **fully containerized with Docker**, but can also be run locally.
   - **Refresh Token** is stored in cookies for session continuity.   
 
 ---
-## 🏗️ Project Structure 
+## Project Structure 🏗️
 ```
 ApiRest-Supermarket/
 │── api-gateway/ # API Gateway (entry point)
@@ -66,7 +66,7 @@ ApiRest-Supermarket/
 │── README.md
 ```
 ---
-## 🏗️ Technologies Used
+## Technologies Used 💻
 
 - **Backend**: Express, TypeScript, Node.js
 - **API Gateway**: http-proxy-middleware
