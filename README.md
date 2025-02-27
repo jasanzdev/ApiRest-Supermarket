@@ -54,23 +54,6 @@ Before running the application, ensure you have the following installed:
    git clone https://github.com/tu-usuario/tu-repositorio.git
    cd tu-repositorio
 
-# API Gateway
-GATEWAY_PORT=3000
-
-# Authentication Service
-AUTH_SERVICE_PORT=4000
-JWT_SECRET=your_jwt_secret_key
-
-# Products Service
-PRODUCTS_SERVICE_PORT=4001
-
-# Database (PostgreSQL)
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=supermarket_db
-
 Running with Docker 🐳
 To run the application using Docker, follow these steps:
 
@@ -103,11 +86,6 @@ docker-compose down
 Logging with Winston 📝
 The application uses Winston for structured logging. Logs are categorized by level (info, error, warn, etc.) and are stored in the logs/ directory. You can customize the logging configuration in the logger.ts file within each service.
 
-Example log entry:
-
-plaintext
-Copy
-2023-10-10T12:00:00.000Z [info]: User successfully authenticated
 Authentication with JWT 🔐
 The Authentication Service uses JWT for secure user authentication. When a user logs in, a JWT token is generated and returned. This token must be included in the Authorization header of subsequent requests to protected endpoints.
 
