@@ -40,16 +40,16 @@ An application built with **Express.js** and **TypeScript**, featuring an API Ga
 ## 🏗️ Project Structure 
 
 RestFullAPI-Supermarket/
-── api-gateway/ # API Gateway (entry point)  |
-   ├── src/ |
-   ├── Dockerfile |
-   ├── package.json 
-── authentication/ # Authentication microservice 
-   ├── src/ 
-   ├── logs/ 
-   ├── Dockerfile 
-   ├── package.json 
-── products/ # Products microservice 
+── api-gateway/ # API Gateway (entry point).
+   ├── src/.
+   ├── Dockerfile.
+   ├── package.json .
+── authentication/ # Authentication microservice .
+   ├── src/ .
+   ├── logs/ .
+   ├── Dockerfile .
+   ├── package.json .
+── products/ # Products microservice .
    ├── src/  
    ├── logs/ 
    ├── Dockerfile 
