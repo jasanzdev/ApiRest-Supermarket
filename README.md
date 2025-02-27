@@ -38,7 +38,7 @@ An application built with **Express.js** and **TypeScript**, featuring an API Ga
 
 ---
 ## 🏗️ Project Structure 
-
+```
 RestFullAPI-Supermarket/
 │── api-gateway/ # API Gateway (entry point)
 │ ├── src/
@@ -63,7 +63,7 @@ RestFullAPI-Supermarket/
 │── docker-compose.yml # Docker Compose configuration
 │── package.json # Contains build/start scripts for all services
 │── README.md
-
+```
 ---
 ## Technologies Used 💻
 
