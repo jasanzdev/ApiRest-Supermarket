@@ -6,7 +6,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 
-This project is a **REST FULL API**, built with **Express and TypeScript**. It follows a **microservices architecture**, using an **API Gateway** (`http-proxy-middleware`) as the single entry point for managing multiple microservices: **authentication, products, and users**, with **PostgreSQL** as the database.
+This project is a **RESTful API**, built with **Express and TypeScript**. It follows a **microservices architecture**, using an **API Gateway** (`http-proxy-middleware`) as the single entry point for managing multiple microservices: **authentication, products, and users**, with **PostgreSQL** as the database.
 The project is **fully containerized with Docker**, but can also be run locally. This project demonstrates a scalable microservices architecture for a supermarket system.
 ---
 
