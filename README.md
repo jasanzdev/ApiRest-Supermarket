@@ -12,20 +12,34 @@ An application built with **Express.js** and **TypeScript**, featuring an API Ga
 
 ## Features 🚀
 
-- **API Gateway**: Centralized entry point for routing requests using `http-proxy-middleware`.
+**API Gateway**: Manages request routing between microservices.  
 - **Microservices Architecture**:
-  - **Authentication Service**: Manages user login and registration using **JWT** for secure authentication 👤
-  - **Products Service**: Handles product listings and inventory 🛒
-  - **Users Service**: Manages user profiles and data
-- **Database**: PostgreSQL for persistent storage.
-- **Communication**: Axios for inter-service communication 🔗
-- **Logging**: **Winston** for structured and centralized logging across services.
-- **Authentication**: **JWT** (JSON Web Tokens) for secure user authentication and authorization.
-- **Scalability**: Designed to support additional microservices in the future.
-- **Dockerized**: Containerized for easy deployment and development.
+  - `authentication`: Handles user authentication and session management.
+  - `products`: Manages product-related operations.
+  - `users`: Manages user-related operations.  
+- **Security & Logging**:
+  - `helmet` for security enhancements.  
+  - `winston` and `winston-daily-rotate-file` to log the last 7 days of activity.  
+  - Each microservice has its own `logs/` directory with separate log levels: `info`, `debug`, `error`.  
+- **User Sessions & Roles**:
+  - **User sessions are based on the User-Agent**.  
+  - **GET requests do not require authentication**.  
+  - **POST, PATCH, DELETE require `ADMIN` or `SUPERVISOR` roles**.  
+  - Available roles: `ADMIN`, `SUPERVISOR`, `OPERATOR`, and `USER`.  
+  - **If no role is specified, the user is created with the `USER` role**.  
+- **Authentication**:
+  - **JWT-based authentication** (`jsonwebtoken`).  
+  - **Session management** using PostgreSQL.  
+  - **Zod is used for validation in all microservices**.  
+  - **Access Token** is stored in the `Authorization` header.  
+  - **Refresh Token** is stored in cookies for session continuity.  
+- **Service Communication**:
+  - `axios` is used for microservice-to-microservice communication.  
 
 ---
-
+## 🏗️ Project Structure 
+RestFullAPI-Supermarket/ │── api-gateway/ # API Gateway (entry point) │ ├── src/ │ ├── Dockerfile │ ├── package.json │── authentication/ # Authentication microservice │ ├── src/ │ ├── logs/ │ ├── Dockerfile │ ├── package.json │── products/ # Products microservice │ ├── src/ │ ├── logs/ │ ├── Dockerfile │ ├── package.json │── users/ # Users microservice │ ├── src/ │ ├── logs/ │ ├── Dockerfile │ ├── package.json │── .env # Global environment variables │── docker-compose.yml # Docker Compose configuration │── package.json # Contains build/start scripts for all services │── README.md
+---
 ## Technologies Used 💻
 
 - **Node.js** & **Express.js**: Backend framework for building the API Gateway and microservices.
@@ -54,73 +68,3 @@ Before running the application, ensure you have the following installed:
    git clone https://github.com/tu-usuario/tu-repositorio.git
    cd tu-repositorio
 
-Running with Docker 🐳
-To run the application using Docker, follow these steps:
-
-Build the Docker images:
-
-bash
-Copy
-docker-compose build
-Start the containers:
-
-bash
-Copy
-docker-compose up
-This will start the following services:
-
-API Gateway on port 3000
-
-Authentication Service on port 4000
-
-Products Service on port 4001
-
-PostgreSQL database
-
-Stop the containers:
-
-bash
-Copy
-docker-compose down
-
-Logging with Winston 📝
-The application uses Winston for structured logging. Logs are categorized by level (info, error, warn, etc.) and are stored in the logs/ directory. You can customize the logging configuration in the logger.ts file within each service.
-
-Authentication with JWT 🔐
-The Authentication Service uses JWT for secure user authentication. When a user logs in, a JWT token is generated and returned. This token must be included in the Authorization header of subsequent requests to protected endpoints.
-
-Example of a protected request:
-
-bash
-Copy
-curl -H "Authorization: Bearer <your_jwt_token>" http://localhost:3000/api/protected-route
-API Endpoints 🌐
-API Gateway
-GET /products: Fetch all products.
-
-POST /auth/register: Register a new user.
-
-POST /auth/login: Log in and receive a JWT token.
-
-Authentication Service
-POST /register: Register a new user.
-
-POST /login: Log in and receive a JWT token.
-
-Products Service
-GET /products: Fetch all products.
-
-POST /products: Create a new product.
-
-PATCH /products/:id : Update a product.
-
-DELETE /products/:id : Delete a product.
-
-Users Service
-GET /users: Fetch all users.
-
-GET /users/:id : Fetch a specific user by ID.
-
-PATCH /users/:id : Update a user's profile.
-
-DELETE /users/:id : Delete a user.
