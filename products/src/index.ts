@@ -5,6 +5,7 @@ import { CreateProductsRouter } from './routes/products';
 import HandleError from './middlewares/handleErrors';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
+import { startServer } from './config/initPostgres';
 
 const envPath = path.resolve(__dirname, '../../.env')
 dotenv.config({ path: envPath })
@@ -22,6 +23,9 @@ app.use(CreateProductsRouter())
 
 app.use(HandleError)
 
-app.listen(port, () => {
-    console.log(`Service Products running on http://localhost:${port}`)
-})
+startServer()
+    .then(() => {
+        app.listen(port, () => {
+            console.log(`Service Products running on http://localhost:${port}`)
+        })
+    }).catch(error => console.log('Error initializing server:', error))
