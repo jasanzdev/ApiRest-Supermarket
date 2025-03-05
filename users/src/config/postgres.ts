@@ -1,5 +1,5 @@
-import pkg from 'pg';
-const { Pool } = pkg;
+import pkg from 'pg'
+const { Pool } = pkg
 
 export const db = new Pool(process.env.NODE_ENV === 'production'
     ? {

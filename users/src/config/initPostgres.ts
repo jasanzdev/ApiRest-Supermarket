@@ -1,5 +1,6 @@
 import pkg from 'pg'
 import bcrypt from 'bcryptjs'
+import { SuperAdmin } from '../constants/adminUser'
 const { Pool } = pkg
 
 export async function startServer() {
@@ -50,8 +51,10 @@ const CreateTableUsers = async () => {
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`)
 
-    const hashPassword = await bcrypt.hash('Admin123', 10)
+    const hashPassword = await bcrypt.hash(SuperAdmin.password, 10)
+    const { name, username, email, role } = SuperAdmin
     await client.query(`INSERT INTO users (name, username, password, email, role) 
-            VALUES('admin','admin','${hashPassword}','supermarket_admin@gmail.com','ADMIN') 
-            ON CONFLICT (username) DO NOTHING`)
+            VALUES($1,$2,$3,$4,$5) 
+            ON CONFLICT (username) DO NOTHING`,
+        [name, username, hashPassword, email, role])
 }

@@ -15,7 +15,7 @@ startServer()
         app.listen(port, () => {
             console.log(`Users Services running on http://localhost:${port}`)
         })
-    }).catch((error) => console.log(`Error initializing server:`, error))
+    }).catch((error) => console.log('Error initializing server:', error))
 
 
 
