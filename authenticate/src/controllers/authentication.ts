@@ -1,17 +1,16 @@
-import { RequestHandler } from "express";
-import CatchErrors from "../utils/catchErrors";
-import { CONFLICT, OK } from "../constants/http";
-import { LoginService, LogoutService, RegisterService } from "../services/authentication";
-import { getCookieOptions } from "../utils/cookieOptions";
-import appAssert from "../utils/appAssert";
-import { validateUser } from "../schemas/user";
-import { User } from "../types/user";
-import AppErrorCode from "../constants/appErrorCode";
+import { RequestHandler } from 'express'
+import CatchErrors from '../utils/catchErrors'
+import { CONFLICT, OK } from '../constants/http'
+import { LoginService, LogoutService, RegisterService } from '../services/authentication'
+import { getCookieOptions } from '../utils/cookieOptions'
+import appAssert from '../utils/appAssert'
+import AppErrorCode from '../constants/appErrorCode'
+import { PublicUser } from '../types/publicUser'
 
 export class AuthenticationController {
 
     static readonly login: RequestHandler = CatchErrors(async (req, res) => {
-        const user = req.user
+        const user: PublicUser = req.user
         const userAgent = req.headers['user-agent'] as string
 
         appAssert(user, CONFLICT, 'User not provide', AppErrorCode.UserNotExist)
@@ -25,10 +24,8 @@ export class AuthenticationController {
     })
 
     static readonly register: RequestHandler = CatchErrors(async (req, res) => {
-        const validatedData = await validateUser(req.body) as User
         const userAgent = req.headers['user-agent'] as string
-
-        const { publicUser, accessToken, refreshToken } = await RegisterService(validatedData, userAgent)
+        const { publicUser, accessToken, refreshToken } = await RegisterService(req.body, userAgent)
 
         res.setHeader('Authorization', accessToken)
         res.cookie('refresh_token', refreshToken, getCookieOptions())

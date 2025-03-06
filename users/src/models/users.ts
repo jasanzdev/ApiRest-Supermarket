@@ -16,13 +16,12 @@ export default class UserModel {
         return result.rowCount ? result.rows[0] : null
     }
 
-    static async findByUsername(username: string) {
-        const result = await db.query('SELECT * FROM users WHERE users.username = $1', [username])
-        return result.rowCount ? result.rows[0] : null
-    }
+    static async findBy(usernameOrEmail: string) {
+        const result = await db.query(
+            `SELECT * FROM users u
+            WHERE u.username = $1 OR u.email = $1`,
+            [usernameOrEmail])
 
-    static async findByEmail(email: string) {
-        const result = await db.query('SELECT * FROM users WHERE users.email = $1', [email])
         return result.rowCount ? result.rows[0] : null
     }
 

@@ -1,17 +1,19 @@
-import AppErrorCode from "../constants/appErrorCode"
-import { UNAUTHORIZED } from "../constants/http"
-import { SessionModel } from "../models/sessions"
-import { UserModel } from "../models/users"
-import { AccessTokenPayload, RefreshTokenPayload } from "../types/payload"
-import { Sessions } from "../types/session"
-import appAssert from "../utils/appAssert"
+import AppErrorCode from '../constants/appErrorCode'
+import { UNAUTHORIZED } from '../constants/http'
+import { SessionModel } from '../models/sessions'
+import { AccessTokenPayload, RefreshTokenPayload } from '../types/payload'
+import { Sessions } from '../types/session'
+import appAssert from '../utils/appAssert'
 import jwt from 'jsonwebtoken'
+import axios from 'axios'
+import { userServiceUrl } from '../constants/axios'
 import {
     generateAccessToken,
     generateRefreshToken,
     verifyAccessToken,
     verifyRefreshToken
-} from "../utils/jwt"
+} from '../utils/jwt'
+import { toPublishUser } from '../utils/userToPublish'
 
 const { TokenExpiredError } = jwt
 
@@ -33,8 +35,10 @@ const RefreshTokenService = async (refreshToken: string) => {
     const newAccessToken = generateAccessToken(accessPayload)
     const newRefreshToken = generateRefreshToken(refreshPayload)
 
-    const user = await UserModel.findById(session.user_id)
-    const publicUser = UserModel.toPublish(user)
+    const response = await axios.get(`${userServiceUrl}${session.user_id}`)
+
+    const { user } = response.data
+    const publicUser = toPublishUser(user)
 
     return { publicUser, newAccessToken, newRefreshToken }
 }
@@ -42,9 +46,12 @@ const RefreshTokenService = async (refreshToken: string) => {
 const ValidateTokenServices = async (accessToken: string, refreshToken: string) => {
     try {
         const { userId } = verifyAccessToken(accessToken)
-        const user = await UserModel.findById(userId)
+        const response = await axios.get(`${userServiceUrl}${userId}`)
+
+        const { user } = response.data
+
         appAssert(user, UNAUTHORIZED, 'Access denied, Invalid token', AppErrorCode.UserNotExist)
-        const publicUser = UserModel.toPublish(user)
+        const publicUser = toPublishUser(user)
         return { publicUser }
     } catch (error) {
         if (error instanceof TokenExpiredError) {

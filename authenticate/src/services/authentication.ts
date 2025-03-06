@@ -1,9 +1,12 @@
-import { PublishUser, User } from "../types/user"
-import { SessionModel } from "../models/sessions"
-import { UserModel } from "../models/users"
-import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/jwt"
+import { SessionModel } from '../models/sessions'
+import axios from 'axios'
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt'
+import { userServiceUrl } from '../constants/axios'
+import { PublicUser } from '../types/publicUser'
+import { User } from '../dto/user'
+import { toPublishUser } from '../utils/userToPublish'
 
-const LoginService = async (user: PublishUser, userAgent: string) => {
+const LoginService = async (user: PublicUser, userAgent: string) => {
 
     const dataSession = {
         userId: user.id,
@@ -28,7 +31,9 @@ const LoginService = async (user: PublishUser, userAgent: string) => {
 }
 
 const RegisterService = async (input: User, userAgent: string) => {
-    const user: User = await UserModel.create(input)
+    const response = await axios.post(userServiceUrl, input)
+
+    const user: User = response.data.user
 
     const dataSession = {
         userId: user.id,
@@ -48,7 +53,7 @@ const RegisterService = async (input: User, userAgent: string) => {
 
     const accessToken = generateAccessToken(accessPayload)
     const refreshToken = generateRefreshToken(refreshPayload)
-    const publicUser = UserModel.toPublish(user)
+    const publicUser = toPublishUser(user)
 
     return { publicUser, accessToken, refreshToken }
 }

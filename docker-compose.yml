@@ -37,6 +37,17 @@ services:
     networks:
       - app-network
 
+  users:
+    build: ./users
+    ports:
+      - "4002:4002"
+    environment:
+      - DATABASE_URL=postgres://postgres:Postgres123@postgres:5432/supermarket
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
   gateway:
     build: ./api-gateway
     ports:
@@ -44,6 +55,7 @@ services:
     depends_on:
       - authentication
       - products
+      - users
     networks:
       - app-network
 

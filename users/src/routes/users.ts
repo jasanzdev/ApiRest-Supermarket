@@ -9,6 +9,7 @@ export const CreateUsersRouter = () => {
     const router = Router()
 
     router.get('/', UserController.getUsers)
+    router.get('/usernameOrEmail/:value', UserController.getUserByUsernameOrEmail)
     router.get('/:id', UserController.getUserById)
     router.post('/', checkSchema(CreateSchema), validateRequest, UserController.createUser)
     router.patch('/:id', checkSchema(UpdateSchema), validateRequest, UserController.updateUser)

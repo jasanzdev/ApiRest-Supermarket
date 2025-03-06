@@ -2,10 +2,11 @@ import { createProxyMiddleware } from "http-proxy-middleware"
 import logger from "../utils/logger"
 import { IncomingMessage } from "http"
 import { Request, Response } from "express"
+import { authUrl } from "../constants/urls"
 
-const target = process.env.NODE_ENV === 'production' ? 'http://authentication:4000/' : 'http://localhost:4000/'
+
 export const AuthProxy = createProxyMiddleware({
-    target: target,
+    target: authUrl,
     changeOrigin: true,
     pathRewrite: { '^/auth': '' },
     on: {

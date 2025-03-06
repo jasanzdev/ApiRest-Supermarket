@@ -1,9 +1,5 @@
 import axios from "axios"
-
-const verifyTokenUrl = process.env.NODE_ENV === 'production'
-    ? 'http://authentication:4000/verify-token'
-    : 'http://localhost:4000/verify-token'
-
+import { verifyTokenUrl } from "../constants/urls"
 
 const VerifyAccessTokenServices = async (accessToken: string, refreshToken: string) => {
     const response = await axios.post(verifyTokenUrl, {}, {

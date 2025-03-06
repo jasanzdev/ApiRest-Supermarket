@@ -1,11 +1,13 @@
-import { RequestHandler } from "express";
+import axios from 'axios'
 import bcrypt from 'bcryptjs'
-import CatchErrors from "../utils/catchErrors";
-import appAssert from "../utils/appAssert";
-import { BAD_REQUEST, UNPROCESSABLE_CONTENT } from "../constants/http";
-import { User } from "../types/user";
-import { UserModel } from "../models/users";
-import AppErrorCode from "../constants/appErrorCode";
+import appAssert from '../utils/appAssert'
+import CatchErrors from '../utils/catchErrors'
+import AppErrorCode from '../constants/appErrorCode'
+import { BAD_REQUEST } from '../constants/http'
+import { RequestHandler } from 'express'
+import { userServiceUrl } from '../constants/axios'
+import { User } from '../dto/user'
+import { toPublishUser } from '../utils/userToPublish'
 
 export const ValidateLogin: RequestHandler = CatchErrors(async (req, res, next) => {
     const { username, password } = req.body
@@ -17,25 +19,27 @@ export const ValidateLogin: RequestHandler = CatchErrors(async (req, res, next) 
         AppErrorCode.BadRequest
     )
 
-    const user: User = await UserModel.findByUsername(username)
+    const url = `${userServiceUrl}usernameOrEmail`
+    const response = await axios.get(`${url}/${username}`)
+
+    const user: User = response.data.user
 
     appAssert(
         user,
-        UNPROCESSABLE_CONTENT,
+        BAD_REQUEST,
         'Invalid username or password',
-        AppErrorCode.BadRequest
+        AppErrorCode.InvalidCredentials
     )
 
-    const isValid = await bcrypt.compare(password, user.password)
+    const isValidPass = await bcrypt.compare(password, user.password)
 
     appAssert(
-        isValid,
-        UNPROCESSABLE_CONTENT,
+        isValidPass,
+        BAD_REQUEST,
         'Invalid username or password',
-        AppErrorCode.BadRequest
+        AppErrorCode.InvalidCredentials
     )
 
-    req.user = UserModel.toPublish(user)
-
+    req.user = toPublishUser(user)
     next()
 })

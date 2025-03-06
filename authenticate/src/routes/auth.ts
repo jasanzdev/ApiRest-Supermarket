@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { AuthenticationController } from "../controllers/authentication"
-import { ValidateLogin } from "../middleware/validateLogin"
-import { ValidateToken } from "../controllers/validateToken";
-import { RefreshToken } from "../controllers/refreshToken";
+import { Router } from 'express'
+import { AuthenticationController } from '../controllers/authentication'
+import { ValidateLogin } from '../middleware/validateLogin'
+import { ValidateToken } from '../controllers/validateToken'
+import { RefreshToken } from '../controllers/refreshToken'
 
 export const CreateAuthRouter = () => {
     const router = Router()

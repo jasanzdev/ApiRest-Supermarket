@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
-import { OK, UNAUTHORIZED } from '../constants/http';
-import CatchErrors from '../utils/catchErrors';
-import appAssert from '../utils/appAssert';
-import { ValidateTokenServices } from '../services/verifyTokens';
-import AppErrorCode from '../constants/appErrorCode';
-import { getCookieOptions } from "../utils/cookieOptions";
+import { Request, Response } from 'express'
+import CatchErrors from '../utils/catchErrors'
+import appAssert from '../utils/appAssert'
+import { OK, UNAUTHORIZED } from '../constants/http'
+import AppErrorCode from '../constants/appErrorCode'
+import { ValidateTokenServices } from '../services/verifyTokens'
+import { getCookieOptions } from '../utils/cookieOptions'
 
 export const ValidateToken = CatchErrors(async (req: Request, res: Response) => {
     const accessToken = req.headers['authorization']

@@ -1,5 +1,5 @@
-import { CookieOptions } from "express"
-import { ThirtyDaysFromNow } from "./date"
+import { CookieOptions } from 'express'
+import { ThirtyDaysFromNow } from './date'
 
 const secure = process.env.NODE_ENV === 'production'
 

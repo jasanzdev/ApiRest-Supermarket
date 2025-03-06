@@ -1,14 +1,15 @@
+import * as path from 'path'
+import * as dotenv from 'dotenv'
+const envPath = path.resolve(__dirname, '../../.env')
+dotenv.config({ path: envPath })
+
 import express, { json } from 'express'
 import cors from 'cors'
 import CookieParser from 'cookie-parser'
-import { CreateProductsRouter } from './routes/products';
-import HandleError from './middlewares/handleErrors';
-import * as path from 'path';
-import * as dotenv from 'dotenv';
-import { startServer } from './config/initPostgres';
+import { CreateProductsRouter } from './routes/products'
+import HandleError from './middlewares/handleErrors'
+import { startServer } from './config/initPostgres'
 
-const envPath = path.resolve(__dirname, '../../.env')
-dotenv.config({ path: envPath })
 
 const app = express()
 

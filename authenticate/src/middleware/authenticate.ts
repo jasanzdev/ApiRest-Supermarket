@@ -1,10 +1,12 @@
-import { RequestHandler } from 'express';
-import CatchErrors from "../utils/catchErrors";
-import { UNAUTHORIZED } from "../constants/http";
-import appAssert from "../utils/appAssert";
-import AppErrorCode from '../constants/appErrorCode';
-import { UserModel } from '../models/users';
-import { verifyAccessToken } from '../utils/jwt';
+import { RequestHandler } from 'express'
+import CatchErrors from '../utils/catchErrors'
+import { UNAUTHORIZED } from '../constants/http'
+import appAssert from '../utils/appAssert'
+import AppErrorCode from '../constants/appErrorCode'
+import { verifyAccessToken } from '../utils/jwt'
+import axios from 'axios'
+import { userServiceUrl } from '../constants/axios'
+import { toPublishUser } from '../utils/userToPublish'
 
 export const Authenticate: RequestHandler = CatchErrors(async (req, res, next) => {
     const accessToken = req.headers['authorization']
@@ -17,7 +19,9 @@ export const Authenticate: RequestHandler = CatchErrors(async (req, res, next) =
     )
 
     const { userId } = verifyAccessToken(accessToken)
-    const user = await UserModel.findById(userId)
+    const response = await axios.get(`${userServiceUrl}${userId}`)
+
+    const { user } = response.data
 
     appAssert(
         user,
@@ -26,7 +30,7 @@ export const Authenticate: RequestHandler = CatchErrors(async (req, res, next) =
         AppErrorCode.UserNotExist
     )
 
-    req.user = UserModel.toPublish(user)
+    req.user = toPublishUser(user)
     next()
 })
 

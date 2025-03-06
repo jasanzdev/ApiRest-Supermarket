@@ -13,3 +13,11 @@ export const db = new Pool(process.env.NODE_ENV === 'production'
         port: Number(process.env.DB_LOCAL_PORT)
     }
 )
+
+db.query('SELECT NOW()')
+    .then((res) => {
+        console.log('Connection successfully to PostgreSQL:', res.rows[0])
+    })
+    .catch((error) => {
+        console.error('Error attempt connect to PostgreSQL:', error)
+    })

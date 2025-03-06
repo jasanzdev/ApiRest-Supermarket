@@ -1,5 +1,5 @@
-import { db } from "../config/postgres";
-import { Product } from "../types/product";
+import { db } from '../config/postgres'
+import { Product } from '../types/product'
 
 interface FindByProps {
     column: string,
@@ -42,14 +42,14 @@ export class ProductModel {
 
         const result = await db.query(
             `INSERT INTO product (name, description, category, price_purchase, price_sale, stock, threshold, active, thumbnail,code)
-                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *`,
+                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
             [name, description, category, price_purchase, price_sale, stock, threshold, active, thumbnail, code])
 
         return result.rows[0]
     }
 
     static async delete(id: Product['id']) {
-        return await db.query(`DELETE FROM product WHERE product.id = $1`, [id])
+        return await db.query('DELETE FROM product WHERE product.id = $1', [id])
     }
 
     static async update({ id, input }: UpdateProps) {

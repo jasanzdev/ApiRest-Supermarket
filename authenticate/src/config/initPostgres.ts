@@ -42,6 +42,8 @@ const CreateTableSession = async () => {
                 id SERIAL PRIMARY KEY,
                 user_id UUID NOT NULL,
                 user_agent TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE (user_id, user_agent),
                 FOREIGN KEY (user_id) REFERENCES "users" (id)
     )`)

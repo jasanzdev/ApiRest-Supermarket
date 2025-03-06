@@ -5,13 +5,13 @@ import cors from 'cors'
 import HandleError from './middleware/errorHandler'
 import { CreateAuthRouter } from './routes/auth'
 
-app.use(json())
 app.use(cors())
+app.use(json())
 app.use(cookieParser())
 app.disable('x-powered-by')
 
 app.use(CreateAuthRouter())
-
 app.use(HandleError)
+
 
 export default app

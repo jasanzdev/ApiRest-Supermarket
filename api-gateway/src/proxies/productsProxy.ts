@@ -1,10 +1,10 @@
 import { createProxyMiddleware } from "http-proxy-middleware"
 import OnProxyReq from "../utils/onProxyReq"
 import logger from "../utils/logger"
+import { productsUrl } from "../constants/urls"
 
-const target = process.env.NODE_ENV === 'production' ? 'http://products:4001/' : 'http://localhost:4001/'
 export const ProductProxy = createProxyMiddleware({
-    target: target,
+    target: productsUrl,
     changeOrigin: true,
     pathRewrite: { '^/products': '' },
     on: {

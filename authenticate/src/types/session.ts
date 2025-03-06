@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User } from "./publicUser";
 
 export type Sessions = {
     id: number,

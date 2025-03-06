@@ -28,7 +28,7 @@ export const CreateSchema: Schema = {
         },
         custom: {
             options: async (value: string) => {
-                const isUsernameExists = await UserModel.findByUsername(value)
+                const isUsernameExists = await UserModel.findBy(value)
                 if (!isUsernameExists) {
                     return true
                 }
@@ -38,12 +38,13 @@ export const CreateSchema: Schema = {
     },
     email: {
         isEmail: true,
+        errorMessage: 'Invalid email format. Please ensure your email address follows the correct structure: name@domain.com',
         normalizeEmail: true,
         escape: true,
         trim: true,
         custom: {
             options: async (value: string) => {
-                const isEmailExists = await UserModel.findByEmail(value)
+                const isEmailExists = await UserModel.findBy(value)
                 if (!isEmailExists) {
                     return true
                 }

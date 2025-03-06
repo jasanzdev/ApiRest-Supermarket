@@ -1,11 +1,12 @@
-import { ErrorRequestHandler, Response } from "express";
-import { INTERNAL_SERVER_ERROR, UNAUTHORIZED, UNPROCESSABLE_CONTENT } from "../constants/http";
-import AppError from "../utils/appErrors";
-import { ZodError } from "zod";
-import jwt from "jsonwebtoken";
-import AppErrorCode from "../constants/appErrorCode";
-import logger from "../utils/logger";
-import { RefreshToken } from "../controllers/refreshToken";
+import { ErrorRequestHandler, Response } from 'express'
+import { INTERNAL_SERVER_ERROR, UNAUTHORIZED, UNPROCESSABLE_CONTENT } from '../constants/http'
+import AppError from '../utils/appErrors'
+import { ZodError } from 'zod'
+import jwt from 'jsonwebtoken'
+import AppErrorCode from '../constants/appErrorCode'
+import logger from '../utils/logger'
+import { RefreshToken } from '../controllers/refreshToken'
+import { AxiosError } from 'axios'
 
 const { JsonWebTokenError } = jwt
 
@@ -48,6 +49,14 @@ export const HandleError: ErrorRequestHandler = (error, req, res, next) => {
 
     if (error instanceof AppError) {
         HandleAppError(res, error)
+        return
+    }
+
+    if (error instanceof AxiosError) {
+        logger.log('error', `Axios Error: ${error.response?.statusText}:${error.status}`)
+        res.status(Number(error.status)).json(error.response
+            ? error.response.data
+            : error.message)
         return
     }
 

@@ -1,9 +1,9 @@
-import { db } from "../config/postgres";
-import { Sessions } from "../types/session";
-import { User } from "../types/user"
+import { db } from '../config/postgres'
+import { PublicUser } from '../types/publicUser'
+import { Sessions } from '../types/session'
 
 interface SessionProps {
-    userId: User['id'],
+    userId: PublicUser['id'],
     userAgent: string,
 }
 
@@ -22,12 +22,12 @@ export class SessionModel {
 
     static async getById(id: Sessions['id']) {
         const result = await db.query(
-            `SELECT * FROM session WHERE session.id = $1`, [id])
+            'SELECT * FROM session WHERE session.id = $1', [id])
 
         return result.rowCount ? result.rows[0] : null
     }
 
-    static async getBy(id: User['id'], userAgent: string) {
+    static async getBy(id: PublicUser['id'], userAgent: string) {
         const result = await db.query(`SELECT * FROM sessions 
             WHERE sessions.user_id = $1 AND sessions.user_agent = $2`, [id, userAgent])
 
@@ -35,6 +35,6 @@ export class SessionModel {
     }
 
     static async delete(id: Sessions['id']) {
-        return await db.query(`DELETE FROM session WHERE session.id = $1`, [id])
+        return await db.query('DELETE FROM session WHERE session.id = $1', [id])
     }
 }

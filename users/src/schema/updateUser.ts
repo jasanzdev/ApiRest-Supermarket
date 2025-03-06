@@ -22,7 +22,7 @@ export const UpdateSchema: Schema = {
         trim: true,
         custom: {
             options: async (value: string) => {
-                const isEmailExists = await UserModel.findByEmail(value)
+                const isEmailExists = await UserModel.findBy(value)
                 if (!isEmailExists) {
                     return true
                 }

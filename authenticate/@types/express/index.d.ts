@@ -1,4 +1,4 @@
-import { PublishUser } from "../../src/types/user"
+import { PublishUser } from "../../src/types/publicUser"
 
 declare global {
     namespace Express {

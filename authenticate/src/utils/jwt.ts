@@ -1,8 +1,8 @@
-import jwt from "jsonwebtoken";
-import { UNPROCESSABLE_CONTENT } from "../constants/http";
-import { AccessTokenPayload, RefreshTokenPayload } from "../types/payload";
-import { accessSecretKey, refreshSecretKey } from "../config/jwt";
-import appAssert from "./appAssert";
+import jwt from 'jsonwebtoken'
+import { UNPROCESSABLE_CONTENT } from '../constants/http'
+import { AccessTokenPayload, RefreshTokenPayload } from '../types/payload'
+import { accessSecretKey, refreshSecretKey } from '../config/jwt'
+import appAssert from './appAssert'
 
 export const generateAccessToken = (payload: AccessTokenPayload): string => {
     appAssert(
@@ -10,7 +10,7 @@ export const generateAccessToken = (payload: AccessTokenPayload): string => {
         UNPROCESSABLE_CONTENT,
         'Impossible to create Access Token, user not provider'
     )
-    return jwt.sign(payload, accessSecretKey, { expiresIn: '15m' });
+    return jwt.sign(payload, accessSecretKey, { expiresIn: '15m' })
 }
 
 export const generateRefreshToken = (payload: RefreshTokenPayload): string => {
@@ -19,7 +19,7 @@ export const generateRefreshToken = (payload: RefreshTokenPayload): string => {
         UNPROCESSABLE_CONTENT,
         'Impossible to create Refresh Token, user not provider')
 
-    return jwt.sign(payload, refreshSecretKey, { expiresIn: '1d' });
+    return jwt.sign(payload, refreshSecretKey, { expiresIn: '1d' })
 }
 
 export const verifyAccessToken = (token: string): AccessTokenPayload => {

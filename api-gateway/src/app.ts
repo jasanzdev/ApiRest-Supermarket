@@ -9,6 +9,7 @@ import { VerifyToken } from './middleware/verifyToken'
 import { NotFound } from './middleware/notFound'
 import { HomeController } from './controllers/home'
 import { ErrorHandler } from './middleware/errorHandler'
+import { UsersProxy } from './proxies/usersProxy'
 
 app.use(cors())
 app.use(helmet())
@@ -17,6 +18,7 @@ app.disable('x-powered-by')
 
 app.get('/', HomeController)
 app.use('/auth', AuthProxy)
+app.use('/users', VerifyToken, UsersProxy)
 app.use('/products', VerifyToken, ProductProxy)
 app.use(NotFound)
 app.use(ErrorHandler)
