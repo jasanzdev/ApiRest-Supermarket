@@ -16,6 +16,7 @@ export class AuthenticationController {
             method: req.method,
             url: req.originalUrl
         })
+
         const user: PublicUser = req.user
         const userAgent = req.headers['user-agent'] as string
 
@@ -36,7 +37,8 @@ export class AuthenticationController {
             url: req.originalUrl
         })
         const userAgent = req.headers['user-agent'] as string
-        const { publicUser, accessToken, refreshToken } = await RegisterService(req.body, userAgent)
+        const receiveSecretKey = req.secret as string
+        const { publicUser, accessToken, refreshToken } = await RegisterService(req.body, userAgent, receiveSecretKey)
 
         res.setHeader('Authorization', accessToken)
         res.cookie('refresh_token', refreshToken, getCookieOptions())

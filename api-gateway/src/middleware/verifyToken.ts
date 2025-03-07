@@ -12,9 +12,10 @@ export const VerifyToken: RequestHandler = CatchErrors(async (req, res, next) =>
     })
     const accessToken = req.headers['authorization']
     const refreshToken = req.cookies.refresh_token
+    const apiSecretKey = req.secret as string
 
     if (refreshToken && accessToken) {
-        const { newRefreshToken, newAccessToken, user } = await VerifyAccessTokenServices(accessToken, refreshToken)
+        const { newRefreshToken, newAccessToken, user } = await VerifyAccessTokenServices(accessToken, refreshToken, apiSecretKey)
 
         if (newRefreshToken && newAccessToken) {
             res.cookie('refresh_token', newRefreshToken, {

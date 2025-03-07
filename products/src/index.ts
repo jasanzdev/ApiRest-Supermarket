@@ -9,17 +9,31 @@ import CookieParser from 'cookie-parser'
 import { CreateProductsRouter } from './routes/products'
 import HandleError from './middlewares/handleErrors'
 import { startServer } from './config/initPostgres'
+import { VerifySecretKey } from './middlewares/verifySecretKey'
 
 
 const app = express()
 
+const allowedOrigins = [process.env.ALLOWED_ORIGIN, 'http://localhost:3000']
+
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true)
+            } else {
+                callback(new Error('Not allowed by CORS'))
+            }
+        },
+    })
+)
 app.use(json())
-app.use(cors())
 app.disable('x-powered-by')
 app.use(CookieParser())
 
 const port = process.env.PRODUCTS_PORT ?? 4001
 
+app.use(VerifySecretKey)
 app.use(CreateProductsRouter())
 
 app.use(HandleError)

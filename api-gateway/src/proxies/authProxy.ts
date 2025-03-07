@@ -3,6 +3,7 @@ import logger from '../utils/logger'
 import { IncomingMessage } from 'http'
 import { Request, Response } from 'express'
 import { authUrl } from '../constants/urls'
+import OnProxyReq from '../utils/onProxyReq'
 
 
 export const AuthProxy = createProxyMiddleware({
@@ -10,6 +11,7 @@ export const AuthProxy = createProxyMiddleware({
     changeOrigin: true,
     pathRewrite: { '^/auth': '' },
     on: {
+        proxyReq: OnProxyReq.proxyReqAuth,
         proxyRes: (proxyRes: IncomingMessage, req: Request, res: Response) => {
             const accessToken = proxyRes.headers.authorization
             if (accessToken) {

@@ -11,6 +11,7 @@ import { toPublishUser } from '../utils/userToPublish'
 
 export const ValidateLogin: RequestHandler = CatchErrors(async (req, res, next) => {
     const { username, password } = req.body
+    const receiveSecretKey = req.secret as string
 
     appAssert(
         username && password,
@@ -20,7 +21,11 @@ export const ValidateLogin: RequestHandler = CatchErrors(async (req, res, next) 
     )
 
     const url = `${userServiceUrl}usernameOrEmail`
-    const response = await axios.get(`${url}/${username}`)
+    const response = await axios.get(`${url}/${username}`, {
+        headers: {
+            'API_KEY': receiveSecretKey,
+        }
+    })
 
     const user: User = response.data.user
 

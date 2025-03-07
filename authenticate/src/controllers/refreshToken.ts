@@ -14,6 +14,7 @@ export const RefreshToken = CatchErrors(async (req: Request, res: Response) => {
         url: req.originalUrl
     })
     const refreshToken = req.cookies['refresh_token']
+    const receiveSecretKey = req.secret as string
 
     appAssert(
         refreshToken,
@@ -22,7 +23,7 @@ export const RefreshToken = CatchErrors(async (req: Request, res: Response) => {
         AppErrorCode.NoTokenProvider
     )
 
-    const { publicUser, newAccessToken, newRefreshToken } = await RefreshTokenService(refreshToken)
+    const { publicUser, newAccessToken, newRefreshToken } = await RefreshTokenService(refreshToken, receiveSecretKey)
 
     res.setHeader('Authorization', newAccessToken)
     res.cookie('refresh_token', newRefreshToken, getCookieOptions())

@@ -1,7 +1,7 @@
-import { AxiosError } from "axios";
-import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
-import logger from "../utils/logger";
-import { User } from "../types/user";
+import { AxiosError } from 'axios'
+import { ErrorRequestHandler, Request, Response } from 'express'
+import logger from '../utils/logger'
+import { User } from '../types/user'
 
 interface ResponseData {
     user?: User,
@@ -9,7 +9,7 @@ interface ResponseData {
     errorCode?: string
 }
 
-const HandleAxiosError = (error: AxiosError, req: Request, res: Response, next: NextFunction) => {
+const HandleAxiosError = (error: AxiosError, req: Request, res: Response) => {
     const response = error.response
     if (response) {
         const data = response.data as ResponseData
@@ -30,7 +30,7 @@ const HandleAxiosError = (error: AxiosError, req: Request, res: Response, next: 
 
 export const ErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     if (error instanceof AxiosError) {
-        HandleAxiosError(error, req, res, next)
+        HandleAxiosError(error, req, res)
         return
     }
 

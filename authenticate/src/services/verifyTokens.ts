@@ -17,7 +17,7 @@ import { toPublishUser } from '../utils/userToPublish'
 
 const { TokenExpiredError } = jwt
 
-const RefreshTokenService = async (refreshToken: string) => {
+const RefreshTokenService = async (refreshToken: string, receiveSecretKey: string) => {
     const { sessionId } = verifyRefreshToken(refreshToken)
     const session: Sessions = await SessionModel.getById(sessionId)
 
@@ -35,7 +35,11 @@ const RefreshTokenService = async (refreshToken: string) => {
     const newAccessToken = generateAccessToken(accessPayload)
     const newRefreshToken = generateRefreshToken(refreshPayload)
 
-    const response = await axios.get(`${userServiceUrl}${session.user_id}`)
+    const response = await axios.get(`${userServiceUrl}${session.user_id}`, {
+        headers: {
+            'API_KEY': receiveSecretKey,
+        }
+    })
 
     const { user } = response.data
     const publicUser = toPublishUser(user)
@@ -43,10 +47,14 @@ const RefreshTokenService = async (refreshToken: string) => {
     return { publicUser, newAccessToken, newRefreshToken }
 }
 
-const ValidateTokenServices = async (accessToken: string, refreshToken: string) => {
+const ValidateTokenServices = async (accessToken: string, refreshToken: string, receiveSecretKey: string) => {
     try {
         const { userId } = verifyAccessToken(accessToken)
-        const response = await axios.get(`${userServiceUrl}${userId}`)
+        const response = await axios.get(`${userServiceUrl}${userId}`, {
+            headers: {
+                'API_KEY': receiveSecretKey,
+            }
+        })
 
         const { user } = response.data
 
@@ -55,7 +63,7 @@ const ValidateTokenServices = async (accessToken: string, refreshToken: string) 
         return { publicUser }
     } catch (error) {
         if (error instanceof TokenExpiredError) {
-            const { publicUser, newAccessToken, newRefreshToken } = await RefreshTokenService(refreshToken)
+            const { publicUser, newAccessToken, newRefreshToken } = await RefreshTokenService(refreshToken, receiveSecretKey)
             return { publicUser, newAccessToken, newRefreshToken }
         } else {
             throw error

@@ -68,7 +68,9 @@ export const HandleError: ErrorRequestHandler = (error, req, res, next) => {
             statusText: error.response?.statusText,
             error: error.response?.data
         })
-        res.status(UNAUTHORIZED).json({ message: 'User not authorized' })
+        res.status(error.status ?? UNAUTHORIZED).json(error.response
+            ? error.response.data
+            : error.message)
         return
     }
 

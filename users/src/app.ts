@@ -4,12 +4,26 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { CreateUsersRouter } from './routes/users'
 import { ErrorHandler } from './middlewares/errorHandler'
+import { VerifySecretKey } from './middlewares/verifySecretKey'
 
-app.use(cors())
+const allowedOrigins = [process.env.ALLOWED_ORIGIN, 'http://localhost:3000']
+
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true)
+            } else {
+                callback(new Error('Not allowed by CORS'))
+            }
+        },
+    })
+)
 app.use(json())
 app.use(cookieParser())
 app.disable('x-powered-by')
 
+app.use(VerifySecretKey)
 app.use(CreateUsersRouter())
 app.use(ErrorHandler)
 

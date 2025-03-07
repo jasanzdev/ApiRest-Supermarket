@@ -30,8 +30,12 @@ const LoginService = async (user: PublicUser, userAgent: string) => {
     return { accessToken, refreshToken }
 }
 
-const RegisterService = async (input: User, userAgent: string) => {
-    const response = await axios.post(userServiceUrl, input)
+const RegisterService = async (input: User, userAgent: string, receiveSecretKey: string) => {
+    const response = await axios.post(userServiceUrl, input, {
+        headers: {
+            'API_KEY': receiveSecretKey,
+        }
+    })
 
     const user: User = response.data.user
 

@@ -15,13 +15,14 @@ export const ValidateToken = CatchErrors(async (req: Request, res: Response) => 
     })
     const accessToken = req.headers['authorization']
     const refreshToken = req.cookies['refresh_token']
+    const receiveSecretKey = req.secret as string
 
     appAssert(accessToken,
         UNAUTHORIZED,
         'Access denied, No token provider',
         AppErrorCode.NoTokenProvider)
 
-    const { publicUser, newAccessToken, newRefreshToken } = await ValidateTokenServices(accessToken, refreshToken)
+    const { publicUser, newAccessToken, newRefreshToken } = await ValidateTokenServices(accessToken, refreshToken, receiveSecretKey)
 
     if (newAccessToken && newRefreshToken) {
         res.setHeader('Authorization', newAccessToken)
