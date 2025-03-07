@@ -3,6 +3,13 @@ import { Roles } from '../constants/roles'
 import UserModel from '../models/users'
 
 export const UpdateSchema: Schema = {
+    id: {
+        in: ['params'],
+        notEmpty: true,
+        trim: true,
+        isUUID: true,
+        errorMessage: 'The id parameter must be a valid UUID'
+    },
     name: {
         optional: true,
         isString: true,

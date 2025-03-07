@@ -69,13 +69,6 @@ export default class UserController {
         const { id } = req.params
         logger.log('info', `Updating User with id:${id}`)
 
-        appAssert(
-            uuidValidate(id),
-            UNPROCESSABLE_CONTENT,
-            'Invalid Id',
-            AppErrorCode.InvalidId
-        )
-
         const user = await UserServices.update(id, req.body)
 
         res.status(user ? OK : NOT_FOUND).json(!user
@@ -113,13 +106,6 @@ export default class UserController {
     static readonly resetPassword: RequestHandler = CatchErrors(async (req, res) => {
         const { password, newPassword } = req.body
         const { id } = req.params
-
-        appAssert(
-            uuidValidate(id),
-            UNPROCESSABLE_CONTENT,
-            'Invalid Id',
-            AppErrorCode.InvalidId
-        )
 
         await UserServices.ResetPassword(id, password, newPassword)
 

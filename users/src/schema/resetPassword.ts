@@ -1,6 +1,13 @@
 import { Schema } from 'express-validator'
 
 export const ResetPassword: Schema = {
+    id: {
+        in: ['params'],
+        notEmpty: true,
+        trim: true,
+        isUUID: true,
+        errorMessage: 'The id parameter must be a valid UUID'
+    },
     newPassword: {
         isString: true,
         trim: true,
