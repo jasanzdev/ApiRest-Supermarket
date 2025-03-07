@@ -17,7 +17,7 @@ const ProductSchema = z.object({
 
     threshold: z.number().positive().int().optional(),
 
-    active: z.boolean(),
+    active: z.boolean().default(true),
 
     thumbnail: z.string().optional(),
 

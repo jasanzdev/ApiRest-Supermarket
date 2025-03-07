@@ -6,10 +6,16 @@ import { getCookieOptions } from '../utils/cookieOptions'
 import appAssert from '../utils/appAssert'
 import AppErrorCode from '../constants/appErrorCode'
 import { PublicUser } from '../types/publicUser'
+import logger from '../utils/logger'
 
 export class AuthenticationController {
 
     static readonly login: RequestHandler = CatchErrors(async (req, res) => {
+        logger.info('Login User', {
+            ip: req.ip,
+            method: req.method,
+            url: req.originalUrl
+        })
         const user: PublicUser = req.user
         const userAgent = req.headers['user-agent'] as string
 
@@ -24,6 +30,11 @@ export class AuthenticationController {
     })
 
     static readonly register: RequestHandler = CatchErrors(async (req, res) => {
+        logger.info('Register User', {
+            ip: req.ip,
+            method: req.method,
+            url: req.originalUrl
+        })
         const userAgent = req.headers['user-agent'] as string
         const { publicUser, accessToken, refreshToken } = await RegisterService(req.body, userAgent)
 

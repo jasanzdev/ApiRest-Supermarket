@@ -1,5 +1,5 @@
-import axios from "axios"
-import { verifyTokenUrl } from "../constants/urls"
+import axios from 'axios'
+import { verifyTokenUrl } from '../constants/urls'
 
 const VerifyAccessTokenServices = async (accessToken: string, refreshToken: string) => {
     const response = await axios.post(verifyTokenUrl, {}, {

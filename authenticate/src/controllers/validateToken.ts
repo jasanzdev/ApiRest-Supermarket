@@ -5,8 +5,14 @@ import { OK, UNAUTHORIZED } from '../constants/http'
 import AppErrorCode from '../constants/appErrorCode'
 import { ValidateTokenServices } from '../services/verifyTokens'
 import { getCookieOptions } from '../utils/cookieOptions'
+import logger from '../utils/logger'
 
 export const ValidateToken = CatchErrors(async (req: Request, res: Response) => {
+    logger.info('Validating Token', {
+        ip: req.ip,
+        method: req.method,
+        url: req.originalUrl
+    })
     const accessToken = req.headers['authorization']
     const refreshToken = req.cookies['refresh_token']
 

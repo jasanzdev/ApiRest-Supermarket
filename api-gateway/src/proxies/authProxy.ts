@@ -1,8 +1,8 @@
-import { createProxyMiddleware } from "http-proxy-middleware"
-import logger from "../utils/logger"
-import { IncomingMessage } from "http"
-import { Request, Response } from "express"
-import { authUrl } from "../constants/urls"
+import { createProxyMiddleware } from 'http-proxy-middleware'
+import logger from '../utils/logger'
+import { IncomingMessage } from 'http'
+import { Request, Response } from 'express'
+import { authUrl } from '../constants/urls'
 
 
 export const AuthProxy = createProxyMiddleware({
@@ -17,7 +17,11 @@ export const AuthProxy = createProxyMiddleware({
             }
         },
         error: (err) => {
-            logger.log('error', `Error Auth: ${err.message} ${err.stack}`)
+            console.log(err)
+            logger.error('Error response Auth', {
+                message: err.message,
+                stack: err.stack
+            })
         }
     }
 })

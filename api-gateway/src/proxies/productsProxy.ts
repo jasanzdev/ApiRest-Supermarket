@@ -10,7 +10,10 @@ export const ProductProxy = createProxyMiddleware({
     on: {
         proxyReq: OnProxyReq.proxyReqProducts,
         error: (err) => {
-            logger.log('error', `Error response products: ${err.message}`)
+            logger.error('Error response products', {
+                message: err.message,
+                stack: err.stack
+            })
         }
     }
 })

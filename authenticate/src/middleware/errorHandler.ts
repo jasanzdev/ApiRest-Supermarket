@@ -11,7 +11,11 @@ import { AxiosError } from 'axios'
 const { JsonWebTokenError } = jwt
 
 const HandleAppError = (res: Response, error: AppError) => {
-    logger.log('error', `App Error: ${error.statusCode} ${error.message}`)
+    logger.error('App Error', {
+        status: error.statusCode,
+        errorCode: error.errorCode,
+        message: error.message
+    })
     res.status(error.statusCode).json({
         message: error.message,
         errorCode: error.errorCode
@@ -19,7 +23,11 @@ const HandleAppError = (res: Response, error: AppError) => {
 }
 
 const HandleJwtError = (res: Response, error: Error) => {
-    logger.log('error', `JsonWebToken Error: ${AppErrorCode.InvalidToken} ${error.message}`)
+    logger.error('JsonWebToken Error', {
+        error: error.name,
+        errorCode: AppErrorCode.InvalidToken,
+        message: error.message
+    })
     if (error.message === 'jwt expired') {
         res.status(UNAUTHORIZED).json({
             message: 'Token Expired',
@@ -37,8 +45,10 @@ const HandleJwtError = (res: Response, error: Error) => {
 export const HandleError: ErrorRequestHandler = (error, req, res, next) => {
 
     if (error instanceof ZodError) {
-        logger.log('error', `App Error: ${AppErrorCode.BadRequest}
-             ${JSON.stringify(error.flatten().fieldErrors)}`)
+        logger.error('Validating Error', {
+            errorCode: AppErrorCode.BadRequest,
+            errors: error.flatten().fieldErrors
+        })
 
         res.status(UNPROCESSABLE_CONTENT).json({
             message: error.flatten().fieldErrors,
@@ -53,10 +63,12 @@ export const HandleError: ErrorRequestHandler = (error, req, res, next) => {
     }
 
     if (error instanceof AxiosError) {
-        logger.log('error', `Axios Error: ${error.response?.statusText}:${error.status}`)
-        res.status(Number(error.status)).json(error.response
-            ? error.response.data
-            : error.message)
+        logger.error('Axios Error', {
+            status: error.status,
+            statusText: error.response?.statusText,
+            error: error.response?.data
+        })
+        res.status(UNAUTHORIZED).json({ message: 'User not authorized' })
         return
     }
 
@@ -65,7 +77,10 @@ export const HandleError: ErrorRequestHandler = (error, req, res, next) => {
         return
     }
 
-    logger.log('error', `Unknown Error: ${AppErrorCode.InternalServerError} ${error.message}`)
+    logger.error('Unknown Error', {
+        status: AppErrorCode.InternalServerError,
+        message: error.message
+    })
     res.status(INTERNAL_SERVER_ERROR).json({
         message: 'Internal Server Error',
         errorCode: AppErrorCode.InternalServerError

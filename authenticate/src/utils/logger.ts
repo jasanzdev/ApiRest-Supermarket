@@ -2,18 +2,13 @@ import winston from 'winston'
 import DailyRotateFile from 'winston-daily-rotate-file'
 
 const { format } = winston
-const { combine, timestamp, printf } = format
-
-const logFormat = printf(({ level, message, timestamp }) => {
-    return `[${timestamp}] ${level}: ${message}`
-})
+const { combine, timestamp, json } = format
 
 const logger = winston.createLogger({
     level: 'debug',
     format: combine(
         timestamp(),
-        logFormat,
-        format.json()
+        json()
     ),
     transports: [
         new winston.transports.File({
@@ -32,11 +27,12 @@ const logger = winston.createLogger({
 })
 
 if (process.env.NODE_ENV !== 'production') {
-    logger.add(
-        new winston.transports.Console({
-            format: winston.format.simple(),
-        })
-    )
+    logger.add(new winston.transports.Console({
+        format: combine(
+            format.colorize(),
+            format.simple()
+        ),
+    }))
 }
 
 logger.add(

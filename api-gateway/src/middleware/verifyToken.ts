@@ -1,11 +1,15 @@
-import CatchErrors from "../utils/catchErrors";
-import logger from "../utils/logger";
-import { RequestHandler } from "express";
-import { VerifyAccessTokenServices } from "../services/verifyAccessToken";
+import CatchErrors from '../utils/catchErrors'
+import logger from '../utils/logger'
+import { RequestHandler } from 'express'
+import { VerifyAccessTokenServices } from '../services/verifyAccessToken'
 
 
 export const VerifyToken: RequestHandler = CatchErrors(async (req, res, next) => {
-    logger.log('info', `Verifying Token: ${req.method} ${req.url}`)
+    logger.info('Verifying Token', {
+        ip: req.ip,
+        method: req.method,
+        url: req.originalUrl
+    })
     const accessToken = req.headers['authorization']
     const refreshToken = req.cookies.refresh_token
 
@@ -22,5 +26,7 @@ export const VerifyToken: RequestHandler = CatchErrors(async (req, res, next) =>
         }
         req.user = user
         next()
+        return
     }
+    next()
 })

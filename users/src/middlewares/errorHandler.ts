@@ -1,9 +1,14 @@
 import { ErrorRequestHandler, Response } from 'express'
 import AppError from '../utils/appErrors'
 import logger from '../utils/logger'
+import { INTERNAL_SERVER_ERROR } from '../constants/http'
 
 const HandleAppError = (res: Response, error: AppError) => {
-    logger.log('error', `App Error: ${error.statusCode}:${error.message}--${error.errorCode}`)
+    logger.error('App Error', {
+        status: error.statusCode,
+        errorCode: error.errorCode,
+        message: error.message
+    })
     res.status(error.statusCode).json({
         message: error.message,
         errorCode: error.errorCode
@@ -11,14 +16,16 @@ const HandleAppError = (res: Response, error: AppError) => {
 }
 
 export const ErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
-    logger.log('error', `Error: ${error.status}:${error.message}`)
-
     if (error instanceof AppError) {
         HandleAppError(res, error)
         return
     }
 
-    res.status(500).json({ message: 'Internal Server Error' })
+    logger.error('Unknown Error', {
+        status: INTERNAL_SERVER_ERROR,
+        message: error.message
+    })
 
+    res.status(500).json({ message: 'Internal Server Error' })
     next()
 }

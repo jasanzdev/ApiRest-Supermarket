@@ -45,6 +45,6 @@ const CreateTableSession = async () => {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE (user_id, user_agent),
-                FOREIGN KEY (user_id) REFERENCES "users" (id)
+                FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE
     )`)
 }

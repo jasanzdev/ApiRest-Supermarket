@@ -5,8 +5,14 @@ import appAssert from '../utils/appAssert'
 import { RefreshTokenService } from '../services/verifyTokens'
 import AppErrorCode from '../constants/appErrorCode'
 import CatchErrors from '../utils/catchErrors'
+import logger from '../utils/logger'
 
 export const RefreshToken = CatchErrors(async (req: Request, res: Response) => {
+    logger.info('Refreshing Token', {
+        ip: req.ip,
+        method: req.method,
+        url: req.originalUrl
+    })
     const refreshToken = req.cookies['refresh_token']
 
     appAssert(

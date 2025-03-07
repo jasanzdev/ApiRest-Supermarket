@@ -10,7 +10,10 @@ export const UsersProxy = createProxyMiddleware({
     on: {
         proxyReq: OnProxyReq.proxyReqUsers,
         error: (err) => {
-            logger.log('error', `Error response users: ${err.message}`)
+            logger.error('Error response users', {
+                message: err.message,
+                stack: err.stack
+            })
         }
     }
 })
