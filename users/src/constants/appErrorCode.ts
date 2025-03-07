@@ -3,6 +3,7 @@ const enum AppErrorCode {
     UsersNotFound = 'UsersNotFound',
     InvalidId = 'InvalidId',
     BadRequest = 'BadRequest',
+    InvalidPass = 'InvalidPassword',
     InternalServerError = 'InternalServerError'
 }
 

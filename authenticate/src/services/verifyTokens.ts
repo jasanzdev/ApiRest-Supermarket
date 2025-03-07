@@ -52,7 +52,9 @@ const ValidateTokenServices = async (accessToken: string, refreshToken: string, 
         const { userId } = verifyAccessToken(accessToken)
         const response = await axios.get(`${userServiceUrl}${userId}`, {
             headers: {
+                'Authorization': accessToken,
                 'API_KEY': receiveSecretKey,
+                'Cookie': `refresh_token=${refreshToken}`
             }
         })
 

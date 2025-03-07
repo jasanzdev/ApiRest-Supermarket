@@ -3,7 +3,7 @@ import logger from '../utils/logger'
 import { IncomingMessage } from 'http'
 import { Request, Response } from 'express'
 import { authUrl } from '../constants/urls'
-import OnProxyReq from '../utils/onProxyReq'
+import OnProxyReq from '../services/onProxyReq'
 
 
 export const AuthProxy = createProxyMiddleware({

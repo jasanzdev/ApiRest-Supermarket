@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { ClientRequest } from 'http'
 import { MethodsRequireAuth } from '../constants/methods'
-import logger from './logger'
-import { ManageUserAuthorized, ProductsAuthorized } from './userAuthorized'
+import logger from '../utils/logger'
+import { ManageUserAuthorized, ProductsAuthorized } from '../utils/userAuthorized'
 
 export default class OnProxyReq {
     static readonly proxyReqAuth = (proxyReq: ClientRequest, req: Request) => {

@@ -109,4 +109,23 @@ export default class UserController {
             message: 'Impossible to delete, user not exists'
         })
     })
+
+    static readonly resetPassword: RequestHandler = CatchErrors(async (req, res) => {
+        const { password, newPassword } = req.body
+        const { id } = req.params
+
+        appAssert(
+            uuidValidate(id),
+            UNPROCESSABLE_CONTENT,
+            'Invalid Id',
+            AppErrorCode.InvalidId
+        )
+
+        await UserServices.ResetPassword(id, password, newPassword)
+
+        res.status(OK).json({
+            success: true,
+            message: 'Password reset successfully'
+        })
+    })
 }

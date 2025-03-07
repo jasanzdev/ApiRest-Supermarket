@@ -6,7 +6,7 @@ import { CreateUsersRouter } from './routes/users'
 import { ErrorHandler } from './middlewares/errorHandler'
 import { VerifySecretKey } from './middlewares/verifySecretKey'
 
-const allowedOrigins = [process.env.ALLOWED_ORIGIN, 'http://localhost:3000']
+const allowedOrigins = [process.env.ALLOWED_ORIGIN, 'http://localhost:3000', 'http://localhost:4000']
 
 app.use(
     cors({

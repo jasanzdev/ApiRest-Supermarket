@@ -1,8 +1,10 @@
 import { SuperAdmin } from '../constants/adminUser'
-import { CONFLICT } from '../constants/http'
+import AppErrorCode from '../constants/appErrorCode'
+import { CONFLICT, INTERNAL_SERVER_ERROR, NOT_FOUND } from '../constants/http'
 import { User, UserToUpdate } from '../dto/user'
 import UserModel from '../models/users'
 import appAssert from '../utils/appAssert'
+import bcrypt from 'bcryptjs'
 
 export default class UserServices {
     static readonly getAll = async () => {
@@ -37,6 +39,38 @@ export default class UserServices {
         const updatedUser = await UserModel.update(id, user)
 
         return !updatedUser ? null : updatedUser
+    }
+
+    static readonly ResetPassword = async (id: User['id'], password: string, newPassword: string) => {
+        const user = await UserModel.findById(id) as User
+        appAssert(
+            user,
+            NOT_FOUND,
+            'Impossible to reset password, user not found',
+            AppErrorCode.InvalidId
+        )
+
+        const isValidPass = await bcrypt.compare(password, user.password)
+        appAssert(
+            isValidPass,
+            CONFLICT,
+            'Passwords do not match.',
+            AppErrorCode.InvalidPass
+        )
+
+        const userToUpdate: UserToUpdate = {}
+        userToUpdate.password = newPassword
+
+        const result = await UserModel.update(id, userToUpdate)
+
+        appAssert(
+            result,
+            INTERNAL_SERVER_ERROR,
+            'Unknown Error occurred while to attempt reset password',
+            AppErrorCode.InternalServerError
+        )
+
+        return true
     }
 
     static readonly delete = async (id: User['id']) => {

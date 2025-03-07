@@ -1,7 +1,7 @@
-import { createProxyMiddleware } from "http-proxy-middleware"
-import OnProxyReq from "../utils/onProxyReq"
-import logger from "../utils/logger"
-import { productsUrl } from "../constants/urls"
+import { createProxyMiddleware } from 'http-proxy-middleware'
+import OnProxyReq from '../services/onProxyReq'
+import logger from '../utils/logger'
+import { productsUrl } from '../constants/urls'
 
 export const ProductProxy = createProxyMiddleware({
     target: productsUrl,
