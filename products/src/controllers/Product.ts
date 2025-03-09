@@ -1,32 +1,26 @@
 import { Request, Response } from 'express'
-import { ProductModel } from '../models/Products'
 import { ValidatePartialProduct, ValidateProduct } from '../schemas/Product'
 import { validate as uuidValidate } from 'uuid'
-import { CreateFilters } from '../services/createProductsFilters'
-import { ApplyFilters } from '../services/applyProductsFilters'
+import { CreateFilters } from '../utils/createProductsFilters'
 import CatchErrors from '../utils/catchErrors'
-import { BAD_REQUEST, CONFLICT, OK } from '../constants/http'
+import { BAD_REQUEST, CREATED, NO_CONTENT, NOT_FOUND, OK } from '../constants/http'
 import appAssert from '../utils/appAssert'
 import AppErrorCode from '../constants/appErrorCode'
+import ProductServices from '../services/products'
 
 export class ProductController {
 
     static readonly getProducts = CatchErrors(async (req: Request, res: Response) => {
         const filters = CreateFilters(req)
-        const products = await ProductModel.findAll()
 
-        appAssert(
-            products,
-            CONFLICT,
-            'Not Products already exists'
-        )
-        if (products) {
-            const filteredProducts = ApplyFilters(products, filters)
-            res.status(200).json({
-                total: filteredProducts.length,
-                products: filteredProducts
+        const products = await ProductServices.getAll(filters)
+
+        res.status(OK).json(
+            {
+                total: products.length,
+                products: products
             })
-        }
+
     })
 
     static readonly getProductById = CatchErrors(async (req: Request, res: Response) => {
@@ -39,15 +33,16 @@ export class ProductController {
             AppErrorCode.InvalidId
         )
 
-        const product = await ProductModel.findById(id)
-        res.status(200).json(!product ? { message: 'Product not found' } : product)
+        const product = await ProductServices.getById(id)
+        res.status(product ? OK : NOT_FOUND).json(!product
+            ? { message: 'Product not found' }
+            : product)
     })
 
     static readonly createProduct = CatchErrors(async (req: Request, res: Response) => {
         const response = ValidateProduct(req.body)
-
-        const product = await ProductModel.create(response)
-        res.status(201).json(product)
+        const product = await ProductServices.create(response)
+        res.status(CREATED).json(product)
     })
 
     static readonly deleteProduct = CatchErrors(async (req: Request, res: Response) => {
@@ -59,9 +54,9 @@ export class ProductController {
             'The provided ID does not have a valid format',
             AppErrorCode.InvalidId
         )
-        const deleted = await ProductModel.delete(id)
 
-        res.status(OK).json(!deleted ? { message: 'Product not exist' } : { message: 'Product deleted successfully' })
+        const deleted = await ProductServices.delete(id)
+        res.status(deleted ? NO_CONTENT : NOT_FOUND).json({ message: 'Impossible to delete, product does not exist' })
 
     })
 
@@ -76,7 +71,13 @@ export class ProductController {
         )
         const validatedInput = ValidatePartialProduct(req.body)
 
-        const updatedProduct = await ProductModel.update({ id: id, input: validatedInput })
-        res.status(200).json(updatedProduct)
+        const updatedProduct = await ProductServices.update(id, validatedInput)
+        res.status(updatedProduct ? OK : NOT_FOUND).json(updatedProduct
+            ? {
+                product: updatedProduct
+            }
+            : {
+                message: 'Impossible to update, product does not exist'
+            })
     })
 }

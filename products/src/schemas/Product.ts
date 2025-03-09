@@ -1,6 +1,6 @@
 import z from 'zod'
 import { AllowedCategories } from '../constants/allowedCategories'
-import { Product } from '../types/product'
+import { Product } from '../dto/product'
 
 const ProductSchema = z.object({
     name: z.string().max(55, { message: 'this👏is👏too👏big' }),

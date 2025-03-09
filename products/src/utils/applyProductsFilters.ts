@@ -1,5 +1,5 @@
-import { Filters } from "../types/filters"
-import { Product } from "../types/product"
+import { Product } from '../dto/product'
+import { Filters } from '../types/types'
 
 export function ApplyFilters(products: Product[], filters: Filters) {
     const filteredProducts = products.filter(product => {
@@ -25,7 +25,7 @@ export function ApplyFilters(products: Product[], filters: Filters) {
             matches = false
         }
 
-        return matches;
+        return matches
     })
 
     return filteredProducts

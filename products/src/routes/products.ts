@@ -1,9 +1,9 @@
-import { Router } from "express"
-import { ProductController } from "../controllers/Product";
+import { Router } from 'express'
+import { ProductController } from '../controllers/Product'
 
 export const CreateProductsRouter = () => {
 
-    const router = Router();
+    const router = Router()
 
     router.get('/', ProductController.getProducts)
 

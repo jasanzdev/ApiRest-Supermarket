@@ -1,7 +1,7 @@
-import { UUIDTypes } from "uuid";
-import { Category } from "../constants/allowedCategories";
+import { UUIDTypes } from 'uuid'
+import { Category } from '../constants/allowedCategories'
 
-export type Product = {
+export interface Product {
     id?: UUIDTypes,
     name: string,
     description: string,

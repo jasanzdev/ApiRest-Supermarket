@@ -1,6 +1,6 @@
-import { Request } from "express"
-import { Filters } from "../types/filters"
-import { AllowedCategories, Category } from "../constants/allowedCategories"
+import { Request } from 'express'
+import { Filters } from '../types/types'
+import { AllowedCategories, Category } from '../constants/allowedCategories'
 
 export function CreateFilters({ query }: Request) {
     const { category, minStock, minPrice, maxPrice } = query

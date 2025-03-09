@@ -18,9 +18,20 @@ export const ProductProxy = createProxyMiddleware({
             })
             proxyRes.on('end', async () => {
                 const responseBody = Buffer.concat(body).toString()
-                const cacheKey = req.originalUrl
-                redisClient.set(cacheKey, responseBody, { 'EX': 36000 })
-                res.status(200).json(JSON.parse(responseBody))
+
+                let cacheKey = req.originalUrl
+                if (cacheKey.endsWith('/')) {
+                    cacheKey = cacheKey.slice(0, -1)
+                }
+
+                if (proxyRes.method !== 'GET' && await redisClient.exists(cacheKey)) {
+                    await redisClient.del([cacheKey, req.baseUrl])
+                    res.status(proxyRes.statusCode ?? 200).json(JSON.parse(responseBody))
+                    return
+                }
+
+                await redisClient.set(cacheKey, responseBody, { 'EX': 36000 })
+                res.status(proxyRes.statusCode ?? 200).json(JSON.parse(responseBody))
             })
         },
         error: (err) => {

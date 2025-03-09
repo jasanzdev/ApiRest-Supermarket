@@ -1,4 +1,4 @@
-import { Category } from "../constants/allowedCategories";
+import { Category } from '../constants/allowedCategories'
 
 export type Filters = {
     category?: Category,

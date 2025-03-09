@@ -1,6 +1,5 @@
 import { db } from '../config/postgres'
-import { Product } from '../types/product'
-
+import { Product } from '../dto/product'
 interface FindByProps {
     column: string,
     value: string | number
@@ -17,7 +16,7 @@ export class ProductModel {
         const result = await db.query(
             `SELECT * FROM product
             ORDER BY category ASC, updated_at DESC`)
-        return result.rowCount ? result.rows : null
+        return result.rows
     }
 
     static async findById(id: Product['id']) {
@@ -51,7 +50,8 @@ export class ProductModel {
     }
 
     static async delete(id: Product['id']) {
-        return await db.query('DELETE FROM product WHERE product.id = $1', [id])
+        const result = await db.query('DELETE FROM product WHERE product.id = $1', [id])
+        return result.rowCount === 1
     }
 
     static async update({ id, input }: UpdateProps) {
