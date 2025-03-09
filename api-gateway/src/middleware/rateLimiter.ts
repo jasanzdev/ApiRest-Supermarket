@@ -4,6 +4,7 @@ import redisClient from '../utils/redisClient'
 import logger from '../utils/logger'
 import { NextFunction, Request, Response } from 'express'
 
+
 export const RateLimiter = rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 20,

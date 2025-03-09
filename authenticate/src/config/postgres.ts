@@ -1,5 +1,5 @@
-import pkg from 'pg';
-const { Pool } = pkg;
+import pkg from 'pg'
+const { Pool } = pkg
 
 
 export const db = new Pool(process.env.NODE_ENV === 'production'
@@ -18,8 +18,8 @@ export const db = new Pool(process.env.NODE_ENV === 'production'
 
 db.query('SELECT NOW()')
     .then((res) => {
-        console.log('Connection successfully to PostgreSQL:', res.rows[0]);
+        console.log('Connection successfully to PostgreSQL:', res.rows[0])
     })
     .catch((error: Error) => {
-        console.error('Error connect to PostgreSQL:', error);
+        console.error('Error connect to PostgreSQL:', error)
     })

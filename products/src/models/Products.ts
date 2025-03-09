@@ -14,7 +14,9 @@ interface UpdateProps {
 export class ProductModel {
 
     static async findAll() {
-        const result = await db.query('SELECT * FROM product')
+        const result = await db.query(
+            `SELECT * FROM product
+            ORDER BY category ASC, updated_at DESC`)
         return result.rowCount ? result.rows : null
     }
 

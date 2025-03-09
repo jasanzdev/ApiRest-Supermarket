@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import { ProductModel } from '../models/Products'
-import { ValidatePartialProduct, ValidateProduct } from '../schemas/Product';
-import { validate as uuidValidate } from 'uuid';
-import { CreateFilters } from '../services/createProductsFilters';
-import { ApplyFilters } from '../services/applyProductsFilters';
-import CatchErrors from '../utils/catchErrors';
-import { BAD_REQUEST, CONFLICT, OK } from '../constants/http';
-import appAssert from '../utils/appAssert';
-import AppErrorCode from '../constants/appErrorCode';
+import { ValidatePartialProduct, ValidateProduct } from '../schemas/Product'
+import { validate as uuidValidate } from 'uuid'
+import { CreateFilters } from '../services/createProductsFilters'
+import { ApplyFilters } from '../services/applyProductsFilters'
+import CatchErrors from '../utils/catchErrors'
+import { BAD_REQUEST, CONFLICT, OK } from '../constants/http'
+import appAssert from '../utils/appAssert'
+import AppErrorCode from '../constants/appErrorCode'
 
 export class ProductController {
 
@@ -22,7 +22,10 @@ export class ProductController {
         )
         if (products) {
             const filteredProducts = ApplyFilters(products, filters)
-            res.status(200).json(filteredProducts)
+            res.status(200).json({
+                total: filteredProducts.length,
+                products: filteredProducts
+            })
         }
     })
 

@@ -10,7 +10,7 @@ export const generateAccessToken = (payload: AccessTokenPayload): string => {
         UNPROCESSABLE_CONTENT,
         'Impossible to create Access Token, user not provider'
     )
-    return jwt.sign(payload, accessSecretKey, { expiresIn: '15m' })
+    return jwt.sign(payload, accessSecretKey, { expiresIn: '5m' })
 }
 
 export const generateRefreshToken = (payload: RefreshTokenPayload): string => {
@@ -24,6 +24,7 @@ export const generateRefreshToken = (payload: RefreshTokenPayload): string => {
 
 export const verifyAccessToken = (token: string): AccessTokenPayload => {
     const { userId, sessionId } = jwt.verify(token, accessSecretKey) as AccessTokenPayload
+
     appAssert(
         sessionId && userId,
         UNPROCESSABLE_CONTENT,

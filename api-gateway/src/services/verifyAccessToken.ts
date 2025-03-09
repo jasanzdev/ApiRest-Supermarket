@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { verifyTokenUrl } from '../constants/urls'
 
-const VerifyAccessTokenServices = async (accessToken: string, refreshToken: string, apiSecretKey: string) => {
+const VerifyAccessTokenService = async (accessToken: string, refreshToken: string, apiSecretKey: string) => {
     const response = await axios.post(verifyTokenUrl, {}, {
         headers: {
             'Authorization': accessToken,
@@ -18,4 +18,4 @@ const VerifyAccessTokenServices = async (accessToken: string, refreshToken: stri
     return { user, newAccessToken, newRefreshToken }
 }
 
-export { VerifyAccessTokenServices }
+export default VerifyAccessTokenService

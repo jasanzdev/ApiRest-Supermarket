@@ -1,8 +1,8 @@
-import { Sessions } from "./session";
-import { User } from "./publicUser";
+import { PublicUser } from './publicUser'
+import { Sessions } from './session'
 
 export type AccessTokenPayload = {
-    userId: User['id'],
+    userId: PublicUser['id'],
     sessionId: number
 }
 

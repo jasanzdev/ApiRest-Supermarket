@@ -1,7 +1,7 @@
-import { ClientRequest } from "http";
-import { User } from "../types/user";
-import { Response } from "express";
-import logger from "./logger";
+import { ClientRequest } from 'http'
+import { User } from '../types/user'
+import { Response } from 'express'
+import logger from './logger'
 
 export const ProductsAuthorized = (user: User, proxyReq: ClientRequest, res: Response) => {
     if (user.role === 'USER') {
@@ -11,8 +11,8 @@ export const ProductsAuthorized = (user: User, proxyReq: ClientRequest, res: Res
             rolePermitted: 'ADMIN | MANAGER | SUPERVISOR'
         })
         res.status(401).json({
-            "error": "Forbidden",
-            "message": "You do not have the required privileges to perform this action."
+            'error': 'Forbidden',
+            'message': 'You do not have the required privileges to perform this action.'
         })
         proxyReq.destroy()
     }
@@ -26,8 +26,8 @@ export const ManageUserAuthorized = (user: User, proxyReq: ClientRequest, res: R
             rolePermitted: 'ADMIN | MANAGER'
         })
         res.status(401).json({
-            "error": "Forbidden",
-            "message": "You do not have the required privileges to perform this action."
+            'error': 'Forbidden',
+            'message': 'You do not have the required privileges to perform this action.'
         })
         proxyReq.destroy()
     }

@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  redis:
+    container_name: redis
+    image: redis:7.4-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/var/lib/redis/data
+    networks:
+      - app-network
+
   postgres:
     image: postgres:17-alpine
     environment:
@@ -61,6 +71,7 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
 
 networks:
   app-network:

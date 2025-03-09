@@ -1,5 +1,5 @@
-import winston from "winston";
-import DailyRotateFile from 'winston-daily-rotate-file';
+import winston from 'winston'
+import DailyRotateFile from 'winston-daily-rotate-file'
 
 const { format } = winston
 const { combine, timestamp, json } = format

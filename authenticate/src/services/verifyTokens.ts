@@ -18,7 +18,13 @@ import { toPublishUser } from '../utils/userToPublish'
 const { TokenExpiredError } = jwt
 
 const RefreshTokenService = async (refreshToken: string, receiveSecretKey: string) => {
-    const { sessionId } = verifyRefreshToken(refreshToken)
+    const refreshTokenSplitter = refreshToken.split('=')[1]
+
+    const { sessionId } = verifyRefreshToken(
+        !refreshTokenSplitter
+            ? refreshToken
+            : refreshTokenSplitter)
+
     const session: Sessions = await SessionModel.getById(sessionId)
 
     appAssert(session, UNAUTHORIZED, 'Access denied, user not found', AppErrorCode.InvalidToken)
@@ -42,8 +48,15 @@ const RefreshTokenService = async (refreshToken: string, receiveSecretKey: strin
     })
 
     const { user } = response.data
-    const publicUser = toPublishUser(user)
 
+    appAssert(
+        user,
+        UNAUTHORIZED,
+        'Access not authorized, user does not exist',
+        AppErrorCode.UserNotExist
+    )
+
+    const publicUser = toPublishUser(user)
     return { publicUser, newAccessToken, newRefreshToken }
 }
 

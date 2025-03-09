@@ -27,7 +27,10 @@ export class AuthenticationController {
         res.setHeader('Authorization', accessToken)
         res.cookie('refresh_token', refreshToken, getCookieOptions())
 
-        res.status(OK).json({ message: 'Login successfully' })
+        res.status(OK).json({
+            message: 'Login successfully',
+            user: user
+        })
     })
 
     static readonly register: RequestHandler = CatchErrors(async (req, res) => {
@@ -43,7 +46,10 @@ export class AuthenticationController {
         res.setHeader('Authorization', accessToken)
         res.cookie('refresh_token', refreshToken, getCookieOptions())
         req.user = publicUser
-        res.status(OK).json({ message: 'Register successfully' })
+        res.status(OK).json({
+            message: 'Register successfully',
+            user: publicUser
+        })
     })
 
     static readonly logout: RequestHandler = CatchErrors(async (req, res) => {

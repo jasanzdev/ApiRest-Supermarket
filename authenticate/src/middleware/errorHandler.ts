@@ -5,8 +5,8 @@ import { ZodError } from 'zod'
 import jwt from 'jsonwebtoken'
 import AppErrorCode from '../constants/appErrorCode'
 import logger from '../utils/logger'
-import { RefreshToken } from '../controllers/refreshToken'
 import { AxiosError } from 'axios'
+import ValidateTokensController from '../controllers/verifyTokens'
 
 const { JsonWebTokenError } = jwt
 
@@ -33,7 +33,7 @@ const HandleJwtError = (res: Response, error: Error) => {
             message: 'Token Expired',
             errorCode: AppErrorCode.AccessTokenExpired
         })
-        return RefreshToken
+        return ValidateTokensController.RefreshToken
     } else {
         res.status(UNAUTHORIZED).json({
             message: 'Invalid token provide',
