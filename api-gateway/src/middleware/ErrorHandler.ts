@@ -9,6 +9,23 @@ interface ResponseData {
     errorCode?: string
 }
 
+export const ErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
+    if (error instanceof AxiosError) {
+        HandleAxiosError(error, req, res)
+        return
+    }
+
+    logger.error('Unknown Error', {
+        status: error.code,
+        message: error.message
+    })
+    res.status(500).json({
+        message: 'Internal server error'
+    })
+    next()
+}
+
+
 const HandleAxiosError = (error: AxiosError, req: Request, res: Response) => {
     const response = error.response
     if (response) {
@@ -26,20 +43,4 @@ const HandleAxiosError = (error: AxiosError, req: Request, res: Response) => {
         message: error.message
     })
     res.status(401).json({ message: 'Access denied' })
-}
-
-export const ErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
-    if (error instanceof AxiosError) {
-        HandleAxiosError(error, req, res)
-        return
-    }
-
-    logger.error('Unknown Error', {
-        status: error.code,
-        message: error.message
-    })
-    res.status(500).json({
-        message: 'Internal server error'
-    })
-    next()
 }
