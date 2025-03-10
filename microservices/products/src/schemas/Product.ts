@@ -15,7 +15,7 @@ const ProductSchema = z.object({
 
     stock: z.number().int().min(1, { message: 'Cannot enter a product without stock' }),
 
-    threshold: z.number().positive().int().optional(),
+    threshold: z.number().int().optional(),
 
     active: z.boolean().default(true),
 

@@ -1,26 +1,38 @@
 import { Request, Response } from 'express'
 import { ValidatePartialProduct, ValidateProduct } from '../schemas/Product'
 import { validate as uuidValidate } from 'uuid'
-import { CreateFilters } from '../utils/createProductsFilters'
 import CatchErrors from '../utils/catchErrors'
 import { BAD_REQUEST, CREATED, NO_CONTENT, NOT_FOUND, OK } from '../constants/http'
 import appAssert from '../utils/appAssert'
 import AppErrorCode from '../constants/appErrorCode'
 import ProductServices from '../services/products'
-
+import { PaginationResult } from '../types/types'
+import { ValidateFiltersQueryParams } from '../schemas/filtersParams'
+import { ValidateSearchQueryParams } from '../schemas/searchParams'
 export class ProductController {
 
     static readonly getProducts = CatchErrors(async (req: Request, res: Response) => {
-        const filters = CreateFilters(req)
+        const filters = ValidateFiltersQueryParams(req.query)
 
-        const products = await ProductServices.getAll(filters)
+        const PaginationResult: PaginationResult = await ProductServices.getAll(filters)
 
-        res.status(OK).json(
-            {
-                total: products.length,
-                products: products
-            })
+        res.status(OK).json(PaginationResult)
+    })
 
+    static readonly search = CatchErrors(async (req: Request, res: Response) => {
+        const searchParams = ValidateSearchQueryParams(req.query)
+
+        const PaginationResult: PaginationResult = await ProductServices.search(searchParams)
+
+        res.status(OK).json(PaginationResult)
+    })
+
+    static readonly getCategories = CatchErrors(async (req: Request, res: Response) => {
+
+        const categories = await ProductServices.getCategories()
+        res.status(categories ? OK : NOT_FOUND).json(!categories
+            ? { message: 'Products not found' }
+            : categories)
     })
 
     static readonly getProductById = CatchErrors(async (req: Request, res: Response) => {
@@ -36,13 +48,13 @@ export class ProductController {
         const product = await ProductServices.getById(id)
         res.status(product ? OK : NOT_FOUND).json(!product
             ? { message: 'Product not found' }
-            : product)
+            : { product: product })
     })
 
     static readonly createProduct = CatchErrors(async (req: Request, res: Response) => {
         const response = ValidateProduct(req.body)
         const product = await ProductServices.create(response)
-        res.status(CREATED).json(product)
+        res.status(CREATED).json({ product: product })
     })
 
     static readonly deleteProduct = CatchErrors(async (req: Request, res: Response) => {

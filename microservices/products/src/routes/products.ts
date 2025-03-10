@@ -7,6 +7,10 @@ export const CreateProductsRouter = () => {
 
     router.get('/', ProductController.getProducts)
 
+    router.get('/categories', ProductController.getCategories)
+
+    router.get('/search', ProductController.search)
+
     router.get('/:id', ProductController.getProductById)
 
     router.post('/', ProductController.createProduct)

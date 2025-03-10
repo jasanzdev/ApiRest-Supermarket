@@ -34,6 +34,7 @@ export const ProductProxy = createProxyMiddleware({
             }
         },
         proxyRes: (proxyRes, req, res) => {
+            const url = req.originalUrl
             const body: Buffer[] = []
 
             proxyRes.on('data', (chunk: Buffer) => {
@@ -41,13 +42,7 @@ export const ProductProxy = createProxyMiddleware({
             })
 
             proxyRes.on('end', async () => {
-                const response = await StoreDataInCache(
-                    {
-                        body: body,
-                        url: req.originalUrl,
-                        method: proxyRes.method
-                    })
-
+                const response = await StoreDataInCache(body, url, req.method)
                 res.status(proxyRes.statusCode ?? 200).json(JSON.parse(response))
             })
         },

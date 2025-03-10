@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS product (
 -- Create table session
 CREATE TABLE IF NOT EXISTS session (
     id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL,
+    user_id UUID NOT NULL ON DELETE CASCADE,
     user_agent TEXT NOT NULL,
     UNIQUE (user_id, user_agent),
     FOREIGN KEY (user_id) REFERENCES "users" (id)

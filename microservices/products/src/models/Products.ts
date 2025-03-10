@@ -1,5 +1,6 @@
 import { db } from '../config/postgres'
 import { Product } from '../dto/product'
+import { Filters, Search } from '../types/types'
 interface FindByProps {
     column: string,
     value: string | number
@@ -12,10 +13,57 @@ interface UpdateProps {
 
 export class ProductModel {
 
-    static async findAll() {
+    static async findAll(filters: Filters) {
+        const { category, stock, minPrice, maxPrice, limit, offset } = filters
+
         const result = await db.query(
-            `SELECT * FROM product
-            ORDER BY category ASC, updated_at DESC`)
+            `SELECT * FROM product p
+            WHERE (p.category = $1 OR $1 IS NULL)
+                AND (p.stock > $2)
+                AND (p.price_sale >= $3 AND (p.price_sale <= $4 OR $4 IS NULL))
+            ORDER BY created_at DESC
+            LIMIT $5
+            OFFSET $6`,
+            [category, stock, minPrice, maxPrice, limit, offset])
+
+        const countResult = await db.query(
+            `SELECT COUNT(*) FROM product p
+            WHERE (p.category = $1 OR $1 IS NULL)
+                AND (p.stock > $2)
+                AND (p.price_sale >= $3 AND (p.price_sale <= $4 OR $4 IS NULL))`,
+            [category, stock, minPrice, maxPrice])
+
+        const count = Number(countResult.rows[0].count)
+        const products = result.rows
+
+        return { products, count }
+    }
+
+    static async search(params: Search) {
+        const { keyword, limit, offset } = params
+
+        const result = await db.query(
+            `SELECT * FROM product p
+            WHERE (p.name ILIKE $1) OR (p.description ILIKE $1)
+            ORDER BY created_at DESC
+            LIMIT $2
+            OFFSET $3`,
+            [`%${keyword}%`, limit, offset])
+
+        const countResult = await db.query(
+            `SELECT COUNT(*) FROM product p
+            WHERE (p.name ILIKE $1) OR (p.description ILIKE $1)`,
+            [`%${keyword}%`])
+
+        const count = Number(countResult.rows[0].count)
+        const products = result.rows
+
+        return { products, count }
+    }
+
+    static async findCategories() {
+        const result = await db.query(
+            'SELECT json_agg(DISTINCT category) AS categories FROM product')
         return result.rows
     }
 
