@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as dotenv from 'dotenv'
-const envPath = path.resolve(__dirname, '../../.env')
+const envPath = path.resolve(__dirname, '../../../.env')
 dotenv.config({ path: envPath })
 
 import express, { json } from 'express'

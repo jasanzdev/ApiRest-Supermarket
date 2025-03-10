@@ -1,11 +1,11 @@
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import logger from '../utils/logger'
 import { productsUrl } from '../constants/urls'
-import redisClient from '../utils/redisClient'
 import { ClientRequest } from 'http'
 import { Request, Response } from 'express'
 import { MethodsRequireAuth } from '../constants/methods'
 import { ProductsAuthorized } from '../utils/userAuthorized'
+import { StoreDataInCache } from '../services/storeDataInCache'
 
 export const ProductProxy = createProxyMiddleware({
     target: productsUrl,
@@ -34,25 +34,22 @@ export const ProductProxy = createProxyMiddleware({
             }
         },
         proxyRes: (proxyRes, req, res) => {
-            if (proxyRes.method === 'GET') {
-                const body: Buffer[] = []
+            const body: Buffer[] = []
 
-                proxyRes.on('data', (chunk: Buffer) => {
-                    body.push(chunk)
-                })
+            proxyRes.on('data', (chunk: Buffer) => {
+                body.push(chunk)
+            })
 
-                proxyRes.on('end', async () => {
-                    const responseBody = Buffer.concat(body).toString()
+            proxyRes.on('end', async () => {
+                const response = await StoreDataInCache(
+                    {
+                        body: body,
+                        url: req.originalUrl,
+                        method: proxyRes.method
+                    })
 
-                    let cacheKey = req.originalUrl
-                    if (cacheKey.endsWith('/')) {
-                        cacheKey = cacheKey.slice(0, -1)
-                    }
-
-                    await redisClient.set(cacheKey, responseBody, { 'EX': 36000 })
-                    res.status(proxyRes.statusCode ?? 200).json(JSON.parse(responseBody))
-                })
-            }
+                res.status(proxyRes.statusCode ?? 200).json(JSON.parse(response))
+            })
         },
         error: (err) => {
             logger.error('Error response products', {

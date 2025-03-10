@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as dotenv from 'dotenv'
 import { startServer } from './config/initPostgres'
 
-const envPath = path.resolve(__dirname, '../../.env')
+const envPath = path.resolve(__dirname, '../../../.env')
 dotenv.config({ path: envPath })
 
 const app = express()

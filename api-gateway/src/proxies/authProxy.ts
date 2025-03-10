@@ -20,12 +20,13 @@ export const AuthProxy = createProxyMiddleware({
                 res.setHeader('Authorization', accessToken)
             }
         },
-        error: (err) => {
+        error: (err, req, res) => {
             console.log(err)
             logger.error('Error response Auth', {
                 message: err.message,
                 stack: err.stack
             })
+            res.end('Something went wrong!!')
         }
     }
 })
