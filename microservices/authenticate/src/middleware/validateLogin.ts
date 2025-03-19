@@ -7,10 +7,7 @@ import { RequestHandler } from 'express'
 import { User } from '../dto/user'
 import { toPublishUser } from '../utils/userToPublish'
 import { FetchUserByUsername } from '../utils/fetchUserAxios'
-<<<<<<< HEAD
 import { PublicUser } from '../types/types.d'
-=======
->>>>>>> 117f445b7de3f928fef095a9bc6e01a19aea0ffd
 
 export const ValidateLogin: RequestHandler = CatchErrors(async (req, res, next) => {
     const { username, password } = req.body
@@ -34,11 +31,7 @@ export const ValidateLogin: RequestHandler = CatchErrors(async (req, res, next) 
         AppErrorCode.InvalidCredentials
     )
 
-<<<<<<< HEAD
     req.user = toPublishUser(user) as PublicUser
-=======
-    req.user = toPublishUser(user)
->>>>>>> 117f445b7de3f928fef095a9bc6e01a19aea0ffd
 
     next()
 })

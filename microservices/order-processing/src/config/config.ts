@@ -6,11 +6,7 @@ dotenv.config({ path: envPath })
 
 const config = {
     server: {
-<<<<<<< HEAD
         port: process.env.ORDER_PROCESSING_PORT ?? 4003
-=======
-        port: process.env.CART_PORT ?? 4003
->>>>>>> 117f445b7de3f928fef095a9bc6e01a19aea0ffd
     },
     redis: {
         url: process.env.REDIS_URL ?? 'redis://localhost:6379'
@@ -23,11 +19,7 @@ const config = {
         port: Number(process.env.DB_LOCAL_PORT)
     },
     productionDB: {
-<<<<<<< HEAD
         connectionString: process.env.DATABASE_URL
-=======
-        connectionString: process.env.DB_LOCAL_NAME
->>>>>>> 117f445b7de3f928fef095a9bc6e01a19aea0ffd
     },
     node_env: {
         development: process.env.NODE_ENV !== 'production',

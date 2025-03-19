@@ -4,11 +4,8 @@
   "description": "APIRest Supermarket Services for Order Management, Shopping Cart, and Inventory.",
   "main": "index.js",
   "scripts": {
-<<<<<<< HEAD
     "build": "npx tsc",
     "start": "node dist/app.js",
-=======
->>>>>>> 117f445b7de3f928fef095a9bc6e01a19aea0ffd
     "dev": "npx tsx --watch src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

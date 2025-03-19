@@ -1,17 +1,11 @@
 import jwt from 'jsonwebtoken'
 import { UNPROCESSABLE_CONTENT } from '../constants/http'
-<<<<<<< HEAD
 import appAssert from './appAssert'
 import { AccessTokenPayload, RefreshTokenPayload } from '../types/types.d'
 import config from '../config/config'
 
 const accessSecretKey = config.jwt.accessSecretKey
 const refreshSecretKey = config.jwt.refreshSecretKey
-=======
-import { accessSecretKey, refreshSecretKey } from '../config/jwt'
-import appAssert from './appAssert'
-import { AccessTokenPayload, RefreshTokenPayload } from '../types/types.d'
->>>>>>> 117f445b7de3f928fef095a9bc6e01a19aea0ffd
 
 export const generateAccessToken = (payload: AccessTokenPayload): string => {
     appAssert(
