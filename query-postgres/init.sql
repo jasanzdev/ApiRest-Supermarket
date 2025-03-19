@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
 --Create database supermarket
 DO $$
 BEGIN
@@ -38,10 +40,12 @@ CREATE TABLE IF NOT EXISTS product (
 -- Create table session
 CREATE TABLE IF NOT EXISTS session (
     id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL ON DELETE CASCADE,
+    user_id UUID NOT NULL,
     user_agent TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (user_id, user_agent),
-    FOREIGN KEY (user_id) REFERENCES "users" (id)
+    FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE
 );
 
 -- Create table cart
