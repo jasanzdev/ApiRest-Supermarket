@@ -1,9 +1,9 @@
-import { PublishUser } from "../../src/types/publicUser"
+import { PublicUser } from '../../src/types/types.d'
 
 declare global {
     namespace Express {
         interface Request {
-            user?: PublishUser
+            user?: PublicUser
         }
     }
 }

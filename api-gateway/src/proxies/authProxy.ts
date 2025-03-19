@@ -12,7 +12,7 @@ export const AuthProxy = createProxyMiddleware({
     on: {
         proxyReq: (proxyReq: ClientRequest, req: Request) => {
             const apiSecretKey = req.secret as string
-            proxyReq.setHeader('API_KEY', apiSecretKey)
+            proxyReq.setHeader('X-API-KEY', apiSecretKey)
         },
         proxyRes: (proxyRes: IncomingMessage, req: Request, res: Response) => {
             const accessToken = proxyRes.headers.authorization

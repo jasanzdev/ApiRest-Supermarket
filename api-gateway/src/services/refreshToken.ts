@@ -5,7 +5,7 @@ const RefreshTokenService = async (refreshToken: string, apiSecretKey: string) =
     const response = await axios.post(refreshTokenUrl, {}, {
         headers: {
             'Cookie': `refresh_token=${refreshToken}`,
-            'API_KEY': apiSecretKey
+            'X-API-KEY': apiSecretKey
         }
     })
 

@@ -25,35 +25,58 @@ services:
     networks:
       - app-network
 
-  authentication:
-    build: ./authenticate
+  authenticate:
+    build: ./microservices/authenticate
     ports:
       - "4000:4000"
     environment:
+      - NODE_ENV=production
       - DATABASE_URL=postgres://postgres:Postgres123@postgres:5432/supermarket
+      - REDIS_URL=redis://redis:6379
     depends_on:
+      - redis
       - postgres
     networks:
       - app-network
 
   products:
-    build: ./products
+    build: ./microservices/products
     ports:
       - "4001:4001"
     environment:
+      - NODE_ENV=production
       - DATABASE_URL=postgres://postgres:Postgres123@postgres:5432/supermarket
+      - REDIS_URL=redis://redis:6379
     depends_on:
+      - redis
       - postgres
     networks:
       - app-network
 
   users:
-    build: ./users
+    build: ./microservices/users
     ports:
       - "4002:4002"
     environment:
+      - NODE_ENV=production
       - DATABASE_URL=postgres://postgres:Postgres123@postgres:5432/supermarket
+      - REDIS_URL=redis://redis:6379
     depends_on:
+      - redis
+      - postgres
+    networks:
+      - app-network
+
+  order-processing:
+    build: ./microservices/order-processing
+    ports:
+      - "4003:4003"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://postgres:Postgres123@postgres:5432/supermarket
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
       - postgres
     networks:
       - app-network
@@ -62,10 +85,15 @@ services:
     build: ./api-gateway
     ports:
       - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://redis:6379
     depends_on:
-      - authentication
+      - redis
+      - authenticate
       - products
       - users
+      - order-processing
     networks:
       - app-network
 

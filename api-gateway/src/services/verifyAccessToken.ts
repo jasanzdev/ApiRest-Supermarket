@@ -5,7 +5,7 @@ const VerifyAccessTokenService = async (accessToken: string, refreshToken: strin
     const response = await axios.post(verifyTokenUrl, {}, {
         headers: {
             'Authorization': accessToken,
-            'API_KEY': apiSecretKey,
+            'X-API-KEY': apiSecretKey,
             'Cookie': `refresh_token=${refreshToken}`
         }
     })

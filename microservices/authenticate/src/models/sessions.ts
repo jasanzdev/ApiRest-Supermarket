@@ -1,6 +1,5 @@
 import { db } from '../config/postgres'
-import { PublicUser } from '../types/publicUser'
-import { Sessions } from '../types/session'
+import { PublicUser, Sessions } from '../types/types.d'
 
 interface SessionProps {
     userId: PublicUser['id'],

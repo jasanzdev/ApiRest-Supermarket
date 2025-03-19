@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import AppErrorCode from '../constants/appErrorCode'
 import logger from '../utils/logger'
 import { AxiosError } from 'axios'
-import ValidateTokensController from '../controllers/verifyTokens'
+import ValidateTokensController from '../controllers/validateTokensController'
 
 const { JsonWebTokenError } = jwt
 

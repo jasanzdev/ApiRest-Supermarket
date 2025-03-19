@@ -7,6 +7,8 @@
   "type": "commonjs",
   "main": "app.js",
   "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/app.js",
     "dev": "npx tsx --watch src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

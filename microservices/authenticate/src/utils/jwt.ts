@@ -1,8 +1,11 @@
 import jwt from 'jsonwebtoken'
 import { UNPROCESSABLE_CONTENT } from '../constants/http'
-import { AccessTokenPayload, RefreshTokenPayload } from '../types/payload'
-import { accessSecretKey, refreshSecretKey } from '../config/jwt'
 import appAssert from './appAssert'
+import { AccessTokenPayload, RefreshTokenPayload } from '../types/types.d'
+import config from '../config/config'
+
+const accessSecretKey = config.jwt.accessSecretKey
+const refreshSecretKey = config.jwt.refreshSecretKey
 
 export const generateAccessToken = (payload: AccessTokenPayload): string => {
     appAssert(
@@ -34,7 +37,7 @@ export const verifyAccessToken = (token: string): AccessTokenPayload => {
 }
 
 export const verifyRefreshToken = (token: string): RefreshTokenPayload => {
-    const { sessionId } = jwt.verify(token, refreshSecretKey) as RefreshTokenPayload
+    const { sessionId, exp } = jwt.verify(token, refreshSecretKey) as RefreshTokenPayload
     appAssert(sessionId, UNPROCESSABLE_CONTENT, 'Invalid Refresh Token')
-    return { sessionId }
+    return { sessionId, exp }
 }

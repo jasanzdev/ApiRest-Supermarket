@@ -1,18 +1,13 @@
 import pkg from 'pg'
+import config from './config'
 const { Pool } = pkg
 
-export const db = new Pool(process.env.NODE_ENV === 'production'
-    ? {
-        connectionString: process.env.DATABASE_URL,
-    }
-    : {
-        user: process.env.DB_LOCAL_USER,
-        host: process.env.DB_LOCAL_HOST,
-        database: process.env.DB_LOCAL_NAME,
-        password: process.env.DB_LOCAL_PASSWORD,
-        port: Number(process.env.DB_LOCAL_PORT)
-    }
-)
+const configPool = config.node_env.development
+    ? config.postgres
+    : { connectionString: config.productionDB }
+
+console.log(configPool)
+export const db = new Pool(configPool)
 
 db.query('SELECT NOW()')
     .then((res) => {

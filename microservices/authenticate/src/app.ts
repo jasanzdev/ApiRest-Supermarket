@@ -3,10 +3,11 @@ import { json } from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import HandleError from './middleware/errorHandler'
-import { CreateAuthRouter } from './routes/auth'
+import { CreateAuthRouter } from './routes/authRoutes'
 import { VerifySecretKey } from './middleware/verifySecretKey'
+import config from './config/config'
 
-const allowedOrigins = [process.env.ALLOWED_ORIGIN, 'http://localhost:3000']
+const allowedOrigins = config.allowedOrigins.origins
 
 app.use(
     cors({

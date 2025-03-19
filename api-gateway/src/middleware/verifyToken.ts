@@ -3,6 +3,7 @@ import logger from '../utils/logger'
 import { RequestHandler } from 'express'
 import RefreshTokenService from '../services/refreshToken'
 import VerifyAccessTokenService from '../services/verifyAccessToken'
+import config from '../config/config'
 
 
 export const VerifyToken: RequestHandler = CatchErrors(async (req, res, next) => {
@@ -25,7 +26,7 @@ export const VerifyToken: RequestHandler = CatchErrors(async (req, res, next) =>
             if (newAccessToken && newRefreshToken) {
                 res.cookie('refresh_token', newRefreshToken, {
                     httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
+                    secure: !config.node_env.development,
                     sameSite: 'strict'
                 })
                 res.setHeader('Authorization', newAccessToken)
@@ -39,7 +40,7 @@ export const VerifyToken: RequestHandler = CatchErrors(async (req, res, next) =>
 
             res.cookie('refresh_token', newRefreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: !config.node_env.development,
                 sameSite: 'strict'
             })
             res.setHeader('Authorization', newAccessToken)

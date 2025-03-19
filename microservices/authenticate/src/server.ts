@@ -1,14 +1,10 @@
+import config from './config/config'
 import express from 'express'
-import * as path from 'path'
-import * as dotenv from 'dotenv'
-import { startServer } from './config/initPostgres'
-
-const envPath = path.resolve(__dirname, '../../../.env')
-dotenv.config({ path: envPath })
+import { startServer } from './utils/initPostgres'
 
 const app = express()
 
-const port = process.env.AUTH_PORT ?? 4000
+const port = config.server.port
 
 startServer()
     .then(() => {

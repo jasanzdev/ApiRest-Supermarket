@@ -1,8 +1,7 @@
 import { createClient } from 'redis'
+import config from '../config/config'
 
-const redisClient = createClient({
-    url: process.env.REDIS_URL ?? 'redis://localhost:6379',
-})
+const redisClient = createClient(config.redis)
 
 redisClient.connect().catch((err) => {
     console.error('Error connecting to Redis:', err)

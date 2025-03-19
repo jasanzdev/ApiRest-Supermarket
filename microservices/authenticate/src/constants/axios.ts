@@ -1,3 +1,5 @@
-export const userServiceUrl = process.env.NODE_ENV === 'production'
-    ? 'http://users:4002/'
-    : 'http://localhost:4002/'
+import config from '../config/config'
+
+export const userServiceUrl = config.node_env.development
+    ? 'http://localhost:4002/'
+    : 'http://users:4002/'

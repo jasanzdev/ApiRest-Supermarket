@@ -1,6 +1,6 @@
 FROM node:22-alpine
 
-WORKDIR /supermarket-products
+WORKDIR /supermarket/products-service
 
 COPY package*.json .
 

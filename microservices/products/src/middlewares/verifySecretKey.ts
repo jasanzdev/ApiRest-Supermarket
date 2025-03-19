@@ -6,7 +6,8 @@ import AppErrorCode from '../constants/appErrorCode'
 import redisClient from '../utils/redisClient'
 
 export const VerifySecretKey: RequestHandler = CatchErrors(async (req, res, next) => {
-    const receiveSecretKey = req.headers['api_key']
+    const receiveSecretKey = req.headers['x-api-key']
+
     appAssert(
         receiveSecretKey,
         FORBIDDEN,

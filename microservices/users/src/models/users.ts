@@ -1,8 +1,7 @@
 import { User, UserToUpdate } from '../dto/user'
 import { db } from '../config/postgres'
 import bcrypt from 'bcryptjs'
-
-const salt = Number(process.env.SALT_ROUNDS ?? 10)
+import config from '../config/config'
 
 export default class UserModel {
 
@@ -27,7 +26,7 @@ export default class UserModel {
 
     static async create(input: User) {
         const { name, username, password, email, role } = input
-        const hashPassword = await bcrypt.hash(password, salt)
+        const hashPassword = await bcrypt.hash(password, config.salt.salt)
         const user = await db.query(`INSERT INTO users (name, username, email, password, role)
                     VALUES ($1, $2, $3, $4, $5) RETURNING *`,
             [name, username, email, hashPassword, role])
@@ -41,7 +40,7 @@ export default class UserModel {
             updated_at: new Date()
         }
         if (user.password) {
-            const hashPassword = await bcrypt.hash(user.password, salt)
+            const hashPassword = await bcrypt.hash(user.password, config.salt.salt)
             userWithUpdatedAt.password = hashPassword
         }
         const update = Object.keys(userWithUpdatedAt).map((key, index) => `${key}=$${index + 2}`).join(', ')

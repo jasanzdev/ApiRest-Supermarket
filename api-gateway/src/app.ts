@@ -14,9 +14,11 @@ import { UsersProxy } from './proxies/usersProxy'
 import { CheckPenalty, RateLimiter } from './middleware/rateLimiter'
 import { CreateApiKey } from './middleware/createApiKey'
 import { CheckCache } from './middleware/checkCache'
+import { PurchaseProxy } from './proxies/purchaseProxy'
+import config from './config/config'
 
 app.use(cors({
-    origin: [process.env.ALLOWED_ORIGINS ?? 'http://localhost:3000'],
+    origin: config.allowedOrigins.origins,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -34,6 +36,7 @@ app.use(RateLimiter)
 app.use('/auth', AuthProxy)
 app.use('/users', CheckCache, UsersProxy)
 app.use('/products', CheckCache, ProductProxy)
+app.use('/purchase', PurchaseProxy)
 app.use(NotFound)
 app.use(ErrorHandler)
 

@@ -1,20 +1,17 @@
-import * as path from 'path'
-import * as dotenv from 'dotenv'
-const envPath = path.resolve(__dirname, '../../../.env')
-dotenv.config({ path: envPath })
-
+import config from './config/config'
 import express, { json } from 'express'
 import cors from 'cors'
 import CookieParser from 'cookie-parser'
-import { CreateProductsRouter } from './routes/products'
+import { CreateProductsRouter } from './routes/productRoutes'
 import HandleError from './middlewares/handleErrors'
-import { startServer } from './config/initPostgres'
+import { startServer } from './utils/initPostgres'
 import { VerifySecretKey } from './middlewares/verifySecretKey'
+import { AuthorizeUserRole } from './middlewares/authorizeUserRole'
 
 
 const app = express()
 
-const allowedOrigins = [process.env.ALLOWED_ORIGIN, 'http://localhost:3000', 'http://localhost:4000']
+const allowedOrigins = config.allowedOrigins.origins
 
 app.use(
     cors({
@@ -31,8 +28,9 @@ app.use(json())
 app.disable('x-powered-by')
 app.use(CookieParser())
 
-const port = process.env.PRODUCTS_PORT ?? 4001
+const port = config.server.port
 
+app.use(AuthorizeUserRole)
 app.use(VerifySecretKey)
 app.use(CreateProductsRouter())
 
