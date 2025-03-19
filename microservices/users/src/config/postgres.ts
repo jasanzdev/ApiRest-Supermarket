@@ -6,7 +6,6 @@ const configPool = config.node_env.development
     ? config.postgres
     : { connectionString: config.productionDB }
 
-console.log(configPool)
 export const db = new Pool(configPool)
 
 db.query('SELECT NOW()')
