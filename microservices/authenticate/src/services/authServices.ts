@@ -2,7 +2,11 @@ import { SessionModel } from '../models/sessions'
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt'
 import { User } from '../dto/user'
 import { toPublishUser } from '../utils/userToPublish'
+<<<<<<< HEAD
 import { PublicUser } from '../types/types.d'
+=======
+import { PublicUser } from '../types/types'
+>>>>>>> 117f445b7de3f928fef095a9bc6e01a19aea0ffd
 import { RegisterUser } from '../utils/fetchUserAxios'
 
 const LoginService = async (user: PublicUser, userAgent: string) => {

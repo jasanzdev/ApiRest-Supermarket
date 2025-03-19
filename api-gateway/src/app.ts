@@ -15,7 +15,10 @@ import { CheckPenalty, RateLimiter } from './middleware/rateLimiter'
 import { CreateApiKey } from './middleware/createApiKey'
 import { CheckCache } from './middleware/checkCache'
 import { PurchaseProxy } from './proxies/purchaseProxy'
+<<<<<<< HEAD
 import config from './config/config'
+=======
+>>>>>>> 117f445b7de3f928fef095a9bc6e01a19aea0ffd
 
 app.use(cors({
     origin: config.allowedOrigins.origins,
