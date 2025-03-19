@@ -6,7 +6,7 @@ import AppErrorCode from '../constants/appErrorCode'
 import CatchErrors from '../utils/catchErrors'
 
 export const VerifySecretKey: RequestHandler = CatchErrors(async (req, res, next) => {
-    const receiveSecretKey = req.headers['api_key']
+    const receiveSecretKey = req.headers['x-api-key']
     appAssert(
         receiveSecretKey,
         FORBIDDEN,

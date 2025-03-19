@@ -4,7 +4,7 @@ import { productsUrl } from '../constants/urls'
 import { ClientRequest } from 'http'
 import { Request, Response } from 'express'
 import { MethodsRequireAuth } from '../constants/methods'
-import { ProductsAuthorized } from '../utils/userAuthorized'
+import { UserAuthorized } from '../utils/userAuthorized'
 import { StoreDataInCache } from '../services/storeDataInCache'
 
 export const ProductProxy = createProxyMiddleware({
@@ -21,8 +21,6 @@ export const ProductProxy = createProxyMiddleware({
                 url: req.originalUrl
             })
 
-            const apiSecretKey = req.secret as string
-            proxyReq.setHeader('API_KEY', apiSecretKey)
             if (MethodsRequireAuth.includes(req.method)) {
                 const user = req.user
                 if (!user) {
@@ -30,8 +28,11 @@ export const ProductProxy = createProxyMiddleware({
                     proxyReq.destroy()
                     return
                 }
-                ProductsAuthorized(user, proxyReq, res)
+                proxyReq.setHeader('X-USER', JSON.stringify(user))
+                UserAuthorized(proxyReq, req, res)
             }
+            const apiSecretKey = req.secret as string
+            proxyReq.setHeader('X-API-KEY', apiSecretKey)
         },
         proxyRes: (proxyRes, req, res) => {
             const url = req.originalUrl
@@ -46,11 +47,12 @@ export const ProductProxy = createProxyMiddleware({
                 res.status(proxyRes.statusCode ?? 200).json(JSON.parse(response))
             })
         },
-        error: (err) => {
+        error: (err, req, res) => {
             logger.error('Error response products', {
                 message: err.message,
                 stack: err.stack
             })
+            res.end('Something went wrong!!')
         }
     }
 })

@@ -25,7 +25,7 @@ export const RateLimiter = rateLimit({
         ]).catch(error => next(error))
 
         logger.error('Request limit exceeded', {
-            user: req.user.username,
+            user: req.user?.username,
             ip: req.ip,
             method: req.method,
             url: req.originalUrl,

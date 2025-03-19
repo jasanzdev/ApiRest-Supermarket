@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios'
 import { ErrorRequestHandler, Request, Response } from 'express'
 import logger from '../utils/logger'
-import { User } from '../types/user'
+import { User } from '../types/types.d'
 
 interface ResponseData {
     user?: User,

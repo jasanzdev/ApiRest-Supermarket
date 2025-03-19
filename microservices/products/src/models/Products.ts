@@ -1,6 +1,6 @@
 import { db } from '../config/postgres'
 import { Product } from '../dto/product'
-import { Filters, Search } from '../types/types'
+import { Filters, RegisterInventoryAdjustment, Search } from '../types/types.d'
 interface FindByProps {
     column: string,
     value: string | number
@@ -67,8 +67,13 @@ export class ProductModel {
         return result.rows
     }
 
-    static async findById(id: Product['id']) {
+    static async findById(id: Product['id']): Promise<Product | null> {
         const result = await db.query('SELECT * FROM product where product.id = $1', [id])
+        return result.rowCount ? result.rows[0] : null
+    }
+
+    static async findByCode(code: Product['code']) {
+        const result = await db.query('SELECT * FROM product where product.code = $1', [code])
         return result.rowCount ? result.rows[0] : null
     }
 
@@ -114,5 +119,17 @@ export class ProductModel {
             [id, ...values])
 
         return updated.rowCount ? updated.rows[0] : null
+    }
+
+    static async registerInventoryAdjustment(newInventoryAdjustment: RegisterInventoryAdjustment) {
+        const { productId, userId, type, quantity, previousStock, newStock, reason } = newInventoryAdjustment
+
+        const updated = await db.query(
+            `INSERT INTO inventory_adjustments
+            (product_id, user_id, type, quantity, previous_stock, new_stock, reason)
+            VALUES($1::uuid, $2::uuid, $3, $4, $5, $6, $7)`,
+            [productId, userId, type, quantity, previousStock, newStock, reason])
+
+        return updated.rowCount === 1
     }
 }

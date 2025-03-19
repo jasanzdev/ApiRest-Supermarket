@@ -17,3 +17,7 @@ export const productsUrl = process.env.NODE_ENV === 'production'
 export const usersUrl = process.env.NODE_ENV === 'production'
     ? 'http://users:4002/'
     : 'http://localhost:4002/'
+
+export const purchaseUrl = process.env.NODE_ENV === 'production'
+    ? 'http://purchase:4003/'
+    : 'http://localhost:4003/'

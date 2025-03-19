@@ -1,6 +1,6 @@
-import express from 'express'
 import * as path from 'path'
 import * as dotenv from 'dotenv'
+import express from 'express'
 import { config } from './config/config'
 
 const envPath = path.resolve(__dirname, '../../.env')

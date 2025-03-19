@@ -2,7 +2,7 @@ import { json } from 'express'
 import app from './server'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import { CreateUsersRouter } from './routes/users'
+import { CreateUsersRouter } from './routes/userRoutes'
 import { ErrorHandler } from './middlewares/errorHandler'
 import { VerifySecretKey } from './middlewares/verifySecretKey'
 
