@@ -1,3 +1,11 @@
+--Create database supermarket
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'supermarket') THEN
+        CREATE DATABASE supermarket;
+    END IF;
+END $$;
+
 -- Create table user
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
