@@ -15,14 +15,16 @@ The system consists of the following components:
 - Request routing and load balancing
 - Authentication and authorization validation
 - Rate limiting and caching
-- Service discovery
+- Security and Headers
+- Error Handling
+- Performance Monitoring
 
 ### Microservices
 1. **Authentication Service**
    - User authentication and authorization
+   - User session management
    - JWT token management
    - Security policies
-   - User session management
 
 2. **Products Service**
    - Product catalog management
@@ -32,9 +34,10 @@ The system consists of the following components:
    - Stock updates
 
 3. **Users Service**
-   - User profile management
+   - User management
    - Customer information
    - Role management
+   - Password management
 
 4. **Order Processing Service**
    - Shopping cart management
@@ -54,14 +57,21 @@ The system consists of the following components:
 
 ## 🛠️ Technologies Used
 
-- Node.js
-- Express.js
-- PostgreSQL (for various service databases)
-- Redis (for caching)
-- JWT for authentication
-- Docker & Docker Compose
-- Swagger for API documentation
-- Jest for testing
+- Node.js(Runtime for server-side JavaScript, enabling scalable and efficient applications.)
+- Express.js(Framework for building APIs and handling HTTP requests, routing, and middleware.)
+- PostgreSQL (Relational database for structured data storage and management.)
+- Redis (In-memory data store used for caching to improve performance.)
+- Axios (HTTP client for making requests to external or internal APIs.)
+- Winston (Logging library for structured and customizable application logging.)
+- Zod (TypeScript-first library for schema validation and data integrity.)
+- Express-validator (Middleware for validating and sanitizing incoming request data.)
+- Express-rate-limit (Middleware to limit request rates and prevent abuse.)
+- Helmet (Middleware to secure HTTP headers and protect against common vulnerabilities.)
+- http-proxy-middleware (Middleware for routing requests to other servers or services.)
+- JWT for authentication (Token-based authentication for secure user verification and authorization.
+- Docker & Docker Compose (Containerization tools for consistent deployment across environments.)
+- Swagger (Framework for API documentation and interactive testing.)
+- Jest (Testing framework for unit, integration, and end-to-end testing.)
 
 ## 📦 Installation
 
