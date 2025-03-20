@@ -4,7 +4,7 @@ A modern microservices-based REST API for managing supermarket operations.
 
 ## 📋 Description
 
-This project implements a distributed system using microservices architecture to handle supermarket operations. The system is designed with scalability and maintainability in mind, separating concerns into independent services that communicate through an API Gateway.
+This project implements a distributed system using microservices architecture to handle supermarket operations. The system is designed with scalability and maintainability in mind, separating concerns into independent services that follow the Model-View-Controller (MVC) design pattern and communicate through an API Gateway.
 
 ## 🏗️ Architecture
 
