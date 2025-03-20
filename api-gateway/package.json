@@ -25,6 +25,8 @@
     "rate-limit-redis": "^4.2.0",
     "redis": "^4.7.0",
     "response-time": "^2.3.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
