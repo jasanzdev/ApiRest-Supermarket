@@ -130,6 +130,23 @@ DATABASE_URL=postgres://postgres:Postgres123@postgres:5432/supermarket
 REDIS_URL=redis://redis:6379
 
 ```
+4. Start the services on localhost:
+```bash
+cd .\api-gateway\
+npm run build && npm run start
+
+cd .\microservices\authenticate\
+npm run build && npm run start
+
+cd .\microservices\products\
+npm run build && npm run start
+
+cd .\microservices\users\
+npm run build && npm run start
+
+cd .\microservices\order-processing\
+npm run build && npm run start
+```
 
 ## 📚 API Documentation
 
