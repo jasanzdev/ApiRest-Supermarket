@@ -210,6 +210,15 @@ To test specific service:
 cd services/<service-name>
 npm run test
 ```
+## 🚧 Pending Development & Suggestions
+
+### Pending Features
+- Payment Integration
+- Notifications Service
+- User Reviews and Ratings
+- Inventory Alerts
+- Enhanced Security
+- Order Cancellation and Returns
 
 ## 📄 License
 
