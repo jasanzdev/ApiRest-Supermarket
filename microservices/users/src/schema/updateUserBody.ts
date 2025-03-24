@@ -37,22 +37,7 @@ export const UpdateSchema: Schema = {
             }
         }
     },
-    password: {
-        optional: true,
-        isString: true,
-        trim: true,
-        escape: true,
-        isLength: {
-            options: { min: 6, max: 12 },
-            errorMessage: 'The password must be a string with a length between 6 and 12 characters.'
-        },
-        matches: {
-            options: /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@!#$.,/*&%+<>()]).{6,12}$/,
-            errorMessage: 'The password to have at least one especial character, letters and numbers'
-        }
-    },
     role: {
-        optional: true,
         trim: true,
         customSanitizer: {
             options: (value: string) => {

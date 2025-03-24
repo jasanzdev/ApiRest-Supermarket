@@ -19,6 +19,11 @@ export class SessionModel {
         return session.rows[0] as Sessions
     }
 
+    /**
+     * Retrieves a session by ID from the database.
+     * @param {Sessions['id']} id - The ID of the session to retrieve.
+     * @returns {Promise<Sessions | null>} The session data or null if not found.
+     */
     static async getById(id: Sessions['id']) {
         const result = await db.query(
             'SELECT * FROM session WHERE session.id = $1', [id])
@@ -33,6 +38,11 @@ export class SessionModel {
         return result.rowCount ? result.rows[0] : null
     }
 
+    /**
+     * Deletes a session from the database by session ID.
+     * @param {Sessions['id']} id - The ID of the session to delete.
+     * @returns {Promise<void>}
+     */
     static async delete(id: Sessions['id']) {
         return await db.query('DELETE FROM session WHERE session.id = $1', [id])
     }

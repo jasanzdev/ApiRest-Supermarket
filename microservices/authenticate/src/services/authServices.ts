@@ -55,6 +55,11 @@ const RegisterService = async (input: User, userAgent: string, receiveSecretKey:
     return { publicUser, accessToken, refreshToken }
 }
 
+/**
+ * Service function to invalidate a user's session based on the refresh token.
+ * @param {string} refreshToken - The refresh token from the request cookie.
+ * @returns {Promise<void>}
+ */
 const LogoutService = async (refreshToken: string) => {
     if (refreshToken) {
         const { sessionId } = verifyRefreshToken(refreshToken)

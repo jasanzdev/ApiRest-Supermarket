@@ -42,6 +42,10 @@ const HandleJwtError = (res: Response, error: Error) => {
     }
 }
 
+/**
+ * Global error handler for the application.
+ * @type {ErrorRequestHandler}
+ */
 export const HandleError: ErrorRequestHandler = (error, req, res, next) => {
 
     if (error instanceof ZodError) {
@@ -52,7 +56,7 @@ export const HandleError: ErrorRequestHandler = (error, req, res, next) => {
 
         res.status(UNPROCESSABLE_CONTENT).json({
             message: error.flatten().fieldErrors,
-            errorCode: AppErrorCode.BadRequest
+            errorCode: AppErrorCode.ValidationError
         })
         return
     }

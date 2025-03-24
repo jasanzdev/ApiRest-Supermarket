@@ -1,0 +1,2164 @@
+openapi: 3.0.4
+info:
+  title: Supermarket API
+  version: 1.0.0
+  description: >-
+    A Node.js Express API for managing supermarket-related services including authentication, users, products, and purchases.
+    The system is designed with scalability and maintainability in mind,
+    separating concerns into independent services that follow the 
+    Model-View-Controller(MVC) design pattern and communicate through an API Gateway.
+servers:
+  - url: http://localhost:3000/supermarket/
+    description: Base URL for the supermarket API
+tags:
+  - name: authenticate
+    description: User authentication and authorization, session management and JWT token management
+  - name: products
+    description: Product catalog management, Inventory control, Category handling, Price management and Stock updates
+  - name: users
+    description: User management, Customer informationRole, management, Password management
+  - name: OrderProcessing
+    description: Shopping cart management, Order creation and processing, Order status tracking and Purchase history
+paths:
+  /auth/login:
+    post:
+      tags:
+        - authenticate
+      summary: User Login.
+      operationId: login
+      description: Authenticates a user by validating their username and password. Returns access and refresh tokens upon successful login.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful. Returns user details and sets tokens.
+          headers:
+            Authorization:
+              schema:
+                type: string
+                description: Access token returned in the Authorization header.
+            Set-Cookie:
+              schema:
+                type: string
+                description: Refresh token set in the `refresh_token` cookie.
+          content: 
+            application/json: 
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successfully
+                  user:
+                    $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid credentials.
+          content:
+            application/json: 
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid username or password"
+                  errorCode:
+                    type: string
+                    example: "InvalidCredentials"
+        '401':
+          description: Unauthorized due to missing or invalid secret key.
+          content: 
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/InvalidSecretKey'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/register:
+    post:
+      tags:
+        - authenticate
+      summary: User Registration
+      operationId: register
+      description: Registers a new user by providing their details. Returns access and refresh tokens upon successful registration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: Registration successful. Returns user details and sets tokens.
+          headers:
+            Authorization:
+              schema:
+                type: string
+                description: Access token returned in the Authorization header.
+            Set-Cookie:
+              schema:
+                type: string
+                description: Refresh token set in the `refresh_token` cookie.
+          content: 
+            application/json: 
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Register successfully
+                  user:
+                    $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Detailed error messages to guide users in correcting input validation issues.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/ExpressValidatorError'
+        '401':
+          description: Unauthorized due to missing or invalid secret key.
+          content: 
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/InvalidSecretKey'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/logout:
+    post:
+      tags:
+        - authenticate
+      summary: User Logout
+      operationId: logout
+      description: Logout a user by invalidating their refresh token and deleting the associated session.
+      security: 
+        - AccessToken: []
+        - RefreshToken: []
+      responses:
+        '200':
+          description: Logout successfully.Clears the refresh token cookie.
+          content: 
+            application/json: 
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout successfully
+        '401':
+          description: Unauthorized due to missing or invalid secret key or token issues.
+          content: 
+            application/json: 
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UnauthorizedResponse'
+                  - $ref: '#/components/schemas/InvalidSecretKey'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/verify-token:
+    post:
+      tags:
+        - authenticate
+      summary: Verify Tokens.
+      operationId: verifyToken
+      description: Verifies the access tokens provided in the request and refreshing them if the access token is expired.
+      security: 
+        - AccessToken: []
+        - RefreshToken: []
+      responses:
+        '200':
+          description: Tokens verified successfully. Returns user details and optionally new tokens if refreshed.
+          headers:
+            Authorization:
+              schema:
+                type: string
+                description: Access token returned in the Authorization header.
+            Set-Cookie:
+              schema:
+                type: string
+                description: Refresh token set in the `refresh_token` cookie.
+          content: 
+            application/json: 
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Tokens verified successfully.
+                  user:
+                    $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthorized due to missing or invalid secret key or token issues.
+          content: 
+            application/json: 
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UnauthorizedResponse'
+                  - $ref: '#/components/schemas/InvalidSecretKey'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/refresh-token:
+    post:
+      tags:
+        - authenticate
+      summary: Refresh Tokens.
+      operationId: refreshToken
+      description: Refreshes the access and refresh tokens using a valid refresh token.
+      security:
+        - RefreshToken: []
+      responses:
+        '200':
+          description: Tokens refreshed successfully. Returns user details and new tokens.
+          headers:
+            Authorization:
+              schema:
+                type: string
+                description: Access token returned in the Authorization header.
+            Set-Cookie:
+              schema:
+                type: string
+                description: Refresh token set in the `refresh_token` cookie.
+          content: 
+            application/json: 
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Tokens refreshed successfully.
+                  user:
+                    $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthorized due to missing or invalid secret key or token issues.
+          content: 
+            application/json: 
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UnauthorizedResponse'
+                  - $ref: '#/components/schemas/InvalidSecretKey'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /producs:
+    get:
+      tags:
+        - products
+      summary: Retrieves a paginated list of products with optional filters.
+      operationId: getFilteredProducts
+      description: Returns a list of products based on optional query parameters such as category, stock, price range, limit, and offset. The response includes pagination details.
+      parameters:
+        - name: category
+          in: query
+          description: Filter products by category.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Categories'
+        - name: stock
+          in: query
+          description: Filter products with stock greater than this value. Must be a positive number.
+          required: false
+          schema:
+            type: number
+            default: 0
+        - name: minPrice
+          in: query
+          description: Filter products with a price greater than or equal to this value. Must be a positive number.
+          required: false
+          schema:
+            type: number
+            default: 0
+        - name: maxPrice
+          in: query
+          description: Filter products with a price less than or equal to this value. Must be greater than `minPrice`.
+          required: false
+          schema:
+            type: number
+        - name: limit
+          in: query
+          description: Maximum number of products to return per page. Defaults to 10.
+          required: false
+          schema:
+            type: number
+            default: 0
+        - name: offset
+          in: query
+          description: Number of products to skip for pagination. Defaults to 0.
+          required: false
+          schema:
+            type: number
+            default: 0
+      responses:
+        '200':
+          description: Successfully retrieved the paginated list of filtered products.
+          content:
+            application/json: 
+              schema:
+                type: object
+                properties:
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  products:
+                    $ref: '#/components/schemas/FilteredProducts'
+        '400':
+          description: Invalid query parameters.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/ValidationParametersError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - products
+      summary: Create a new product
+      operationId: createProduct
+      description: Creates a new product with the provided details.
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      requestBody:
+        description: Create a new product in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json: 
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/ProductResponse'
+        '400':
+          description: Validation error in request body.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/ZodError'
+        '401':
+          description: Access not authorized (Invalid or expired token provide)
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /products/categories:
+    get:
+      tags:
+        - products
+      summary: Retrieves a list of product categories.
+      operationId: getCategories
+      description: Returns a list of available categories. If no categories are found, a message indicating that no products were found is returned.
+      responses:
+        '200':
+          description: Successfully retrieved the list of categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    $ref: '#/components/schemas/Categories'
+        '404':
+          description: No categories were found
+          content:
+            aplication/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Categories not found
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /producs/search:
+    get:
+      tags:
+        - products
+      summary: Search for products by keyword
+      operationId: searchProducts
+      description: Allows searching for products using a keyword with pagination
+      parameters:
+        - name: keyword
+          in: query
+          description: Keyword to search for products.
+          required: true
+          schema:
+            type: string
+            example: ipho
+        - name: limit
+          in: query
+          description: Maximum number of products to return per page. Defaults to 10.
+          required: false
+          schema:
+            type: number
+            default: 0
+        - name: offset
+          in: query
+          description: Number of products to skip for pagination. Defaults to 0.
+          required: false
+          schema:
+            type: number
+            default: 0
+      responses:
+        '200':
+          description: Paginated list of found products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  products:
+                    $ref: '#/components/schemas/FilteredProducts'
+        '400':
+          description: Validation error in parameters.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/ValidationParametersError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /products/{id}:
+    get:
+      tags:
+        - products
+      summary: Retrieves a product by its ID.
+      operationId: getProductById
+      description: Returns a single product based on the provided ID. If the ID is invalid or the product is not found, appropriate error messages are returned.
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the product (UUID format).
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5760f04b-fd96-408d-adb4-1ab149371b9a
+      responses:
+        '200':
+          description: Successfully retrieved the product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/ProductResponse'
+        '400':
+          description: The provided ID does not have a valid format.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/InvalidIdError'
+        '404':
+          description: The product with the specified ID was not found.
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/ProductNotFound'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags:
+        - products
+      summary: Update a product by ID
+      operationId: updateProduct
+      description:  Partially updates a product using its unique UUID identifier.
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the product (UUID format).
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5760f04b-fd96-408d-adb4-1ab149371b9a
+      requestBody:
+        required: true
+        content:
+          aplication/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdateRequest'
+      responses:
+        '200':
+          description: Product updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/ProductResponse'
+        '400':
+          description: Invalid ID format or validation error in request body.
+          content:
+            application/json: 
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/InvalidIdError'
+                  - $ref: '#/components/schemas/ZodError'
+        '404':
+          description: The product with the specified ID was not found.
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/ProductNotFound'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - products
+      summary: Delete a product by ID
+      operationId: deleteProduct
+      description:  Deletes a product using its unique UUID identifier.
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the product (UUID format).
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5760f04b-fd96-408d-adb4-1ab149371b9a
+      responses:
+        '204':
+          description: Product deleted successfully (no content returned)
+        '400':
+          description: Invalid ID format
+          content:
+            application/json: 
+              schema:
+                  $ref: '#/components/schemas/InvalidIdError'
+        '404':
+          description: The product with the specified ID was not found.
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/ProductNotFound'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /products/code/{code}:
+    get:
+      tags:
+        - products
+      summary: Get a product by its code.
+      operationId: getProductByCode
+      description: Retrieves a product using its unique code.
+      parameters:
+        - name: code
+          in: path
+          description: The unique code of the product (must be a valid number)
+          required: true
+          schema:
+            type: number
+            example: 1639828085202
+      responses:
+        '200':
+          description: Product found successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/ProductResponse'
+        '400':
+          description: Invalid code provided.
+          content:
+            application/json: 
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid code provided.The code must be a valid number"
+                  errorCode:
+                    type: string
+                    example: "InvalidCode"
+        '404':
+          description: Product not found
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/ProductNotFound'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /products/adjust-inventory/{id}:
+    patch:
+      tags:
+        - products
+      summary: Adjust product inventory
+      operationId: adjustInventory
+      description:  Adjusts the inventory of a product based on type, quantity, and reason, with user authorization checks.
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the product (UUID format).
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 5760f04b-fd96-408d-adb4-1ab149371b9a
+      requestBody:
+        required: true
+        content:
+          aplication/json:
+            schema:
+              $ref: '#/components/schemas/AdjustInventoryRequest'
+      responses:
+        '200':
+          description: Inventory adjusted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: boolean
+                    example: true
+                  product:
+                    $ref: '#/components/schemas/ProductResponse'
+        '400':
+          description: Invalid ID format or validation error in request body.
+          content:
+            application/json: 
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/InvalidIdError'
+                  - $ref: '#/components/schemas/ZodError'
+        '401':
+          description: Unauthorized action (non-USER role required for non-SALE adjustments)
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: Product not found or insufficient stock
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/ProductNotFound'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users:
+    get:
+      tags:
+        - users
+      summary: Retrieve all users
+      operationId: getUsers
+      description: Fetches a list of all users from the database, ordered by last update time in descending order
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    description: Total number of users
+                    example: 8
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - users
+      summary: Create a new user
+      operationId: createUser
+      description: Creates a new user with the provided details after validating input data
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: User Created successfully
+                  user:
+                    $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpressValidatorError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: Retrieve a user by ID
+      operationId: getUserById
+      description: Fetches a specific user from the database using their unique identifier (UUID)
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the user (UUID format).
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: b3ba4dea-e55f-423d-b863-3eb5bdb79fdc
+      responses:
+        '200':
+          description: User found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: User founded successfully
+                  user:
+                    $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidIdError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotFound'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags:
+        - users
+      summary: Update a user by ID
+      operationId: updateUser
+      description: Updates an existing user's details based on their unique identifier (UUID). All fields are optional.
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the user (UUID format).
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: b3ba4dea-e55f-423d-b863-3eb5bdb79fdc
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: User updated successfully
+                  user:
+                    $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Validation failed or Invalid Id
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ExpressValidatorError'
+                  - $ref: '#/components/schemas/InvalidIdError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotFound'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - users
+      summary:
+      operationId: deleteUser
+      description:
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the user (UUID format).
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: b3ba4dea-e55f-423d-b863-3eb5bdb79fdc
+      responses:
+        '204':
+          description: User deleted successfully (no content returned)
+        '400':
+          description: Invalid ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidIdError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotFound'
+        '409':
+          description: Conflict - Cannot delete Super Admin user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: impossible to delete de Super Admin user
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/usernameOrEmail/{value}:
+    get:
+      tags:
+        - users
+      summary: Retrieve a user by username or email
+      operationId: getUserByUsernameOrEmail
+      description: Fetches a user from the database using either their username or email address
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: value
+          in: path
+          description: The username or email address of the user
+          required: true
+          schema:
+            type: string
+            example: johndoe | john.doe@example.com
+      responses:
+        '200':
+          description: User found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: User founded successfully
+                  user:
+                    $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Bad Request - Username or email not provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Username or Email no provider
+                  errorCode:
+                    type: string
+                    example: BadRequest
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotFound'
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/resetPassword/{id}:
+    patch:
+      tags:
+        - users
+      summary: Reset a user's password
+      operationId: resetPassword
+      description: Resets a user's password by verifying their current password and updating it with a new one
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the user (UUID format).
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: b3ba4dea-e55f-423d-b863-3eb5bdb79fdc
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        '200':
+          description: Password reset successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Password reset successfully
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpressValidatorError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Impossible to reset password, user not found
+                  errorCode:
+                    type: string
+                    example: UserNotFound
+        '409':
+          description: Conflict - Current password incorrect
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Passwords do not match.
+                  errorCode:
+                    type: string
+                    example: InvalidPass
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order-processing/cart/:
+    get:
+      tags:
+        - OrderProcessing
+      summary: Retrieve user's cart details
+      operationId: getDetailsCart
+      description: Fetches the active cart details for the authenticated user based on their user ID
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      responses:
+        '200':
+          description: Cart retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '401':
+          description: Unauthorized - Error from external service (AxiosError)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: No active cart found for the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user does not have an active cart.
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order-processing/cart/add:
+    post:
+      tags:
+        - OrderProcessing
+      summary: Add products to user's cart
+      operationId: addToCart
+      description: Adds one or more products to the authenticated user's cart, checking inventory availability. Updates existing cart if it exists, otherwise creates a new one.
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ProductCart'
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/ProductCart'
+            examples:
+              singleProduct:
+                summary: Add a single product
+                value:
+                  productId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                  quantity: 2
+              multipleProducts:
+                summary: Add multiple products
+                value:
+                  - productId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                    quantity: 2
+                  - productId: "b2c3d4e5-f6g7-8901-bcde-f12345678901"
+                    quantity: 1
+      responses:
+        '200':
+          description: Cart updated or created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '400':
+          description: Validation failed or insufficient stock
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationErrorCart'
+                  - $ref: '#/components/schemas/AppErrorCart'
+              examples:
+                validationError:
+                  summary: Validation failure
+                  value:
+                    success: false
+                    message: validation failed
+                    errors:
+                      - field: productId
+                        message: ProductId must be a valid UUID
+                insufficientStock:
+                  summary: Insufficient stock
+                  value:
+                    message: Stock available is 1 for product a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                    errorCode: ProductOutOfStock
+        '401':
+          description: Unauthorized - Error from external service (AxiosError)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: Product not found or unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppErrorCart'
+              example:
+                message: Product with id a1b2c3d4-e5f6-7890-abcd-ef1234567890 does not exist or is not available
+                errorCode: ProductNotExist
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order-processing/cart/remove/{amount}/{productId}:
+    delete:
+      tags:
+        - OrderProcessing
+      summary: Remove a product from user's cart
+      operationId: removeFromCart
+      description: Removes a specified quantity of a product from the authenticated user's cart. If amount is not provided or invalid, defaults to 1. Removes the product entirely if the remaining quantity would be zero or less.
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: amount
+          in: path
+          description: The quantity of the product to remove (defaults to 1 if not provided or invalid)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            example: 2
+        - name: productId
+          in: path
+          description: The unique identifier of the product to remove (UUID format)
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+      responses:
+        '200':
+          description: Product removed from cart successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product removed from cart
+                  cart:
+                    $ref: '#/components/schemas/CartResponse'
+        '400':
+          description: Invalid product ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppErrorCart'
+              example:
+                message: Invalid Id
+                errorCode: InvalidId
+        '401':
+          description: Unauthorized - Error from external service (AxiosError)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: Cart or product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppErrorCart'
+              examples:
+                cartNotFound:
+                  summary: Cart not found
+                  value:
+                    message: Cart not found for current user
+                    errorCode: CartNotExist
+                productNotFound:
+                  summary: Product not found in cart
+                  value:
+                    message: Product not found in cart
+                    errorCode: ProductNotExist
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order-processing/cart/clear:
+    delete:
+      tags:
+        - OrderProcessing
+      summary: Clear user's cart
+      operationId: clearCart
+      description: Removes all products from the authenticated user's cart by setting the products list to empty.
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      responses:
+        '200':
+          description: Cart cleared successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Cart cleared
+        '401':
+          description: Unauthorized - Error from external service(AxiosError)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: Cart not found for the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppErrorCart'
+              example:
+                message: Cart not found for current user
+                errorCode: CartNotExist
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order-processing/orders/:
+    get:
+      tags:
+        - OrderProcessing
+      summary: Retrieve user's order details
+      operationId: getOrdersDetails
+      description: Fetches all orders associated with the authenticated user based on their user ID
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      responses:
+        '200':
+          description: Orders retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderResponse'
+        '401':
+          description: Unauthorized - Error from external service(AxiosError)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: No orders found for the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  orders:
+                    type: object
+                    example: null
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - OrderProcessing
+      summary: Create a new order
+      operationId: createOrder
+      description: Creates a new order for the authenticated user based on their active cart, calculates the total price using an external product service, and deletes the cart upon successful creation.
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      responses:
+        '201':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Your new order has been created and is now pending payment completion.
+        '401':
+          description: Unauthorized - Error from external service(AxiosError)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: No active cart found for the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppErrorCart'
+              example:
+                message: User does not have an active cart
+                errorCode: CartNotExist
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order-processing/orders/{id}:
+    get:
+      tags:
+        - OrderProcessing
+      summary: Retrieve an order by ID
+      operationId: getOrderById
+      description: Fetches a specific order by its unique identifier for the authenticated user
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the order.
+          required: true
+          schema:
+            type: integer
+            example: 2
+      responses:
+        '200':
+          description: Order retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  order:
+                    $ref: '#/components/schemas/OrderResponse'
+        '401':
+          description: Unauthorized - Error from external service(AxiosError)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  order:
+                    type: object
+                    example: null
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags:
+        - OrderProcessing
+      summary: Update an order's status
+      operationId: updateOrder
+      description: Updates the status of a specific order. If the status is set to 'Paid', it checks inventory and adjusts product stock via an external service. The status cannot be set to 'pending'.
+      security:
+        - AccessToken: []
+        - RefreshToken: []
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the order.
+          required: true
+          schema:
+            type: integer
+            example: 3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: New status for the order (cannot be 'pending')
+                  example: Paid
+                  enum: [Paid, Shipped, Delivered, Cancelled]
+              required:
+                - status
+      responses:
+        '200':
+          description: Order status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Order changing status successfully
+        '400':
+          description: Invalid order ID or status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppErrorCart'
+              examples:
+                invalidId:
+                  summary: Invalid or missing ID
+                  value:
+                    message: User ID is either missing or not a valid number.
+                    errorCode: InvalidId
+                invalidStatus:
+                  summary: Unrecognized status
+                  value:
+                    message: Invalid order status. The provided status is not recognized.
+                    errorCode: InvalidOrderStatus
+                insufficientStock:
+                  summary: Insufficient stock for 'Paid' status
+                  value:
+                    message: Stock available is 1 for product a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                    errorCode: ProductOutOfStock
+        '401':
+          description: Unauthorized - Error from external service(AxiosError)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: Order or product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppErrorCart'
+              examples:
+                orderNotFound:
+                  summary: Order not found
+                  value:
+                    message: Order with id a1b2c3d4-e5f6-7890-abcd-ef1234567890 does not exist
+                    errorCode: OrderNotExist
+                productNotFound:
+                  summary: Product not found or unavailable
+                  value:
+                    message: Product with id a1b2c3d4-e5f6-7890-abcd-ef1234567890 does not exist or is not available
+                    errorCode: ProductNotExist
+        '409':
+          description: Conflict - Status cannot be 'pending'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppErrorCart'
+              example:
+                message: Order status cannot be updated to pending
+                errorCode: OrderStatusConflict
+        '500':
+          description: Internal server error.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: The username of the user.
+          example: johndoe
+        password:
+          type: string
+          description: The password of the user.
+          example: Password123!
+    RegisterRequest:
+      type: object
+      required:
+        - name
+        - username
+        - password
+        - email
+      properties:
+        name:
+          type: string
+          description: Full name of the user
+          example: Michael Kenneth Williams
+        username:
+          type: string
+          description: Username chosen by the user for login or identification purposes.
+          example: mkwilliams
+        password:
+          type: string
+          description: The password of the user.
+          example: Password123!
+        email:
+          type: string
+          format: email
+          description: Email address of the user, used for communication.
+          example: michael.williams@x.super.com
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the user.
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: Full name of the user
+          example: Michael Kenneth Williams
+        username:
+          type: string
+          description: Username chosen by the user for login or identification purposes.
+          example: mkwilliams
+        email:
+          type: string
+          format: email
+          description: Email address of the user, used for communication.
+          example: michael.williams@x.super.com"
+        role:
+          type: string
+          description: Role assigned to the user, defining their permissions and      access level.
+          enum: [admin, manager, supervisor, user]
+          example: USER
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp indicating when the user account was created.
+          example: "2025-03-15T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp indicating when the user account was last updated.
+          example: "2025-03-25T11:56:00Z"
+    UserRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the user.
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: Full name of the user
+          example: Michael Kenneth Williams
+        username:
+          type: string
+          description: Username chosen by the user for login or identification purposes.
+          example: mkwilliams
+        email:
+          type: string
+          format: email
+          description: Email address of the user, used for communication.
+          example: michael.williams@x.super.com"
+        role:
+          type: string
+          description: Role assigned to the user, defining their permissions and access level.
+          enum: [admin, manager, supervisor, user]
+          example: USER
+    UpdateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full name of the user
+          example: Michael Kenneth Williams
+        email:
+          type: string
+          format: email
+          description: Email address of the user, used for communication.
+          example: michael.williams@x.super.com"
+        role:
+          type: string
+          description: Role assigned to the user, defining their permissions and access level.
+          enum: [admin, manager, supervisor, user]
+          example: supervisor
+    ResetPasswordRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          description: The user's current password for verification
+        newPassword:
+          type: string
+          description: New password, must have at least one number, letter, and special character and with a length between 6 and 12 characters.
+        confirm:
+          type: string
+          description: Confirmation of the new password, must match newPassword
+      required:
+        - password
+        - newPassword
+        - confirm
+    Categories:
+      type: array
+      items:
+        type: string
+        enum:
+          - beauty
+          - fragrances
+          - groceries
+          - furniture
+          - home-decoration
+          - kitchen-accessories
+          - laptops
+          - mens-shirts
+          - mens-shoes
+          - mens-watches
+          - mobile-accessories
+          - motorcycle
+          - skin-care
+          - smartphones
+          - sports-accessories
+          - sunglasses
+          - tablets
+          - tops
+          - vehicle
+          - women-bags
+          - women-dresses
+          - women-jewelry
+          - women-shoes
+          - women-watches
+    Pagination:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          description: Total number of records found.
+          example: 64
+        totalPages:
+          type: integer
+          description: Total number of available pages.
+          example: 7
+        currentPage:
+          type: integer
+          description: Current page number.
+          example: 1
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more pages available.
+          example: true
+        hasPreviousPage:
+          type: boolean
+          description: Indicates if there are previous pages available.
+          example: false
+    FilteredProducts:
+      type: array
+      description: List of filtered poducts
+      items:
+        $ref: '#/components/schemas/ProductResponse'
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the product.
+          example: 5760f04b-fd96-408d-adb4-1ab149371b9a
+        name:
+          type: string
+          description: Name of the product.
+          example: Tissue Paper Box
+        description:
+          type: string
+          description: Description of the product.
+          example: Convenient tissue paper box for everyday use, providing soft and absorbent tissues.
+        category:
+          type: string
+          description: Category of the product, will be one of the predefined categories
+          example: groceries
+        price_purchase:
+          type: number
+          description: Purchase price of the product.
+          example: 2.49
+        price_sale:
+          type: number
+          description: Sale price of the product.
+          example: 3.99
+        stock:
+          type: integer
+          description: Stock quantity of the product.
+          example: 87
+        threshold:
+          type: integer
+          description: Threshold for restocking.
+          example: 5
+        active:
+          type: boolean
+          description: Indicates if the product is active.
+          example: true
+        thumbnail:
+          type: string
+          description: Thumbnail image URL of the product.
+          example: "https://cdn.dummyjson.com/products/images/groceries/Tissue%20Paper%20Box/thumbnail.png"
+        code:
+          type: number
+          description: Unique product code.
+          example: 1639828085202
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp indicating when the user account was created.
+          example: "2025-03-15T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp indicating when the user account was last updated.
+          example: "2025-03-25T11:56:00Z"
+    ProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the product. (max 55 characters)
+          example: Tissue Paper Box
+        description:
+          type: string
+          description: Description of the product. (cannot be empty)
+          example: Convenient tissue paper box for everyday use, providing soft and absorbent tissues.
+        category:
+          $ref: '#/components/schemas/Categories'
+        price_purchase:
+          type: number
+          description: Purchase price of the product. (must be positive)
+          example: 2.49
+        price_sale:
+          type: number
+          description: Sale price of the product. (must be positive and higher than purchase price)
+          example: 3.99
+        stock:
+          type: integer
+          description: Stock quantity of the product.(must be a positive integer)
+          example: 87
+        threshold:
+          type: integer
+          description: Threshold for restocking. (optional, must be a positive integer)
+          default: 0
+        active:
+          type: boolean
+          description: Indicates if the product is active.
+          default: true
+        thumbnail:
+          type: string
+          description: Thumbnail image URL of the product. (optional)
+          example: "https://cdn.dummyjson.com/products/images/groceries/Tissue%20Paper%20Box/thumbnail.png"
+        code:
+          type: number
+          description: Unique product code. (must be a 13-digit positive number)
+          example: 1639828085202
+      required:
+        - name
+        - description
+        - category
+        - price_purchase
+        - price_sale
+        - stock
+        - code
+    ProductUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the product. (optional, max 55 characters)
+          example: Tissue Paper Box
+        description:
+          type: string
+          description: Description of the product. (optional, cannot be empty)
+          example: Convenient tissue paper box for everyday use, providing soft and absorbent tissues.
+        category:
+          $ref: '#/components/schemas/Categories'
+        price_sale:
+          type: number
+          description: Sale price of the product. (optional, must be positive and higher than purchase price)
+          example: 3.99
+        stock:
+          type: integer
+          description: Stock quantity of the product.(optional, must be a positive integer)
+          example: 87
+        threshold:
+          type: integer
+          description: Threshold for restocking. (optional, must be a positive integer)
+          default: 0
+        active:
+          type: boolean
+          description: Indicates if the product is active(optional).
+          default: true
+        thumbnail:
+          type: string
+          description: Thumbnail image URL of the product. (optional)
+          example: "https://cdn.dummyjson.com/products/images/groceries/Tissue%20Paper%20Box/thumbnail.png"
+    AdjustInventoryRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of inventory adjustment.
+          example: SALE
+          enum:
+            - SALE
+            - PURCHASE
+            - RETURN
+            - CORRECTION
+        quantity:
+          type: integer
+          description: Quantity to adjust
+          example: 10
+        reason:
+          type: string
+          description: Reason for the adjustment (cannot be empty)
+          example: "Customer purchase"
+      required:
+        - type
+        - quantity
+        - reason
+    CartResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 3
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user owning the cart.
+          example: 123e4567-e89b-12d3-a456-426614174000
+        products:
+          type: array
+          description: List of products in the cart
+          items:
+            $ref: '#/components/schemas/ProductCart'
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the cart was created
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the last cart update
+    ProductCart:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+          description: Unique identifier of the product.
+          example: 5760f04b-fd96-408d-adb4-1ab149371b9a
+        quantity:
+          type: integer
+          minimum: 1
+          description: Number of units of the product in the cart
+          example: 3
+    OrderResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 4
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user owning the order.
+          example: 123e4567-e89b-12d3-a456-426614174000
+        products:
+          type: array
+          description: List of products in the order
+          items:
+            $ref: '#/components/schemas/ProductCart'
+        total:
+          type: number
+          description: Total price to paid for order
+          example: 34.92
+        status:
+          type: string
+          description: 
+          enum:
+            - Pending
+            - Paid
+            - Shipped
+            - Cancelled
+          example: Pending
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the order was created
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the last order update
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+      required:
+        - message
+    InvalidSecretKey:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message describing the error
+          example: Unauthorized. Missing or invalid secret-key.
+        errorCode: 
+          type: string
+          description: Specific error code
+          example: "InvalidSecretKey"
+      required:
+        - message
+        - errorCode
+    ExpressValidatorError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates whether the request was successful or not.
+          example: false
+        message:
+          type: string
+          description: A general message describing the result of the request.
+          example: "validation failed"
+        errors:
+          type: array
+          description: A list of validation errors encountered during the request.
+          items:
+            type: object
+            properties: 
+              field:
+                type: string
+                description: Field with validation error
+                example: stock
+              message:
+                type: string
+                description: Descriptive error message
+                example: "Expected number, received string"
+    ValidationParametersError:
+      type: array
+      description: List of validation errors on parameters 
+      items:
+        type: object
+        properties: 
+          field:
+            type: string
+            description: Field with validation error
+            example: limit
+          message:
+            type: string
+            description: Descriptive error message
+            example: "Expected number, received string"
+    ZodError:
+      type: array
+      description: List of validation errors
+      items:
+        type: object
+        properties: 
+          field:
+            type: string
+            description: Field with validation error
+            example: stock
+          message:
+            type: string
+            description: Descriptive error message
+            example: "Expected number, received string"
+    UnauthorizedResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: You are not authorized to perform this action.
+        code:
+          type: string
+          example: "InvalidToken"
+    InvalidIdError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "The provided ID does not have a valid format"
+        errorCode:
+          type: string
+          example: "InvalidId"
+    ProductNotFound:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Product not found"
+    UserNotFound:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "User not found"
+        user:
+          type: object
+          example: null
+    ValidationErrorCart:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: validation failed
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: productId
+              message:
+                type: string
+                example: ProductId must be a valid UUID
+    AppErrorCart:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Stock available is 1 for product a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        errorCode:
+          type: string
+          example: ProductOutOfStock
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      in: header
+      name: authorization
+      description: Access token passed in the Authorization header
+    RefreshToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      in: cookie
+      name: refresh_token
+      description: Refresh token passed as refresh_token=bearer<JWT> in the Cookie header

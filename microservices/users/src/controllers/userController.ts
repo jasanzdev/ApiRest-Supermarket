@@ -3,7 +3,7 @@ import CatchErrors from '../utils/catchError'
 import UserServices from '../services/userServices'
 import { validate as uuidValidate } from 'uuid'
 import appAssert from '../utils/appAssert'
-import { BAD_REQUEST, CREATED, NO_CONTENT, NOT_FOUND, OK, UNPROCESSABLE_CONTENT } from '../constants/http'
+import { BAD_REQUEST, CREATED, NO_CONTENT, NOT_FOUND, OK } from '../constants/http'
 import AppErrorCode from '../constants/appErrorCode'
 import logger from '../utils/logger'
 
@@ -23,7 +23,7 @@ export default class UserController {
         const { id } = req.params
         appAssert(
             uuidValidate(id),
-            UNPROCESSABLE_CONTENT,
+            BAD_REQUEST,
             'Invalid Id',
             AppErrorCode.InvalidId
         )
@@ -85,7 +85,7 @@ export default class UserController {
 
         appAssert(
             uuidValidate(id),
-            UNPROCESSABLE_CONTENT,
+            BAD_REQUEST,
             'Invalid Id',
             AppErrorCode.InvalidId
         )

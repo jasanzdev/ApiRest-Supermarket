@@ -39,10 +39,6 @@ export default class UserModel {
             ...user,
             updated_at: new Date()
         }
-        if (user.password) {
-            const hashPassword = await bcrypt.hash(user.password, config.salt.salt)
-            userWithUpdatedAt.password = hashPassword
-        }
         const update = Object.keys(userWithUpdatedAt).map((key, index) => `${key}=$${index + 2}`).join(', ')
         const values = Object.values(userWithUpdatedAt)
 

@@ -21,6 +21,12 @@ import redisClient from '../utils/redisClient'
 
 const { TokenExpiredError } = jwt
 
+/**
+ * Service function to refresh tokens when the access token expires.
+ * @param {string} refreshToken - The refresh token to validate and refresh.
+ * @param {string} receiveSecretKey - The secret API key from the request.
+ * @returns {Promise<{ publicUser: PublicUser, newAccessToken: string, newRefreshToken: string }>} New tokens and user data.
+ */
 const RefreshTokenService = async (refreshToken: string, receiveSecretKey: string) => {
     const isTokenInvalidated = await redisClient.get(refreshToken)
 
@@ -63,6 +69,13 @@ const RefreshTokenService = async (refreshToken: string, receiveSecretKey: strin
     return { publicUser, newAccessToken, newRefreshToken }
 }
 
+/**
+ * Service function to validate tokens and refresh them if necessary.
+ * @param {string} accessToken - The access token from the request header.
+ * @param {string} refreshToken - The refresh token from the request cookie.
+ * @param {string} receiveSecretKey - The secret API key from the request.
+ * @returns {Promise<{ publicUser: PublicUser, newAccessToken?: string, newRefreshToken?: string }>} User data and optional new tokens.
+ */
 const ValidateTokenServices = async (accessToken: string, refreshToken: string, receiveSecretKey: string) => {
     try {
         const { userId } = verifyAccessToken(accessToken)

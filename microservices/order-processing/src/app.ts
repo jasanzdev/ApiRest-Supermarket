@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
     res.json({ message: 'Hello Shopping Cart Service' })
 })
 app.use(ValidateApiAccess)
-app.use('/carts', CreateCartRouter())
+app.use('/cart', CreateCartRouter())
 app.use('/orders', CreateOrdersRouter())
 
 app.use(ErrorHandler)

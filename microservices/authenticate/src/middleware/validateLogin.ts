@@ -9,6 +9,10 @@ import { toPublishUser } from '../utils/userToPublish'
 import { FetchUserByUsername } from '../utils/fetchUserAxios'
 import { PublicUser } from '../types/types.d'
 
+/**
+ * Middleware to validate login credentials (username and password).
+ * @type {RequestHandler}
+ */
 export const ValidateLogin: RequestHandler = CatchErrors(async (req, res, next) => {
     const { username, password } = req.body
     const receiveSecretKey = req.secret as string
@@ -16,8 +20,8 @@ export const ValidateLogin: RequestHandler = CatchErrors(async (req, res, next) 
     appAssert(
         username && password,
         BAD_REQUEST,
-        'The username && password is require',
-        AppErrorCode.BadRequest
+        'Invalid username or password',
+        AppErrorCode.InvalidCredentials
     )
 
     const user: User = await FetchUserByUsername(username, receiveSecretKey)

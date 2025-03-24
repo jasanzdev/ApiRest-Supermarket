@@ -28,12 +28,11 @@ export default class UserServices {
     }
 
     static readonly update = async (id: User['id'], input: User): Promise<User | null> => {
-        const { name, email, password, role } = input
+        const { name, email, role } = input
 
         const user: UserToUpdate = {}
         if (name) user.name = name
         if (email) user.email = email
-        if (password) user.password = password
         if (role) user.role = role
 
         const updatedUser = await UserModel.update(id, user)
@@ -47,7 +46,7 @@ export default class UserServices {
             user,
             NOT_FOUND,
             'Impossible to reset password, user not found',
-            AppErrorCode.InvalidId
+            AppErrorCode.UsersNotFound
         )
 
         const isValidPass = await bcrypt.compare(password, user.password)

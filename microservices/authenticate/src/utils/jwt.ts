@@ -8,23 +8,18 @@ const accessSecretKey = config.jwt.accessSecretKey
 const refreshSecretKey = config.jwt.refreshSecretKey
 
 export const generateAccessToken = (payload: AccessTokenPayload): string => {
-    appAssert(
-        payload.userId,
-        UNPROCESSABLE_CONTENT,
-        'Impossible to create Access Token, user not provider'
-    )
     return jwt.sign(payload, accessSecretKey, { expiresIn: '15m' })
 }
 
 export const generateRefreshToken = (payload: RefreshTokenPayload): string => {
-    appAssert(
-        payload.sessionId,
-        UNPROCESSABLE_CONTENT,
-        'Impossible to create Refresh Token, user not provider')
-
     return jwt.sign(payload, refreshSecretKey, { expiresIn: '1d' })
 }
 
+/**
+ * Function to verify and decode an access token.
+ * @param {string} token - The access token to verify.
+ * @returns {AccessTokenPayload} The decoded payload containing userId and sessionId.
+ */
 export const verifyAccessToken = (token: string): AccessTokenPayload => {
     const { userId, sessionId } = jwt.verify(token, accessSecretKey) as AccessTokenPayload
 
@@ -36,6 +31,11 @@ export const verifyAccessToken = (token: string): AccessTokenPayload => {
     return { userId, sessionId }
 }
 
+/**
+ * Function to verify and decode a refresh token.
+ * @param {string} token - The refresh token to verify.
+ * @returns {RefreshTokenPayload} The decoded payload containing sessionId and expiration.
+ */
 export const verifyRefreshToken = (token: string): RefreshTokenPayload => {
     const { sessionId, exp } = jwt.verify(token, refreshSecretKey) as RefreshTokenPayload
     appAssert(sessionId, UNPROCESSABLE_CONTENT, 'Invalid Refresh Token')

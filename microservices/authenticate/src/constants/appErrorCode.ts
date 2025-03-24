@@ -7,7 +7,9 @@ const enum AppErrorCode {
     BadRequest = 'BadRequest',
     NoTokenProvider = 'NoTokenProvider',
     InvalidCredentials = 'InvalidCredentials',
-    InternalServerError = 'InternalServerError'
+    InternalServerError = 'InternalServerError',
+    InvalidSecretKey = 'InvalidSecretKey',
+    ValidationError = 'ValidationError'
 }
 
 export default AppErrorCode

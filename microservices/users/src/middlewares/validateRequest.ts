@@ -6,7 +6,7 @@ export const validateRequest = (req: Request, res: Response, next: NextFunction)
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
-        logger.error('Validate Error', {
+        logger.error('Validation Error', {
             status: 400,
             statusText: 'validation failed',
             errors: errors.array()

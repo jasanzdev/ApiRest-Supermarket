@@ -4,7 +4,6 @@ import { ClientRequest, IncomingMessage } from 'http'
 import { Request, Response } from 'express'
 import { authUrl } from '../constants/urls'
 
-
 export const AuthProxy = createProxyMiddleware({
     target: authUrl,
     changeOrigin: true,

@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { ValidatePartialProduct, ValidateProduct } from '../schemas/createProductBody'
 import { validate as uuidValidate } from 'uuid'
 import CatchErrors from '../utils/catchErrors'
-import { BAD_REQUEST, CONFLICT, CREATED, NO_CONTENT, NOT_FOUND, OK, UNAUTHORIZED } from '../constants/http'
+import { BAD_REQUEST, CREATED, NO_CONTENT, NOT_FOUND, OK, UNAUTHORIZED } from '../constants/http'
 import appAssert from '../utils/appAssert'
 import AppErrorCode from '../constants/appErrorCode'
 import ProductServices from '../services/productServices'
@@ -13,7 +13,7 @@ import { ValidateInventoryAdjustmentInput } from '../schemas/inventoryAdjustment
 
 export class ProductController {
 
-    static readonly getProducts = CatchErrors(async (req: Request, res: Response) => {
+    static readonly getFilteredProducts = CatchErrors(async (req: Request, res: Response) => {
         const filters = ValidateFiltersQueryParams(req.query)
 
         const PaginationResult: PaginationResult = await ProductServices.getAll(filters)
@@ -33,7 +33,7 @@ export class ProductController {
 
         const categories = await ProductServices.getCategories()
         res.status(categories ? OK : NOT_FOUND).json(!categories
-            ? { message: 'Products not found' }
+            ? { message: 'Categories not found' }
             : categories)
     })
 
@@ -60,7 +60,7 @@ export class ProductController {
 
         appAssert(
             !isNaN(validCode),
-            CONFLICT,
+            BAD_REQUEST,
             'The code must be a valid number',
             AppErrorCode.InvalidCode
         )

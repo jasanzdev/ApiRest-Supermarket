@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { RequestHandler } from 'express'
 import CatchErrors from '../utils/catchErrors'
 import logger from '../utils/logger'
 import appAssert from '../utils/appAssert'
@@ -9,7 +9,11 @@ import { getCookieOptions } from '../utils/cookieOptions'
 
 export default class ValidateTokensController {
 
-    static readonly VerifyToken = CatchErrors(async (req: Request, res: Response) => {
+    /**
+     * Controller method to verify access and refresh tokens.
+     * @type {RequestHandler}
+     */
+    static readonly VerifyToken: RequestHandler = CatchErrors(async (req, res) => {
         logger.info('Validating Token', {
             ip: req.ip,
             method: req.method,
@@ -32,10 +36,17 @@ export default class ValidateTokensController {
             res.cookie('refresh_token', newRefreshToken, getCookieOptions())
         }
 
-        res.status(OK).json({ user: publicUser })
+        res.status(OK).json({
+            message: 'Tokens verified successfully.',
+            user: publicUser
+        })
     })
 
-    static readonly RefreshToken = CatchErrors(async (req: Request, res: Response) => {
+    /**
+     * Controller method to refresh access and refresh tokens.
+     * @type {RequestHandler}
+     */
+    static readonly RefreshToken: RequestHandler = CatchErrors(async (req, res) => {
         logger.info('Refreshing Token', {
             ip: req.ip,
             method: req.method,
@@ -56,6 +67,9 @@ export default class ValidateTokensController {
         res.setHeader('Authorization', newAccessToken)
         res.cookie('refresh_token', newRefreshToken, getCookieOptions())
 
-        res.status(OK).json({ user: publicUser })
+        res.status(OK).json({
+            message: 'Tokens refreshed successfully.',
+            user: publicUser
+        })
     })
 }

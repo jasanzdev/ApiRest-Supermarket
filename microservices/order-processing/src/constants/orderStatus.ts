@@ -1,3 +1,3 @@
-export const OrderStatus = ['Pending', 'Paid', 'Shipped'] as const
+export const OrderStatus = ['Pending', 'Paid', 'Shipped', 'Cancelled'] as const
 
 export type OrderStatus = typeof OrderStatus[number]
