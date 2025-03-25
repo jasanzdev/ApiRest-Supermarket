@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import redisClient from '../utils/redisClient'
+import redisClient from '../config/redisClient'
 import appAssert from '../utils/appAssert'
 import { UNAUTHORIZED } from '../constants/http'
 import AppErrorCode from '../constants/appErrorCode'

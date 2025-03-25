@@ -1,6 +1,6 @@
 import { Cart } from '../dto/dto'
 import { ProductCart, User } from '../types/types'
-import { db } from '../utils/postgres'
+import { db } from '../config/postgres'
 
 export default class CartModel {
 

@@ -17,7 +17,7 @@ import {
 } from '../types/types.d'
 import { User } from '../dto/user'
 import { FetchUserById } from '../utils/fetchUserAxios'
-import redisClient from '../utils/redisClient'
+import redisClient from '../config/redisClient'
 
 const { TokenExpiredError } = jwt
 

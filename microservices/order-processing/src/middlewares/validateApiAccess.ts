@@ -3,7 +3,7 @@ import CatchErrors from '../utils/catchErrors'
 import appAssert from '../utils/appAssert'
 import { FORBIDDEN, UNAUTHORIZED } from '../constants/http'
 import AppErrorCode from '../constants/appErrorCode'
-import redisClient from '../utils/redisClient'
+import redisClient from '../config/redisClient'
 import { User } from '../types/types'
 
 export const ValidateApiAccess: RequestHandler = CatchErrors(async (req, res, next) => {

@@ -32,9 +32,7 @@
   "paths": {
     "/auth/login": {
       "post": {
-        "tags": [
-          "authenticate"
-        ],
+        "tags": ["authenticate"],
         "summary": "User Login.",
         "operationId": "login",
         "description": "Authenticates a user by validating their username and password. Returns access and refresh tokens upon successful login.",
@@ -127,9 +125,7 @@
     },
     "/auth/register": {
       "post": {
-        "tags": [
-          "authenticate"
-        ],
+        "tags": ["authenticate"],
         "summary": "User Registration",
         "operationId": "register",
         "description": "Registers a new user by providing their details. Returns access and refresh tokens upon successful registration.",
@@ -212,9 +208,7 @@
     },
     "/auth/logout": {
       "post": {
-        "tags": [
-          "authenticate"
-        ],
+        "tags": ["authenticate"],
         "summary": "User Logout",
         "operationId": "logout",
         "description": "Logout a user by invalidating their refresh token and deleting the associated session.",
@@ -275,9 +269,7 @@
     },
     "/auth/verify-token": {
       "post": {
-        "tags": [
-          "authenticate"
-        ],
+        "tags": ["authenticate"],
         "summary": "Verify Tokens.",
         "operationId": "verifyToken",
         "description": "Verifies the access tokens provided in the request and refreshing them if the access token is expired.",
@@ -355,9 +347,7 @@
     },
     "/auth/refresh-token": {
       "post": {
-        "tags": [
-          "authenticate"
-        ],
+        "tags": ["authenticate"],
         "summary": "Refresh Tokens.",
         "operationId": "refreshToken",
         "description": "Refreshes the access and refresh tokens using a valid refresh token.",
@@ -432,9 +422,7 @@
     },
     "/producs": {
       "get": {
-        "tags": [
-          "products"
-        ],
+        "tags": ["products"],
         "summary": "Retrieves a paginated list of products with optional filters.",
         "operationId": "getFilteredProducts",
         "description": "Returns a list of products based on optional query parameters such as category, stock, price range, limit, and offset. The response includes pagination details.",
@@ -540,9 +528,7 @@
         }
       },
       "post": {
-        "tags": [
-          "products"
-        ],
+        "tags": ["products"],
         "summary": "Create a new product",
         "operationId": "createProduct",
         "description": "Creates a new product with the provided details.",
@@ -616,9 +602,7 @@
     },
     "/products/categories": {
       "get": {
-        "tags": [
-          "products"
-        ],
+        "tags": ["products"],
         "summary": "Retrieves a list of product categories.",
         "operationId": "getCategories",
         "description": "Returns a list of available categories. If no categories are found, a message indicating that no products were found is returned.",
@@ -669,9 +653,7 @@
     },
     "/producs/search": {
       "get": {
-        "tags": [
-          "products"
-        ],
+        "tags": ["products"],
         "summary": "Search for products by keyword",
         "operationId": "searchProducts",
         "description": "Allows searching for products using a keyword with pagination",
@@ -751,9 +733,7 @@
     },
     "/products/{id}": {
       "get": {
-        "tags": [
-          "products"
-        ],
+        "tags": ["products"],
         "summary": "Retrieves a product by its ID.",
         "operationId": "getProductById",
         "description": "Returns a single product based on the provided ID. If the ID is invalid or the product is not found, appropriate error messages are returned.",
@@ -819,9 +799,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "products"
-        ],
+        "tags": ["products"],
         "summary": "Update a product by ID",
         "operationId": "updateProduct",
         "description": "Partially updates a product using its unique UUID identifier.",
@@ -912,9 +890,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "products"
-        ],
+        "tags": ["products"],
         "summary": "Delete a product by ID",
         "operationId": "deleteProduct",
         "description": "Deletes a product using its unique UUID identifier.",
@@ -978,9 +954,7 @@
     },
     "/products/code/{code}": {
       "get": {
-        "tags": [
-          "products"
-        ],
+        "tags": ["products"],
         "summary": "Get a product by its code.",
         "operationId": "getProductByCode",
         "description": "Retrieves a product using its unique code.",
@@ -1057,9 +1031,7 @@
     },
     "/products/adjust-inventory/{id}": {
       "patch": {
-        "tags": [
-          "products"
-        ],
+        "tags": ["products"],
         "summary": "Adjust product inventory",
         "operationId": "adjustInventory",
         "description": "Adjusts the inventory of a product based on type, quantity, and reason, with user authorization checks.",
@@ -1166,9 +1138,7 @@
     },
     "/users": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Retrieve all users",
         "operationId": "getUsers",
         "description": "Fetches a list of all users from the database, ordered by last update time in descending order",
@@ -1217,9 +1187,7 @@
         }
       },
       "post": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Create a new user",
         "operationId": "createUser",
         "description": "Creates a new user with the provided details after validating input data",
@@ -1290,9 +1258,7 @@
     },
     "/users/{id}": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Retrieve a user by ID",
         "operationId": "getUserById",
         "description": "Fetches a specific user from the database using their unique identifier (UUID)",
@@ -1374,9 +1340,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Update a user by ID",
         "operationId": "updateUser",
         "description": "Updates an existing user's details based on their unique identifier (UUID). All fields are optional.",
@@ -1475,9 +1439,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": null,
         "operationId": "deleteUser",
         "description": null,
@@ -1557,9 +1519,7 @@
     },
     "/users/usernameOrEmail/{value}": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Retrieve a user by username or email",
         "operationId": "getUserByUsernameOrEmail",
         "description": "Fetches a user from the database using either their username or email address",
@@ -1652,9 +1612,7 @@
     },
     "/users/resetPassword/{id}": {
       "patch": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Reset a user's password",
         "operationId": "resetPassword",
         "description": "Resets a user's password by verifying their current password and updating it with a new one",
@@ -1775,9 +1733,7 @@
     },
     "/order-processing/cart/": {
       "get": {
-        "tags": [
-          "OrderProcessing"
-        ],
+        "tags": ["OrderProcessing"],
         "summary": "Retrieve user's cart details",
         "operationId": "getDetailsCart",
         "description": "Fetches the active cart details for the authenticated user based on their user ID",
@@ -1841,9 +1797,7 @@
     },
     "/order-processing/cart/add": {
       "post": {
-        "tags": [
-          "OrderProcessing"
-        ],
+        "tags": ["OrderProcessing"],
         "summary": "Add products to user's cart",
         "operationId": "addToCart",
         "description": "Adds one or more products to the authenticated user's cart, checking inventory availability. Updates existing cart if it exists, otherwise creates a new one.",
@@ -1986,9 +1940,7 @@
     },
     "/order-processing/cart/remove/{amount}/{productId}": {
       "delete": {
-        "tags": [
-          "OrderProcessing"
-        ],
+        "tags": ["OrderProcessing"],
         "summary": "Remove a product from user's cart",
         "operationId": "removeFromCart",
         "description": "Removes a specified quantity of a product from the authenticated user's cart. If amount is not provided or invalid, defaults to 1. Removes the product entirely if the remaining quantity would be zero or less.",
@@ -2109,9 +2061,7 @@
     },
     "/order-processing/cart/clear": {
       "delete": {
-        "tags": [
-          "OrderProcessing"
-        ],
+        "tags": ["OrderProcessing"],
         "summary": "Clear user's cart",
         "operationId": "clearCart",
         "description": "Removes all products from the authenticated user's cart by setting the products list to empty.",
@@ -2179,9 +2129,7 @@
     },
     "/order-processing/orders/": {
       "get": {
-        "tags": [
-          "OrderProcessing"
-        ],
+        "tags": ["OrderProcessing"],
         "summary": "Retrieve user's order details",
         "operationId": "getOrdersDetails",
         "description": "Fetches all orders associated with the authenticated user based on their user ID",
@@ -2259,9 +2207,7 @@
         }
       },
       "post": {
-        "tags": [
-          "OrderProcessing"
-        ],
+        "tags": ["OrderProcessing"],
         "summary": "Create a new order",
         "operationId": "createOrder",
         "description": "Creates a new order for the authenticated user based on their active cart, calculates the total price using an external product service, and deletes the cart upon successful creation.",
@@ -2329,9 +2275,7 @@
     },
     "/order-processing/orders/{id}": {
       "get": {
-        "tags": [
-          "OrderProcessing"
-        ],
+        "tags": ["OrderProcessing"],
         "summary": "Retrieve an order by ID",
         "operationId": "getOrderById",
         "description": "Fetches a specific order by its unique identifier for the authenticated user",
@@ -2418,9 +2362,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "OrderProcessing"
-        ],
+        "tags": ["OrderProcessing"],
         "summary": "Update an order's status",
         "operationId": "updateOrder",
         "description": "Updates the status of a specific order. If the status is set to 'Paid', it checks inventory and adjusts product stock via an external service. The status cannot be set to 'pending'.",
@@ -2455,17 +2397,10 @@
                     "type": "string",
                     "description": "New status for the order (cannot be 'pending')",
                     "example": "Paid",
-                    "enum": [
-                      "Paid",
-                      "Shipped",
-                      "Delivered",
-                      "Cancelled"
-                    ]
+                    "enum": ["Paid", "Shipped", "Delivered", "Cancelled"]
                   }
                 },
-                "required": [
-                  "status"
-                ]
+                "required": ["status"]
               }
             }
           }
@@ -2588,10 +2523,7 @@
     "schemas": {
       "LoginRequest": {
         "type": "object",
-        "required": [
-          "username",
-          "password"
-        ],
+        "required": ["username", "password"],
         "properties": {
           "username": {
             "type": "string",
@@ -2607,12 +2539,7 @@
       },
       "RegisterRequest": {
         "type": "object",
-        "required": [
-          "name",
-          "username",
-          "password",
-          "email"
-        ],
+        "required": ["name", "username", "password", "email"],
         "properties": {
           "name": {
             "type": "string",
@@ -2665,12 +2592,7 @@
           "role": {
             "type": "string",
             "description": "Role assigned to the user, defining their permissions and      access level.",
-            "enum": [
-              "admin",
-              "manager",
-              "supervisor",
-              "user"
-            ],
+            "enum": ["admin", "manager", "supervisor", "user"],
             "example": "USER"
           },
           "created_at": {
@@ -2715,12 +2637,7 @@
           "role": {
             "type": "string",
             "description": "Role assigned to the user, defining their permissions and access level.",
-            "enum": [
-              "admin",
-              "manager",
-              "supervisor",
-              "user"
-            ],
+            "enum": ["admin", "manager", "supervisor", "user"],
             "example": "USER"
           }
         }
@@ -2742,12 +2659,7 @@
           "role": {
             "type": "string",
             "description": "Role assigned to the user, defining their permissions and access level.",
-            "enum": [
-              "admin",
-              "manager",
-              "supervisor",
-              "user"
-            ],
+            "enum": ["admin", "manager", "supervisor", "user"],
             "example": "supervisor"
           }
         }
@@ -2768,11 +2680,7 @@
             "description": "Confirmation of the new password, must match newPassword"
           }
         },
-        "required": [
-          "password",
-          "newPassword",
-          "confirm"
-        ]
+        "required": ["password", "newPassword", "confirm"]
       },
       "Categories": {
         "type": "array",
@@ -3028,12 +2936,7 @@
             "type": "string",
             "description": "Type of inventory adjustment.",
             "example": "SALE",
-            "enum": [
-              "SALE",
-              "PURCHASE",
-              "RETURN",
-              "CORRECTION"
-            ]
+            "enum": ["SALE", "PURCHASE", "RETURN", "CORRECTION"]
           },
           "quantity": {
             "type": "integer",
@@ -3046,11 +2949,7 @@
             "example": "Customer purchase"
           }
         },
-        "required": [
-          "type",
-          "quantity",
-          "reason"
-        ]
+        "required": ["type", "quantity", "reason"]
       },
       "CartResponse": {
         "type": "object",
@@ -3129,12 +3028,7 @@
           "status": {
             "type": "string",
             "description": null,
-            "enum": [
-              "Pending",
-              "Paid",
-              "Shipped",
-              "Cancelled"
-            ],
+            "enum": ["Pending", "Paid", "Shipped", "Cancelled"],
             "example": "Pending"
           },
           "created_at": {
@@ -3157,9 +3051,7 @@
             "description": "Error message"
           }
         },
-        "required": [
-          "message"
-        ]
+        "required": ["message"]
       },
       "InvalidSecretKey": {
         "type": "object",
@@ -3175,10 +3067,7 @@
             "example": "InvalidSecretKey"
           }
         },
-        "required": [
-          "message",
-          "errorCode"
-        ]
+        "required": ["message", "errorCode"]
       },
       "ExpressValidatorError": {
         "type": "object",
@@ -3362,7 +3251,7 @@
         "bearerFormat": "JWT",
         "in": "cookie",
         "name": "refresh_token",
-        "description": "Refresh token passed as refresh_token=bearer<JWT> in the Cookie header"
+        "description": "Refresh token passed as refresh_token=JWT in the Cookie header"
       }
     }
   }

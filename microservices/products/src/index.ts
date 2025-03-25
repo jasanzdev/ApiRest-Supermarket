@@ -4,7 +4,6 @@ import cors from 'cors'
 import CookieParser from 'cookie-parser'
 import { CreateProductsRouter } from './routes/productRoutes'
 import HandleError from './middlewares/handleErrors'
-import { startServer } from './utils/initPostgres'
 import { VerifySecretKey } from './middlewares/verifySecretKey'
 import { AuthorizeUserRole } from './middlewares/authorizeUserRole'
 
@@ -36,9 +35,6 @@ app.use(CreateProductsRouter())
 
 app.use(HandleError)
 
-startServer()
-    .then(() => {
-        app.listen(port, () => {
-            console.log(`Service Products running on http://localhost:${port}`)
-        })
-    }).catch(error => console.log('Error initializing server:', error))
+app.listen(port, () => {
+    console.log(`Service Products running on http://localhost:${port}`)
+})

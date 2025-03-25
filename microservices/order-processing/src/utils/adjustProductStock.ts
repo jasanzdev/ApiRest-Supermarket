@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ProductCart, User } from '../types/types'
 import { ProductsUrl } from '../constants/urlServices'
-import redisClient from './redisClient'
+import redisClient from '../config/redisClient'
 
 export const AdjustProductStock = async (products: ProductCart[], receiveSecretKey: string, user: User) => {
     await redisClient.del('products/')

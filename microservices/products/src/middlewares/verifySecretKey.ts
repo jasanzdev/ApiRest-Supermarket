@@ -3,7 +3,7 @@ import CatchErrors from '../utils/catchErrors'
 import appAssert from '../utils/appAssert'
 import { FORBIDDEN } from '../constants/http'
 import AppErrorCode from '../constants/appErrorCode'
-import redisClient from '../utils/redisClient'
+import redisClient from '../config/redisClient'
 
 export const VerifySecretKey: RequestHandler = CatchErrors(async (req, res, next) => {
     const receiveSecretKey = req.headers['x-api-key']

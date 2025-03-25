@@ -12,15 +12,16 @@ export const VerifyToken: RequestHandler = CatchErrors(async (req, res, next) =>
         method: req.method,
         url: req.originalUrl
     })
-    const accessToken = req.headers['authorization']
+    const bearerAccessToken = req.headers['authorization']
     const refreshToken = req.cookies['refresh_token']
     const apiSecretKey = req.secret as string
 
     const refresh = refreshToken ? 'onlyRefreshToken' : 'bothUndefined'
-    const handlerKey = accessToken && refreshToken ? 'bothDefined' : refresh
+    const handlerKey = bearerAccessToken && refreshToken ? 'bothDefined' : refresh
 
     const tokenHandlers = {
         bothDefined: async () => {
+            const accessToken = bearerAccessToken?.split(' ')[1]
             const { newRefreshToken, newAccessToken, user } = await VerifyAccessTokenService(accessToken as string, refreshToken, apiSecretKey)
 
             if (newAccessToken && newRefreshToken) {

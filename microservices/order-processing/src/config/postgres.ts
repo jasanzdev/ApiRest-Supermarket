@@ -1,11 +1,10 @@
 import pkg from 'pg'
 const { Pool } = pkg
-import config from '../config/config'
+import config from './config'
 
-export const db = new Pool(!config.node_env.development
-    ? config.productionDB
-    : config.postgres
-)
+const configPool = { connectionString: config.postgresDocker }
+
+export const db = new Pool(configPool)
 
 db.query('SELECT NOW()')
     .then((res) => {

@@ -18,9 +18,7 @@ const config = {
         password: process.env.DB_LOCAL_PASSWORD,
         port: Number(process.env.DB_LOCAL_PORT)
     },
-    productionDB: {
-        connectionString: process.env.DATABASE_URL
-    },
+    postgresDocker: process.env.DATABASE_URL,
     node_env: {
         development: process.env.NODE_ENV !== 'production',
     },
