@@ -1,18 +1,18 @@
-import CartModel from '../models/cart'
-import { Cart } from '../dto/dto'
-import { ProductCart, User } from '../types/types'
 import { InventoryCheck } from '../utils/inventoryCheck'
 import appAssert from '../utils/appAssert'
 import { NOT_FOUND } from '../constants/http'
 import AppErrorCode from '../constants/appErrorCode'
+import { Cart, ICartRepository, ICartService, ProductCart } from '../types/cartTypes'
+import { User } from '../types/types.d'
 
-export default class CartServices {
-    static readonly getCart = async (userId: User['id']): Promise<Cart> => {
-        const cart = await CartModel.getCart(userId)
-        return cart
+export default class CartServices implements ICartService {
+    constructor(private readonly cartRepository: ICartRepository) { }
+
+    async findOne(userId: User['id']): Promise<Cart | null> {
+        return await this.cartRepository.findOne(userId)
     }
 
-    static readonly addToCart = async (input: ProductCart[], userId: User['id'], receiveSecretKey: string): Promise<Cart> => {
+    async addToCart(input: ProductCart[], userId: User['id'], receiveSecretKey: string): Promise<Cart> {
         await InventoryCheck(input, receiveSecretKey)
 
         const existCart = await this.existsCart(userId)
@@ -32,11 +32,11 @@ export default class CartServices {
             products.push(...input)
         }
 
-        const cart: Cart = await CartModel.addToCart(products, userId)
+        const cart: Cart = await this.cartRepository.addToCart(products, userId)
         return cart
     }
 
-    static readonly removeFromCart = async (productId: string, userId: User['id'], amount: number) => {
+    async removeFromCart(productId: string, userId: User['id'], amount: number): Promise<Cart | null> {
         const cart = await this.existsCart(userId)
 
         appAssert(
@@ -63,11 +63,11 @@ export default class CartServices {
             products[productIndex].quantity -= amount
         }
 
-        const updatedCart = await CartModel.updateCart(products)
+        const updatedCart = await this.cartRepository.update(products, userId)
         return updatedCart
     }
 
-    static readonly clearCart = async (userId: User['id']) => {
+    async clearCart(userId: User['id']): Promise<Cart | null> {
         const cart = await this.existsCart(userId)
 
         appAssert(
@@ -77,11 +77,11 @@ export default class CartServices {
             AppErrorCode.CartNotExist
         )
 
-        const updatedCart = await CartModel.updateCart([])
+        const updatedCart = await this.cartRepository.update([], userId)
         return updatedCart
     }
 
-    static readonly existsCart = async (userId: User['id']): Promise<Cart | null> => {
-        return await CartModel.getCart(userId)
+    async existsCart(userId: User['id']): Promise<Cart | null> {
+        return await this.cartRepository.findOne(userId)
     }
 }

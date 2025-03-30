@@ -7,9 +7,32 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redis_data:/var/lib/redis/data
+      - ./redis-data:/var/lib/redis/data
     networks:
       - app-network
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:8.0.6-noble
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: Mongo123
+    volumes:
+      - ./mongo-data:/data/db
+
+  mongo-express:
+    image: mongo-express:1.0.2-20-alpine3.19
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: Mongo123
+      ME_CONFIG_MONGODB_URL: mongodb://admin:Mongo123@mongodb:27017/
+      ME_CONFIG_BASICAUTH: false
 
   postgres:
     image: postgres:17-alpine
@@ -20,7 +43,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
       - ./query-postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
@@ -98,8 +121,12 @@ services:
       - app-network
 
 volumes:
-  postgres_data:
-  redis_data:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  mongo-data:
+    driver: local
 
 networks:
   app-network:

@@ -1,13 +1,16 @@
 import { RequestHandler } from 'express'
 import CatchErrors from '../utils/catchErrors'
-import OrderService from '../services/orderServices'
 import { BAD_REQUEST, CONFLICT, NOT_FOUND, OK } from '../constants/http'
 import appAssert from '../utils/appAssert'
 import AppErrorCode from '../constants/appErrorCode'
 import { OrderStatus } from '../constants/orderStatus'
+import { IOrderService } from '../types/orderType'
 
-export default class OrdersController {
-    static readonly getOrderById: RequestHandler = CatchErrors(async (req, res) => {
+export class OrderController {
+
+    constructor(private readonly orderService: IOrderService) { }
+
+    getOrderById: RequestHandler = CatchErrors(async (req, res) => {
         const { id } = req.params
 
         appAssert(
@@ -17,28 +20,28 @@ export default class OrdersController {
             AppErrorCode.InvalidId
         )
 
-        const order = await OrderService.getOrderById(+id)
+        const order = await this.orderService.getOrderById(+id)
         res.status(order ? OK : NOT_FOUND).json({
             success: true,
             orders: order
         })
     })
 
-    static readonly getOrdersDetails: RequestHandler = CatchErrors(async (req, res) => {
-        const orders = await OrderService.getOrdersDetails(req.user)
+    getOrdersDetails: RequestHandler = CatchErrors(async (req, res) => {
+        const orders = await this.orderService.getOrdersDetails(req.user)
         res.status(orders ? OK : NOT_FOUND).json({
             success: true,
             orders: orders
         })
     })
 
-    static readonly create: RequestHandler = CatchErrors(async (req, res) => {
+    create: RequestHandler = CatchErrors(async (req, res) => {
         const receiveSecretKey = req.secret as string
-        await OrderService.createOrder(req.user, receiveSecretKey)
+        await this.orderService.createOrder(req.user, receiveSecretKey)
         res.status(201).json({ message: 'Your new order has been created and is now pending payment completion.' })
     })
 
-    static readonly update: RequestHandler = CatchErrors(async (req, res) => {
+    update: RequestHandler = CatchErrors(async (req, res) => {
         const { id } = req.params
         const { status } = req.body
         const receiveSecretKey = req.secret as string
@@ -63,7 +66,7 @@ export default class OrdersController {
             AppErrorCode.InvalidOrderStatus
         )
 
-        await OrderService.updateOrder({
+        await this.orderService.updateOrder({
             orderId: + id,
             status,
             receiveSecretKey,

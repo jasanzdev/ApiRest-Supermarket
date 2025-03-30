@@ -1,13 +1,21 @@
 import { Router } from 'express'
-import OrdersController from '../controllers/orderController'
+import { IOrderRepository, IOrderService } from '../types/orderType'
+import { OrderService } from '../services/orderServices'
+import { ICartRepository } from '../types/cartTypes'
+import { OrderController } from '../controllers/orderController'
 
-export const CreateOrdersRouter = () => {
+export const CreateOrdersRouter = (
+    orderRepository: IOrderRepository,
+    cartRepository: ICartRepository) => {
+
     const router = Router()
+    const orderService: IOrderService = new OrderService(orderRepository, cartRepository)
+    const orderController = new OrderController(orderService)
 
-    router.get('/', OrdersController.getOrdersDetails)
-    router.get('/:id', OrdersController.getOrderById)
-    router.post('/', OrdersController.create)
-    router.patch('/:id', OrdersController.update)
+    router.get('/', orderController.getOrdersDetails)
+    router.get('/:id', orderController.getOrderById)
+    router.post('/', orderController.create)
+    router.patch('/:id', orderController.update)
 
     return router
 }

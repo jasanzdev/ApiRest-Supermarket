@@ -1,54 +1,34 @@
-import { Order } from '../dto/dto'
-import { ProductCart, User } from '../types/types'
-import { db } from '../config/postgres'
+import mongoose, { Schema } from 'mongoose'
+import { Order } from '../types/orderType'
+import { OrderStatus } from '../constants/orderStatus'
 
-export default class OrderModel {
-
-    static readonly findOne = async (orderId: Order['id']): Promise<Order | null> => {
-        const result = await db.query(
-            `SELECT * FROM orders
-            WHERE id = $1`,
-            [orderId])
-
-        return result.rowCount ? result.rows[0] : null
+const orderSchema: Schema = new Schema<Order>({
+    user_id: {
+        type: String,
+        required: true
+    },
+    products: [{
+        productId: {
+            type: String,
+            required: true
+        },
+        quantity: {
+            type: Number,
+            required: true
+        }
+    }],
+    total: {
+        type: Number,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: [...OrderStatus],
+        default: 'Pending'
     }
+}, {
+    timestamps: true,
+    versionKey: false
+})
 
-    static readonly find = async (userId: User['id']): Promise<Order[] | null> => {
-        const result = await db.query(
-            `SELECT * FROM orders
-            WHERE user_id = $1::uuid`,
-            [userId])
-
-        return result.rowCount ? result.rows : null
-    }
-
-    static readonly create = async (userId: User['id'], products: ProductCart[], total: number): Promise<Order> => {
-        const productsJson = JSON.stringify(products)
-        const result = await db.query(
-            `INSERT INTO orders (user_id, products, total)
-            VALUES ($1::uuid, $2::jsonb, $3)
-            RETURNING *`,
-            [userId, productsJson, total])
-
-        return result.rows[0]
-    }
-
-    static readonly update = async (orderId: Order['id'], status: string) => {
-        const result = await db.query(
-            `UPDATE orders
-            SET status = $1
-            WHERE id = $2 RETURNING *`,
-            [status, orderId])
-
-        return result.rows[0]
-    }
-
-    static readonly findPendingOrders = async (userId: string) => {
-        const result = await db.query(
-            `SELECT * FROM orders
-            WHERE user_id = $1::uuid AND status = $2`,
-            [userId, 'pending'])
-
-        return result.rowCount ? result.rows[0] : null
-    }
-}
+export const OrderModel = mongoose.model<Order>('Order', orderSchema)

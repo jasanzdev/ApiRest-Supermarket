@@ -1,13 +1,7 @@
-import { UUIDTypes } from 'uuid'
 import { OrderStatus } from '../constants/orderStatus'
 
-export type ProductCart = {
-    productId: UUIDTypes,
-    quantity: number
-}
-
 export type User = {
-    id: UUIDTypes,
+    id: string,
     name: string,
     username: string,
     email: string

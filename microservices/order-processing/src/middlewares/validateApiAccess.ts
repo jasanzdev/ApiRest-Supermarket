@@ -4,7 +4,7 @@ import appAssert from '../utils/appAssert'
 import { FORBIDDEN, UNAUTHORIZED } from '../constants/http'
 import AppErrorCode from '../constants/appErrorCode'
 import redisClient from '../config/redisClient'
-import { User } from '../types/types'
+import { User } from '../types/types.d'
 
 export const ValidateApiAccess: RequestHandler = CatchErrors(async (req, res, next) => {
     const receiveSecretKey = req.headers['x-api-key']
