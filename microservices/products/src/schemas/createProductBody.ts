@@ -26,7 +26,7 @@ const ProductSchema = z.object({
     threshold: z.number()
         .int({ message: 'Threshold must be an integer.' })
         .positive({ message: 'Threshold must be a positive number.' })
-        .default(0),
+        .default(1),
 
     active: z.boolean().default(true),
 
