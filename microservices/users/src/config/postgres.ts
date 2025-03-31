@@ -1,8 +1,8 @@
 import pkg from 'pg'
-import config from './config'
+import { envs } from './config'
 const { Pool } = pkg
 
-const configPool = { connectionString: config.postgresDocker }
+const configPool = { connectionString: envs.postgresUrl }
 
 export const db = new Pool(configPool)
 

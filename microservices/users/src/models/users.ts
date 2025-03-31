@@ -1,7 +1,7 @@
 import { User, UserToUpdate } from '../dto/user'
 import { db } from '../config/postgres'
 import bcrypt from 'bcryptjs'
-import config from '../config/config'
+import { envs } from '../config/config'
 
 export default class UserModel {
 
@@ -26,7 +26,7 @@ export default class UserModel {
 
     static async create(input: User) {
         const { name, username, password, email, role } = input
-        const hashPassword = await bcrypt.hash(password, config.salt.salt)
+        const hashPassword = await bcrypt.hash(password, envs.salt)
         const user = await db.query(`INSERT INTO users (name, username, email, password, role)
                     VALUES ($1, $2, $3, $4, $5) RETURNING *`,
             [name, username, email, hashPassword, role])

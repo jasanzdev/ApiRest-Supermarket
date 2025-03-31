@@ -1,36 +1,35 @@
-import * as path from 'path'
-import * as dotenv from 'dotenv'
+import 'dotenv/config'
+import joi from 'joi'
 
-const envPath = path.resolve(__dirname, '../../../../.env')
-dotenv.config({ path: envPath })
+interface EnvVars {
+    USER_PORT: number
+    POSTGRES_URL: string
+    REDIS_URL: string,
+    ADMIN_PASS: string,
+    SALT_ROUNDS: number,
+    NODE_ENV: string
+}
+const envsSchema = joi.object({
+    USER_PORT: joi.string().required(),
+    REDIS_URL: joi.string().required(),
+    ADMIN_PASS: joi.string().required(),
+    POSTGRES_URL: joi.string().required(),
+    SALT_ROUNDS: joi.number().required()
+}).unknown(true)
 
-const config = {
-    server: {
-        port: process.env.USER_PORT ?? 4002
-    },
-    redis: {
-        url: process.env.REDIS_URL ?? 'redis://localhost:6379'
-    },
-    postgres: {
-        user: process.env.DB_LOCAL_USER,
-        host: process.env.DB_LOCAL_HOST,
-        database: process.env.DB_LOCAL_NAME,
-        password: process.env.DB_LOCAL_PASSWORD,
-        port: Number(process.env.DB_LOCAL_PORT)
-    },
-    postgresDocker: process.env.DATABASE_URL,
-    node_env: {
-        development: process.env.NODE_ENV !== 'production',
-    },
-    allowedOrigins: {
-        origins: [process.env.ALLOWED_ORIGIN, 'http://localhost:3000', 'http://localhost:4000']
-    },
-    adminPass: {
-        password: process.env.PASS_ADMIN ?? 'Admin123'
-    },
-    salt: {
-        salt: Number(process.env.SALT_ROUNDS ?? 10)
-    }
+const { error, value } = envsSchema.validate(process.env)
+
+if (error) {
+    throw new Error(`Config validation error: ${error.message}`)
 }
 
-export default config
+const envVars: EnvVars = value
+
+export const envs = {
+    port: envVars.USER_PORT,
+    redisUrl: envVars.REDIS_URL,
+    postgresUrl: envVars.POSTGRES_URL,
+    isProduction: envVars.NODE_ENV === 'Production',
+    adminPass: envVars.ADMIN_PASS,
+    salt: envVars.SALT_ROUNDS
+}

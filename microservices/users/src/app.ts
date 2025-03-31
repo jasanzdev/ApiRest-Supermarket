@@ -5,21 +5,9 @@ import cookieParser from 'cookie-parser'
 import { CreateUsersRouter } from './routes/userRoutes'
 import { ErrorHandler } from './middlewares/errorHandler'
 import { VerifySecretKey } from './middlewares/verifySecretKey'
-import config from './config/config'
 
-const allowedOrigins = config.allowedOrigins.origins
 
-app.use(
-    cors({
-        origin: (origin, callback) => {
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true)
-            } else {
-                callback(new Error('Not allowed by CORS'))
-            }
-        },
-    })
-)
+app.use(cors())
 app.use(json())
 app.use(cookieParser())
 app.disable('x-powered-by')
