@@ -83,71 +83,60 @@ git clone https://github.com/jasanzdev/ApiRest-Supermarket.git
 
 2. Install dependencies for all services:
 ```bash
-cd ApiRest-Supermarket/
+   cd ApiRest-Supermarket/
 npm install
 ```
-
-3. Configure environment variables in the root directory:
+3. Copy the .env.example file and rename it to .env:
 ```bash
-.env
+   cp .env.example .env
 ```
+4. Open the .env file in your preferred text editor and set the variable values ​​as needed.
 
-4. Start the services using Docker Compose:
-```bash
-docker-compose up
-```
-
-## 🔧 Configuration
-
-Configure the following shared environment variables in the root directory:
-
-```.env
-# Gateway Service
-GATEWAY_PORT=3000
-
-# Authentication Service
-AUTH_PORT=4000
-JWT_ACCESS_SECRET_KEY=your_jwt_access_secret
-JWT_REFRESH_SECRET_KEY=your_jwt_refresh_secret
-
-# Products Service
-PRODUCTS_PORT=4001
-
-# Users Service
-USER_PORT=4002
-PASS_ADMIN=your_pass_admin_user
-SALT_ROUNDS=10
-
-# Order Processing Service
-ORDER_PROCESSING_PORT=4003
-
-DB_LOCAL_HOST=localhost
-DB_LOCAL_PORT=postgres_port
-DB_LOCAL_USER=postgres_user
-DB_LOCAL_PASSWORD=postgres_password
-DB_LOCAL_NAME=database_name
-
-DATABASE_URL=postgres://postgres:Postgres123@postgres:5432/supermarket
-REDIS_URL=redis://redis:6379
-
-```
-4. Start the services on localhost:
-```bash
-cd .\api-gateway\
-npm run build && npm run start
-
-cd .\microservices\authenticate\
-npm run build && npm run start
-
-cd .\microservices\products\
-npm run build && npm run start
-
-cd .\microservices\users\
-npm run build && npm run start
-
-cd .\microservices\order-processing\
-npm run build && npm run start
-```
+## 🖥️ Start Services
+1. Start Redis
+   ```bash
+   docker compose up -d redis
+   ```
+2. Start MongoDB
+   ```bash
+   docker compose up -d mongodb
+   ```
+3. Start Postgres
+   ```bash
+   docker compose up -d postgresProducts
+   docker compose up -d postgresUsers
+   ```
+4. Start Services
+   1. Gateway
+      ```bash
+         cd .\api-gateway\
+         npm run build
+         npm run start
+      ```
+   2. Authenticate
+      ```bash
+         cd .\microservices\authenticate\
+         npm run build
+         npm run start
+      ```
+   3. products
+      ```bash
+         cd .\microservices\products\
+         npm run build
+         npm run start
+      ```
+   4. users
+      ```bash
+         cd .\microservices\users\
+         npm run build
+         npm run start
+      ```
+   5. order-processing
+      ```bash
+         cd .\microservices\order-processing\
+         npm run build
+         npm run start
+      ```
 
 ## 📚 API Documentation
 
