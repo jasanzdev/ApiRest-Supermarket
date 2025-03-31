@@ -1,22 +1,26 @@
-import * as path from 'path'
-import * as dotenv from 'dotenv'
+import 'dotenv/config'
+import joi from 'joi'
 
-const envPath = path.resolve(__dirname, '../../../.env')
-dotenv.config({ path: envPath })
+interface EnvVars {
+    GATEWAY_PORT: number
+    REDIS_URL: string
+    NODE_ENV: string
+}
+const envsSchema = joi.object({
+    GATEWAY_PORT: joi.number().required(),
+    REDIS_URL: joi.string().required(),
+}).unknown(true)
 
-const config = {
-    server: {
-        port: process.env.GATEWAY_PORT ?? 3000
-    },
-    redis: {
-        url: process.env.REDIS_URL ?? 'redis://localhost:6379'
-    },
-    allowedOrigins: {
-        origins: [process.env.ALLOWED_ORIGINS ?? 'http://localhost:3000']
-    },
-    node_env: {
-        development: process.env.NODE_ENV !== 'production',
-    }
+const { error, value } = envsSchema.validate(process.env)
+
+if (error) {
+    throw new Error(`Config validation error: ${error.message}`)
 }
 
-export default config
+const envVars: EnvVars = value
+
+export const envs = {
+    port: envVars.GATEWAY_PORT,
+    redisUrl: envVars.REDIS_URL,
+    isProduction: envVars.NODE_ENV === 'Production',
+}

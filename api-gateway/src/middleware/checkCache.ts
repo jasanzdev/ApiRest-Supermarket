@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
-import redisClient from '../utils/redisClient'
 import CatchErrors from '../utils/catchErrors'
 import logger from '../utils/logger'
+import redisClient from '../config/redisClient'
 
 export const CheckCache: RequestHandler = CatchErrors(async (req, res, next) => {
 

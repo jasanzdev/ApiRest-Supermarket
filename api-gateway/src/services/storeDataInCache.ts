@@ -1,4 +1,4 @@
-import redisClient from '../utils/redisClient'
+import redisClient from '../config/redisClient'
 
 export const StoreDataInCache = async (body: Buffer[], url: string, method: string): Promise<string> => {
     const responseBody = Buffer.concat(body).toString()

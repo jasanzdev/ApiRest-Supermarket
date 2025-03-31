@@ -1,4 +1,3 @@
-import config from './config/config'
 import app from './server'
 import cors from 'cors'
 import helmet from 'helmet'
@@ -18,12 +17,7 @@ import { CreateApiKey } from './middleware/createApiKey'
 import { CheckCache } from './middleware/checkCache'
 import { PurchaseProxy } from './proxies/purchaseProxy'
 
-app.use(cors({
-    origin: config.allowedOrigins.origins,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-}))
+app.use(cors())
 app.use(helmet())
 app.use(cookieParser())
 app.disable('x-powered-by')
