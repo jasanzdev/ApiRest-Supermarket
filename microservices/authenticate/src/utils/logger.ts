@@ -1,6 +1,6 @@
 import winston from 'winston'
 import DailyRotateFile from 'winston-daily-rotate-file'
-import config from '../config/config'
+import { envs } from '../config/config'
 
 const { format } = winston
 const { combine, timestamp, json } = format
@@ -27,7 +27,7 @@ const logger = winston.createLogger({
     ],
 })
 
-if (config.node_env.development) {
+if (!envs.isProduction) {
     logger.add(new winston.transports.Console({
         format: combine(
             format.colorize(),

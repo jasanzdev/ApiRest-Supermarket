@@ -2,10 +2,10 @@ import jwt from 'jsonwebtoken'
 import { UNPROCESSABLE_CONTENT } from '../constants/http'
 import appAssert from './appAssert'
 import { AccessTokenPayload, RefreshTokenPayload } from '../types/types.d'
-import config from '../config/config'
+import { envs } from '../config/config'
 
-const accessSecretKey = config.jwt.accessSecretKey
-const refreshSecretKey = config.jwt.refreshSecretKey
+const accessSecretKey = envs.accessSecretKey
+const refreshSecretKey = envs.refreshSecretKey
 
 export const generateAccessToken = (payload: AccessTokenPayload): string => {
     return jwt.sign(payload, accessSecretKey, { expiresIn: '15m' })

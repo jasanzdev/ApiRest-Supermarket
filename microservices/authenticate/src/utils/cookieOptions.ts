@@ -1,8 +1,8 @@
 import { CookieOptions } from 'express'
 import { ThirtyDaysFromNow } from './date'
-import config from '../config/config'
+import { envs } from '../config/config'
 
-const secure = !config.node_env.development
+const secure = envs.isProduction
 
 const defaults: CookieOptions = {
     httpOnly: true,
