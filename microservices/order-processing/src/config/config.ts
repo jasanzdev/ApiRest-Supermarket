@@ -11,7 +11,6 @@ const envsSchema = joi.object({
     ORDER_PROCESSING_PORT: joi.number().required(),
     REDIS_URL: joi.string().required(),
     MONGO_URL: joi.string().required(),
-    NODE_ENV: joi.string().required()
 }).unknown(true)
 
 const { error, value } = envsSchema.validate(process.env)
@@ -26,5 +25,5 @@ export const envs = {
     port: envVars.ORDER_PROCESSING_PORT,
     redisUrl: envVars.REDIS_URL,
     mongoUrl: envVars.MONGO_URL,
-    node_env: envVars.NODE_ENV === 'Development'
+    isProduction: envVars.NODE_ENV === 'Production'
 }
