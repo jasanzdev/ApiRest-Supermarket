@@ -84,7 +84,7 @@ git clone https://github.com/jasanzdev/ApiRest-Supermarket.git
 2. Install dependencies for all services:
 ```bash
    cd ApiRest-Supermarket/
-npm install
+   npm install
 ```
 3. Copy the .env.example file and rename it to .env:
 ```bash
@@ -109,33 +109,33 @@ npm install
 4. Start Services
    1. Gateway
       ```bash
-         cd .\api-gateway\
-         npm run build
-         npm run start
+      cd .\api-gateway\
+      npm run build
+      npm run start
       ```
    2. Authenticate
       ```bash
-         cd .\microservices\authenticate\
-         npm run build
-         npm run start
+      cd .\microservices\authenticate\
+      npm run build
+      npm run start
       ```
    3. products
       ```bash
-         cd .\microservices\products\
-         npm run build
-         npm run start
+      cd .\microservices\products\
+      npm run build
+      npm run start
       ```
    4. users
       ```bash
-         cd .\microservices\users\
-         npm run build
-         npm run start
+      cd .\microservices\users\
+      npm run build
+      npm run start
       ```
    5. order-processing
       ```bash
-         cd .\microservices\order-processing\
-         npm run build
-         npm run start
+      cd .\microservices\order-processing\
+      npm run build
+      npm run start
       ```
 
 ## 📚 API Documentation
