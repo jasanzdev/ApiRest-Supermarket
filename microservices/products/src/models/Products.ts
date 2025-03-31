@@ -20,7 +20,7 @@ export class ProductModel {
             `SELECT * FROM product p
             WHERE (p.category = $1 OR $1 IS NULL)
                 AND (p.stock > $2)
-                AND (p.price_sale >= $3 AND (p.price_sale <= $4 OR $4 IS NULL))
+                AND (p.price >= $3 AND (p.price <= $4 OR $4 IS NULL))
             ORDER BY created_at DESC
             LIMIT $5
             OFFSET $6`,
@@ -30,7 +30,7 @@ export class ProductModel {
             `SELECT COUNT(*) FROM product p
             WHERE (p.category = $1 OR $1 IS NULL)
                 AND (p.stock > $2)
-                AND (p.price_sale >= $3 AND (p.price_sale <= $4 OR $4 IS NULL))`,
+                AND (p.price >= $3 AND (p.price <= $4 OR $4 IS NULL))`,
             [category, stock, minPrice, maxPrice])
 
         const count = Number(countResult.rows[0].count)
@@ -86,8 +86,7 @@ export class ProductModel {
         const { name,
             description,
             category,
-            price_purchase,
-            price_sale,
+            price,
             stock,
             threshold,
             active,
@@ -95,9 +94,9 @@ export class ProductModel {
             code } = input
 
         const result = await db.query(
-            `INSERT INTO product (name, description, category, price_purchase, price_sale, stock, threshold, active, thumbnail,code)
-                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
-            [name, description, category, price_purchase, price_sale, stock, threshold, active, thumbnail, code])
+            `INSERT INTO product (name, description, category, price, stock, threshold, active, thumbnail,code)
+                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
+            [name, description, category, price, stock, threshold, active, thumbnail, code])
 
         return result.rows[0]
     }

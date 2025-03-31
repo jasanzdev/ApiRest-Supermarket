@@ -16,10 +16,7 @@ const ProductSchema = z.object({
         }
     }),
 
-    price_purchase: z.number()
-        .positive({ message: 'Purchase price must be a positive number.' }),
-
-    price_sale: z.number()
+    price: z.number()
         .positive({ message: 'Sale price must be a positive number.' }),
 
     stock: z.number()
@@ -44,13 +41,7 @@ const ProductSchema = z.object({
 })
 
 export function ValidateProduct(input: Product) {
-    const result = ProductSchema.refine(
-        (data) => data.price_sale > data.price_purchase,
-        {
-            message: 'The sale price must be higher than the purchase price',
-            path: ['salePrice']
-        }
-    ).safeParse(input)
+    const result = ProductSchema.safeParse(input)
 
     if (result.error) throw result.error
 
