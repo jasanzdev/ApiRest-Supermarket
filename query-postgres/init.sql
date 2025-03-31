@@ -47,25 +47,3 @@ CREATE TABLE IF NOT EXISTS session (
     UNIQUE (user_id, user_agent),
     FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE
 );
-
--- Create table cart
-CREATE TABLE IF NOT EXISTS cart (
-    id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL UNIQUE,
-    products JSONB NOT NULL DEFAULT '[]',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE
-);
-
--- Create table order
-CREATE TABLE IF NOT EXISTS orders (
-    id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL,
-    products JSONB NOT NULL DEFAULT '[]',
-    total DECIMAL(8,2) NOT NULL,
-    status VARCHAR(20) NOT NULL DEFAULT 'pending',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE
-);
