@@ -60,7 +60,7 @@ The system consists of the following components:
 - **Node.js** -- `(Runtime for server-side JavaScript, enabling scalable and efficient applications.)`
 - **Express.js** -- `(Framework for building APIs and handling HTTP requests, routing, and middleware.)`
 - **PostgreSQL** -- `(Relational database for structured data storage and management.)`
-- **MongoDb** -- `(NoSQL database for flexible, schema-less data storage and high scalability.)`
+- **MongoDB** -- `(NoSQL database for flexible, schema-less data storage and high scalability.)`
 - **Redis** -- `(In-memory data store used for caching to improve performance.)`
 - **Axios** -- `(HTTP client for making requests to external or internal APIs.)`
 - **Winston** -- `(Logging library for structured and customizable application logging.)`
