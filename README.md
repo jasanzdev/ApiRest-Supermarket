@@ -152,64 +152,48 @@ npm run build && npm run start
 
 API documentation for each service is available at:
 ```
-Gateway: http://localhost:3000/api-docs
-Authentication: http://localhost:3001/api-docs
-Products: http://localhost:3002/api-docs
-Users: http://localhost:3003/api-docs
-Orders: http://localhost:3004/api-docs
+http://localhost:3000/supermarket/docs/
 ```
 
 ## 🔍 Main Endpoints
 
 ### Authentication Service
-- `POST /auth/login` - User login
-- `POST /auth/register` - User registration
-- `POST /auth/logout` - User Logout
-- `POST /auth/verify-token` - Verify Access Token
-- `POST /auth/refresh-token` - Refresh Access Token
+- `POST /supermarket/auth/login` - User login
+- `POST /supermarket/auth/register` - User registration
+- `POST /supermarket/auth/logout` - User Logout
+- `POST /supermarket/auth/verify-token` - Verify Access Token
+- `POST /supermarket/auth/refresh-token` - Refresh Access Token
 
 ### Products Service
-- `GET /products` - Get all products
-- `GET /products/categories` - Get all categories
-- `GET /products/search` - Improving search by product name and description
-- `GET /products/:id` - Get a specific product for id
-- `GET /products/code/:code` - Get a specific product for code
-- `POST /products` - Create a new product
-- `PATCH /products/:id` - Update a product
-- `DELETE /products/:id` - Delete a product
-- `DELETE /products/adjust-inventory/:id` - Adjust inventory for product id
+- `GET /supermarket/products` - Get all products
+- `GET /supermarket/products/categories` - Get all categories
+- `GET /supermarket/products/search` - Improving search by product name and description
+- `GET /supermarket/products/:id` - Get a specific product for id
+- `GET /supermarket/products/code/:code` - Get a specific product for code
+- `POST /supermarket/products` - Create a new product
+- `PATCH /supermarket/products/:id` - Update a product
+- `DELETE /supermarket/products/:id` - Delete a product
+- `DELETE /supermarket/products/adjust-inventory/:id` - Adjust inventory for product id
 
 ### Users Service
-- `GET /users` - Get users
-- `GET /users/usernameOrEmail/:value` - Get user by email or username
-- `GET /users/:id` - Get user by id
-- `POST /users` - Add new user
-- `PATCH /users/:id` - Update user
-- `PATCH /users/resetPassword:id` - Reset a user´s password
-- `DELETE /users/:id` - Delete user
+- `GET /supermarket/users` - Get users
+- `GET /supermarket/users/usernameOrEmail/:value` - Get user by email or username
+- `GET /supermarket/users/:id` - Get user by id
+- `POST /supermarket/users` - Add new user
+- `PATCH /supermarket/users/:id` - Update user
+- `PATCH /supermarket/users/resetPassword:id` - Reset a user´s password
+- `DELETE /supermarket/users/:id` - Delete user
 
 ### Order Processing Service
-- `GET /cart` - Get user shopping cart
-- `POST /cart/add` - Add items to user cart
-- `DELETE /cart/remove/:amount?/:productId` - Remove item from user cart
-- `DELETE /cart/clear` - Clear user shopping cart
-- `GET /orders` - Get user orders
-- `GET /orders/:id` - Get specific order
-- `POST /orders` - Create new order
-- `PATCH /orders/:id` - Update status of user specific order
+- `GET /supermarket/purchase/cart` - Get user shopping cart
+- `POST /supermarket/purchase/cart/add` - Add items to user cart
+- `DELETE /supermarket/purchase/cart/remove/:amount?/:productId` - Remove item from user cart
+- `DELETE /supermarket/purchase/cart/clear` - Clear user shopping cart
+- `GET /supermarket/purchase/orders` - Get user orders
+- `GET /supermarket/purchase/orders/:id` - Get specific order
+- `POST /supermarket/purchase/orders` - Create new order
+- `PATCH /supermarket/purchase/orders/:id` - Update status of user specific order
 
-## 🧪 Testing
-
-To run tests for all services:
-```bash
-./scripts/test-all.sh
-```
-
-To test specific service:
-```bash
-cd services/<service-name>
-npm run test
-```
 ## 🚧 Pending Development & Suggestions
 
 ### Pending Features
@@ -218,7 +202,7 @@ npm run test
 - User Reviews and Ratings
 - Inventory Alerts
 - Enhanced Security
-- Order Cancellation and Returns
+- Implepments unit and EndToEnd test
 
 ## 📄 License
 
