@@ -72,7 +72,6 @@ The system consists of the following components:
 - **JWT for authentication** -- `(Token-based authentication for secure user verification and authorization.)`
 - **Docker & Docker Compose** -- `(Containerization tools for consistent deployment across environments.)`
 - **Swagger** -- `(Framework for API documentation and interactive testing.)`
-- **Jest** -- `(Testing framework for unit, integration, and end-to-end testing.)`
 
 ## 📦 Installation
 
@@ -192,7 +191,7 @@ http://localhost:3000/supermarket/docs/
 - User Reviews and Ratings
 - Inventory Alerts
 - Enhanced Security
-- Implepments unit and EndToEnd test
+- Implements unit and EndToEnd test
 
 ## 📄 License
 
