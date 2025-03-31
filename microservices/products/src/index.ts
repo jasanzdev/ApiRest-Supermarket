@@ -1,4 +1,3 @@
-import config from './config/config'
 import express, { json } from 'express'
 import cors from 'cors'
 import CookieParser from 'cookie-parser'
@@ -6,28 +5,18 @@ import { CreateProductsRouter } from './routes/productRoutes'
 import HandleError from './middlewares/handleErrors'
 import { VerifySecretKey } from './middlewares/verifySecretKey'
 import { AuthorizeUserRole } from './middlewares/authorizeUserRole'
+import { envs } from './config/config'
 
 
 const app = express()
 
-const allowedOrigins = config.allowedOrigins.origins
 
-app.use(
-    cors({
-        origin: (origin, callback) => {
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true)
-            } else {
-                callback(new Error('Not allowed by CORS'))
-            }
-        },
-    })
-)
+app.use(cors())
 app.use(json())
 app.disable('x-powered-by')
 app.use(CookieParser())
 
-const port = config.server.port
+const port = envs.port
 
 app.use(AuthorizeUserRole)
 app.use(VerifySecretKey)

@@ -1,30 +1,30 @@
-import * as path from 'path'
-import * as dotenv from 'dotenv'
+import 'dotenv/config'
+import joi from 'joi'
 
-const envPath = path.resolve(__dirname, '../../../../.env')
-dotenv.config({ path: envPath })
-
-const config = {
-    server: {
-        port: process.env.PRODUCTS_PORT ?? 4001
-    },
-    redis: {
-        url: process.env.REDIS_URL ?? 'redis://localhost:6379'
-    },
-    postgres: {
-        user: process.env.DB_LOCAL_USER,
-        host: process.env.DB_LOCAL_HOST,
-        database: process.env.DB_LOCAL_NAME,
-        password: process.env.DB_LOCAL_PASSWORD,
-        port: Number(process.env.DB_LOCAL_PORT)
-    },
-    postgresDocker: process.env.DATABASE_URL,
-    node_env: {
-        development: process.env.NODE_ENV !== 'production',
-    },
-    allowedOrigins: {
-        origins: [process.env.ALLOWED_ORIGIN, 'http://localhost:3000']
-    }
+interface EnvVars {
+    PRODUCTS_PORT: number
+    REDIS_URL: string
+    POSTGRES_URL: string
+    NODE_ENV: string
 }
 
-export default config
+const envsSchema = joi.object({
+    PRODUCTS_PORT: joi.string().required(),
+    REDIS_URL: joi.string().required(),
+    POSTGRES_URL: joi.string().required(),
+}).unknown(true)
+
+const { error, value } = envsSchema.validate(process.env)
+
+if (error) {
+    throw new Error(`Config validation error: ${error.message}`)
+}
+
+const envVars: EnvVars = value
+
+export const envs = {
+    port: envVars.PRODUCTS_PORT,
+    redisUrl: envVars.REDIS_URL,
+    postgresUrl: envVars.POSTGRES_URL,
+    isProduction: envVars.NODE_ENV === 'Production',
+}
