@@ -1,9 +1,9 @@
 node_modules/
 dist/
 logs/
-mongo-data/
-postgres-data/
-redis-data/
+redis_data/
+mongo_data/
+postgres_data/
 
 .env
 
