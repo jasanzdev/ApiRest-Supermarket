@@ -65,8 +65,7 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgres://postgres:Postgres123@postgresUsers:5432/supermarket_users
+      - MONGO_URL=mongodb://admin:Mongo123@localhost:27017/sessions?authSource=admin
       - REDIS_URL=redis://redis:6379
     depends_on:
       - redis
@@ -78,7 +77,6 @@ services:
     ports:
       - "4001:4001"
     environment:
-      - NODE_ENV=production
       - DATABASE_URL=postgres://postgres:Postgres123@postgresProducts:5432/supermarket_products
       - REDIS_URL=redis://redis:6379
     depends_on:
@@ -92,7 +90,6 @@ services:
     ports:
       - "4002:4002"
     environment:
-      - NODE_ENV=production
       - DATABASE_URL=postgres://postgres:Postgres123@postgresUsers:5432/supermarket_users
       - REDIS_URL=redis://redis:6379
     depends_on:
@@ -106,7 +103,6 @@ services:
     ports:
       - "4003:4003"
     environment:
-      - NODE_ENV=production
       - DATABASE_URL=mongodb://admin:Mongo123@mongodb:27017/order_processing?authSource=admin
       - REDIS_URL=redis://redis:6379
     depends_on:
@@ -120,7 +116,6 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
       - REDIS_URL=redis://redis:6379
     depends_on:
       - redis
