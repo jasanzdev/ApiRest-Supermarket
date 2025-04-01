@@ -183,15 +183,17 @@ http://localhost:3000/supermarket/docs/
 - `POST /supermarket/purchase/orders` - Create new order
 - `PATCH /supermarket/purchase/orders/:id` - Update status of user specific order
 
-## 🚧 Pending Development & Suggestions
+## 🔜 Next Steps
 
-### Pending Features
-- Payment Integration
-- Notifications Service
-- User Reviews and Ratings
-- Inventory Alerts
-- Enhanced Security
-- Implements unit and EndToEnd test
+🔹 Integrate OAuth with Google or Facebook
+🔹 Integrate online payments
+🔹 Send email notifications when placing an order
+🔹 Confirm payments and update order status
+🔹 Send confirmation emails to the user
+🔹 Record payments in a history system
+🔹 Inventory Alerts
+🔹 Implements unit and EndToEnd test
+🔹 
 
 ## 📄 License
 
