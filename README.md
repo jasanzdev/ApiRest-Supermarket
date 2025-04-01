@@ -185,14 +185,14 @@ http://localhost:3000/supermarket/docs/
 
 ## 🔜 Next Steps
 
-🔹 Integrate OAuth with Google or Facebook
-🔹 Integrate online payments
-🔹 Send email notifications when placing an order
-🔹 Confirm payments and update order status
-🔹 Send confirmation emails to the user
-🔹 Record payments in a history system
-🔹 Inventory Alerts
-🔹 Implements unit and EndToEnd test
+🔹 `Integrate OAuth with Google or Facebook`
+🔹 `Integrate online payments`
+🔹 `Send email notifications when placing an order`
+🔹 `Confirm payments and update order status`
+🔹 `Send confirmation emails to the user`
+🔹 `Record payments in a history system`
+🔹 `Inventory Alerts`
+🔹 `Implements unit and EndToEnd test`
 🔹 
 
 ## 📄 License
