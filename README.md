@@ -194,10 +194,6 @@ http://localhost:3000/supermarket/docs/
 🔹 `Inventory Alerts`  
 🔹 `Implements unit and EndToEnd test`  
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## ✉️ Contact
 
 Jose A Sanz - [@jasanzdev](https://github.com/jasanzdev)
