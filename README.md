@@ -184,16 +184,16 @@ http://localhost:3000/supermarket/docs/
 - `PATCH /supermarket/purchase/orders/:id` - Update status of user specific order
 
 ## 🔜 Next Steps
-```
-🔹 `Integrate OAuth with Google or Facebook`
-🔹 `Integrate online payments`
-🔹 `Send email notifications when placing an order`
-🔹 `Confirm payments and update order status`
-🔹 `Send confirmation emails to the user`
-🔹 `Record payments in a history system`
-🔹 `Inventory Alerts`
-🔹 `Implements unit and EndToEnd test`
-```
+
+🔹 `Integrate OAuth with Google or Facebook`  
+🔹 `Integrate online payments`  
+🔹 `Send email notifications when placing an order`  
+🔹 `Confirm payments and update order status`  
+🔹 `Send confirmation emails to the user`  
+🔹 `Record payments in a history system`  
+🔹 `Inventory Alerts`  
+🔹 `Implements unit and EndToEnd test`  
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
