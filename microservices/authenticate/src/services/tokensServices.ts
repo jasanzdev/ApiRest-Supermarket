@@ -2,7 +2,6 @@ import appAssert from '../utils/appAssert'
 import jwt from 'jsonwebtoken'
 import AppErrorCode from '../constants/appErrorCode'
 import { UNAUTHORIZED } from '../constants/http'
-import { SessionModel } from '../models/sessions'
 import { toPublishUser } from '../utils/userToPublish'
 import {
     generateAccessToken,
@@ -13,21 +12,16 @@ import {
 import {
     AccessTokenPayload,
     RefreshTokenPayload,
-    Sessions
+    User
 } from '../types/types.d'
-import { User } from '../dto/user'
 import { FetchUserById } from '../utils/fetchUserAxios'
 import redisClient from '../config/redisClient'
+import { SessionRepository } from '../repositories/session'
 
 const { TokenExpiredError } = jwt
 
-/**
- * Service function to refresh tokens when the access token expires.
- * @param {string} refreshToken - The refresh token to validate and refresh.
- * @param {string} receiveSecretKey - The secret API key from the request.
- * @returns {Promise<{ publicUser: PublicUser, newAccessToken: string, newRefreshToken: string }>} New tokens and user data.
- */
 const RefreshTokenService = async (refreshToken: string, receiveSecretKey: string) => {
+    const sessionRepository = new SessionRepository()
     const isTokenInvalidated = await redisClient.get(refreshToken)
 
     appAssert(!isTokenInvalidated,
@@ -43,7 +37,7 @@ const RefreshTokenService = async (refreshToken: string, receiveSecretKey: strin
             ? refreshToken
             : refreshTokenSplitter)
 
-    const session: Sessions = await SessionModel.getById(sessionId)
+    const session = await sessionRepository.findById(sessionId)
 
     appAssert(session, UNAUTHORIZED, 'Access denied, user not found', AppErrorCode.InvalidToken)
 
@@ -53,7 +47,7 @@ const RefreshTokenService = async (refreshToken: string, receiveSecretKey: strin
 
     const accessPayload: AccessTokenPayload = {
         sessionId: session.id,
-        userId: session.user_id
+        userId: session.userId
     }
     const currentTime = Math.floor(Date.now() / 1000)
     const ttl = exp as number - currentTime
@@ -63,19 +57,12 @@ const RefreshTokenService = async (refreshToken: string, receiveSecretKey: strin
     const newAccessToken = generateAccessToken(accessPayload)
     const newRefreshToken = generateRefreshToken(refreshPayload)
 
-    const user: User = await FetchUserById(session.user_id, receiveSecretKey)
+    const user: User = await FetchUserById(session.userId, receiveSecretKey)
 
     const publicUser = toPublishUser(user)
     return { publicUser, newAccessToken, newRefreshToken }
 }
 
-/**
- * Service function to validate tokens and refresh them if necessary.
- * @param {string} accessToken - The access token from the request header.
- * @param {string} refreshToken - The refresh token from the request cookie.
- * @param {string} receiveSecretKey - The secret API key from the request.
- * @returns {Promise<{ publicUser: PublicUser, newAccessToken?: string, newRefreshToken?: string }>} User data and optional new tokens.
- */
 const ValidateTokenServices = async (accessToken: string, refreshToken: string, receiveSecretKey: string) => {
     try {
         const { userId } = verifyAccessToken(accessToken)

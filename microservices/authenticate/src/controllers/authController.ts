@@ -1,14 +1,15 @@
 import { RequestHandler } from 'express'
 import CatchErrors from '../utils/catchErrors'
 import { OK } from '../constants/http'
-import { LoginService, LogoutService, RegisterService } from '../services/authServices'
 import { getCookieOptions } from '../utils/cookieOptions'
 import logger from '../utils/logger'
-import { PublicUser } from '../types/types.d'
-import { User } from '../dto/user'
+import { PublicUser, User } from '../types/types.d'
+import { AuthService } from '../services/authServices'
 
 export class AuthenticationController {
-    static readonly login: RequestHandler = CatchErrors(async (req, res) => {
+    constructor(private readonly authService: AuthService) { }
+
+    login: RequestHandler = CatchErrors(async (req, res) => {
         logger.info('Login User', {
             ip: req.ip,
             method: req.method,
@@ -18,7 +19,7 @@ export class AuthenticationController {
         const user = req.user as User
         const userAgent = req.headers['user-agent'] as string
 
-        const { accessToken, refreshToken } = await LoginService(user, userAgent)
+        const { accessToken, refreshToken } = await this.authService.loginService(user, userAgent)
 
         res.setHeader('Authorization', accessToken)
         res.cookie('refresh_token', refreshToken, getCookieOptions())
@@ -29,11 +30,8 @@ export class AuthenticationController {
         })
     })
 
-    /**
-     * Controller method to handle user registration and token generation.
-     * @type {RequestHandler}
-     */
-    static readonly register: RequestHandler = CatchErrors(async (req, res) => {
+
+    register: RequestHandler = CatchErrors(async (req, res) => {
         logger.info('Register User', {
             ip: req.ip,
             method: req.method,
@@ -42,7 +40,7 @@ export class AuthenticationController {
         const userAgent = req.headers['user-agent'] as string
         const receiveSecretKey = req.secret as string
 
-        const { publicUser, accessToken, refreshToken } = await RegisterService(req.body, userAgent, receiveSecretKey)
+        const { publicUser, accessToken, refreshToken } = await this.authService.registerService(req.body, userAgent, receiveSecretKey)
 
         res.setHeader('Authorization', accessToken)
         res.cookie('refresh_token', refreshToken, getCookieOptions())
@@ -53,13 +51,9 @@ export class AuthenticationController {
         })
     })
 
-    /**
-     * Controller method to handle user logout.
-     * @type {RequestHandler}
-     */
-    static readonly logout: RequestHandler = CatchErrors(async (req, res) => {
+    logout: RequestHandler = CatchErrors(async (req, res) => {
         const refreshToken = req.cookies['refresh_token']
-        await LogoutService(refreshToken)
+        await this.authService.logoutService(refreshToken)
 
         res.clearCookie('refresh_token')
         res.status(200).json({ message: 'Logout successfully' })

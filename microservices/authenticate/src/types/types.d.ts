@@ -1,10 +1,19 @@
-import { User } from '../dto/user'
+import { Roles } from '../constants/roles'
+
+export interface User {
+    id: string,
+    name: string,
+    username: string,
+    email: string,
+    password: string,
+    role: Roles,
+}
 
 export type PublicUser = Omit<User, 'password'>
 
 export type Sessions = {
     id: number,
-    user_id: PublicUser['id'],
+    userId: PublicUser['id'],
     userAgent: string,
 }
 

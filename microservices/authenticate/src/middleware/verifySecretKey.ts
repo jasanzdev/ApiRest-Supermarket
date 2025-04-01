@@ -5,10 +5,6 @@ import { UNAUTHORIZED } from '../constants/http'
 import AppErrorCode from '../constants/appErrorCode'
 import CatchErrors from '../utils/catchErrors'
 
-/**
- * Middleware to verify the secret API key provided in the request headers.
- * @type {RequestHandler}
- */
 export const VerifySecretKey: RequestHandler = CatchErrors(async (req, res, next) => {
     const receiveSecretKey = req.headers['x-api-key']
 

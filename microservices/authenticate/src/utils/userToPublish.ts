@@ -1,4 +1,4 @@
-import { User } from '../dto/user'
+import { User } from '../types/types.d'
 
 /**
  * Utility function to transform a user object into a public-facing format, excluding the password.

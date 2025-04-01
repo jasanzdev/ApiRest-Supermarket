@@ -9,11 +9,7 @@ import { getCookieOptions } from '../utils/cookieOptions'
 
 export default class ValidateTokensController {
 
-    /**
-     * Controller method to verify access and refresh tokens.
-     * @type {RequestHandler}
-     */
-    static readonly VerifyToken: RequestHandler = CatchErrors(async (req, res) => {
+    verifyToken: RequestHandler = CatchErrors(async (req, res) => {
         logger.info('Validating Token', {
             ip: req.ip,
             method: req.method,
@@ -42,11 +38,7 @@ export default class ValidateTokensController {
         })
     })
 
-    /**
-     * Controller method to refresh access and refresh tokens.
-     * @type {RequestHandler}
-     */
-    static readonly RefreshToken: RequestHandler = CatchErrors(async (req, res) => {
+    refreshToken: RequestHandler = CatchErrors(async (req, res) => {
         logger.info('Refreshing Token', {
             ip: req.ip,
             method: req.method,

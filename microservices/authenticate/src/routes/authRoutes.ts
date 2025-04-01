@@ -2,19 +2,26 @@ import { Router } from 'express'
 import { AuthenticationController } from '../controllers/authController'
 import { ValidateLogin } from '../middleware/validateLogin'
 import ValidateTokensController from '../controllers/validateTokensController'
+import { SessionRepository } from '../repositories/session'
+import { AuthService } from '../services/authServices'
 
 export const CreateAuthRouter = () => {
     const router = Router()
 
-    router.post('/login', ValidateLogin, AuthenticationController.login)
+    const sessionRepository = new SessionRepository()
+    const authService = new AuthService(sessionRepository)
+    const authController = new AuthenticationController(authService)
+    const validateToken = new ValidateTokensController()
 
-    router.post('/register', AuthenticationController.register)
+    router.post('/login', ValidateLogin, authController.login)
 
-    router.post('/logout', AuthenticationController.logout)
+    router.post('/register', authController.register)
 
-    router.post('/verify-token', ValidateTokensController.VerifyToken)
+    router.post('/logout', authController.logout)
 
-    router.post('/refresh-token', ValidateTokensController.RefreshToken)
+    router.post('/verify-token', validateToken.verifyToken)
+
+    router.post('/refresh-token', validateToken.refreshToken)
 
     return router
 }

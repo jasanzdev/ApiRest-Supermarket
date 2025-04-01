@@ -4,15 +4,10 @@ import CatchErrors from '../utils/catchErrors'
 import AppErrorCode from '../constants/appErrorCode'
 import { BAD_REQUEST } from '../constants/http'
 import { RequestHandler } from 'express'
-import { User } from '../dto/user'
 import { toPublishUser } from '../utils/userToPublish'
 import { FetchUserByUsername } from '../utils/fetchUserAxios'
-import { PublicUser } from '../types/types.d'
+import { PublicUser, User } from '../types/types.d'
 
-/**
- * Middleware to validate login credentials (username and password).
- * @type {RequestHandler}
- */
 export const ValidateLogin: RequestHandler = CatchErrors(async (req, res, next) => {
     const { username, password } = req.body
     const receiveSecretKey = req.secret as string

@@ -7,6 +7,7 @@ interface EnvVars {
     JWT_REFRESH_SECRET_KEY: string
     REDIS_URL: string
     POSTGRES_URL: string
+    MONGO_URL: string
     NODE_ENV: string
 }
 const envsSchema = joi.object({
@@ -15,6 +16,7 @@ const envsSchema = joi.object({
     JWT_REFRESH_SECRET_KEY: joi.string().required(),
     REDIS_URL: joi.string().required(),
     POSTGRES_URL: joi.string().required(),
+    MONGO_URL: joi.string().required(),
     NODE_ENV: joi.string().required()
 }).unknown(true)
 
@@ -32,5 +34,6 @@ export const envs = {
     postgresUrl: envVars.POSTGRES_URL,
     isProduction: envVars.NODE_ENV === 'Production',
     accessSecretKey: envVars.JWT_ACCESS_SECRET_KEY,
-    refreshSecretKey: envVars.JWT_REFRESH_SECRET_KEY
+    refreshSecretKey: envVars.JWT_REFRESH_SECRET_KEY,
+    mongoUrl: envVars.MONGO_URL
 }

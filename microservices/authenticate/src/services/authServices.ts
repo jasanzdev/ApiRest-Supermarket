@@ -1,71 +1,68 @@
-import { SessionModel } from '../models/sessions'
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt'
-import { User } from '../dto/user'
 import { toPublishUser } from '../utils/userToPublish'
-import { PublicUser } from '../types/types.d'
+import { PublicUser, User } from '../types/types.d'
 import { RegisterUser } from '../utils/fetchUserAxios'
+import { SessionRepository } from '../repositories/session'
 
-const LoginService = async (user: PublicUser, userAgent: string) => {
+export class AuthService {
 
-    const dataSession = {
-        userId: user.id,
-        userAgent: userAgent,
+    constructor(private readonly sessionRepository: SessionRepository) { }
+
+    loginService = async (user: PublicUser, userAgent: string) => {
+
+        const dataSession = {
+            userId: user.id,
+            userAgent: userAgent,
+        }
+
+        const session = await this.sessionRepository.create(dataSession)
+
+        const accessPayload = {
+            userId: user.id,
+            sessionId: session.id
+        }
+
+        const refreshPayload = {
+            sessionId: session.id
+        }
+
+        const accessToken = generateAccessToken(accessPayload)
+        const refreshToken = generateRefreshToken(refreshPayload)
+
+        return { accessToken, refreshToken }
     }
 
-    const session = await SessionModel.create(dataSession)
+    registerService = async (input: User, userAgent: string, receiveSecretKey: string) => {
+        const user: User = await RegisterUser(input, receiveSecretKey)
 
-    const accessPayload = {
-        userId: user.id,
-        sessionId: session.id
+        const dataSession = {
+            userId: user.id,
+            userAgent: userAgent,
+        }
+
+        const session = await this.sessionRepository.create(dataSession)
+
+        const accessPayload = {
+            userId: user.id,
+            sessionId: session.id
+        }
+
+        const refreshPayload = {
+            sessionId: session.id
+        }
+
+        const accessToken = generateAccessToken(accessPayload)
+        const refreshToken = generateRefreshToken(refreshPayload)
+        const publicUser = toPublishUser(user)
+
+        return { publicUser, accessToken, refreshToken }
     }
 
-    const refreshPayload = {
-        sessionId: session.id
+    logoutService = async (refreshToken: string) => {
+        if (refreshToken) {
+            const { sessionId } = verifyRefreshToken(refreshToken)
+            await this.sessionRepository.delete(sessionId)
+        }
     }
-
-    const accessToken = generateAccessToken(accessPayload)
-    const refreshToken = generateRefreshToken(refreshPayload)
-
-    return { accessToken, refreshToken }
 }
-
-const RegisterService = async (input: User, userAgent: string, receiveSecretKey: string) => {
-    const user: User = await RegisterUser(input, receiveSecretKey)
-
-    const dataSession = {
-        userId: user.id,
-        userAgent: userAgent,
-    }
-
-    const session = await SessionModel.create(dataSession)
-
-    const accessPayload = {
-        userId: user.id,
-        sessionId: session.id
-    }
-
-    const refreshPayload = {
-        sessionId: session.id
-    }
-
-    const accessToken = generateAccessToken(accessPayload)
-    const refreshToken = generateRefreshToken(refreshPayload)
-    const publicUser = toPublishUser(user)
-
-    return { publicUser, accessToken, refreshToken }
-}
-
-/**
- * Service function to invalidate a user's session based on the refresh token.
- * @param {string} refreshToken - The refresh token from the request cookie.
- * @returns {Promise<void>}
- */
-const LogoutService = async (refreshToken: string) => {
-    if (refreshToken) {
-        const { sessionId } = verifyRefreshToken(refreshToken)
-        await SessionModel.delete(sessionId)
-    }
-}
-
-export { LoginService, RegisterService, LogoutService }
 

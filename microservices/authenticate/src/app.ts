@@ -1,4 +1,5 @@
 import app from './server'
+import './config/mongodb'
 import { json } from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
