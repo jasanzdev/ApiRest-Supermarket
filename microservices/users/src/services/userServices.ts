@@ -1,8 +1,8 @@
 import { SuperAdmin } from '../constants/adminUser'
 import AppErrorCode from '../constants/appErrorCode'
 import { CONFLICT, INTERNAL_SERVER_ERROR, NOT_FOUND } from '../constants/http'
-import { User, UserToUpdate } from '../dto/user'
 import UserModel from '../models/users'
+import { User, UserToUpdate } from '../types/types.d'
 import appAssert from '../utils/appAssert'
 import bcrypt from 'bcryptjs'
 

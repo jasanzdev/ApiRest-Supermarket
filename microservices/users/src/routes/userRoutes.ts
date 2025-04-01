@@ -2,9 +2,9 @@ import { Router } from 'express'
 import UserController from '../controllers/userController'
 import { checkSchema } from 'express-validator'
 import { validateRequest } from '../middlewares/validateRequest'
-import { CreateSchema } from '../schema/createUserBody'
-import { UpdateSchema } from '../schema/updateUserBody'
-import { ResetPassword } from '../schema/resetPasswordBody'
+import { CreateSchema } from '../dto/createUser'
+import { UpdateSchema } from '../dto/updateUser'
+import { ResetPassword } from '../dto/resetPassword'
 
 export const CreateUsersRouter = () => {
     const router = Router()

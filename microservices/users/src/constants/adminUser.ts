@@ -1,5 +1,5 @@
 import { envs } from '../config/config'
-import { User } from '../dto/user'
+import { User } from '../types/types.d'
 
 export const SuperAdmin: User = {
     name: 'System Admin',

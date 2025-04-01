@@ -1,7 +1,7 @@
-import { User, UserToUpdate } from '../dto/user'
 import { db } from '../config/postgres'
 import bcrypt from 'bcryptjs'
 import { envs } from '../config/config'
+import { User, UserToUpdate } from '../types/types.d'
 
 export default class UserModel {
 
