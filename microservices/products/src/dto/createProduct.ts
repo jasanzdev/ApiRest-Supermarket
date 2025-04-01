@@ -1,6 +1,6 @@
 import z from 'zod'
 import { AllowedCategories } from '../constants/allowedCategories'
-import { Product } from '../dto/product'
+import { Product } from '../types/types.d'
 
 const ProductSchema = z.object({
     name: z.string().max(55, { message: 'this👏is👏too👏big, name must not exceed 55 characters.' }),

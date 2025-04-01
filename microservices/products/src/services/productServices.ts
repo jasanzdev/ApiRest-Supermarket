@@ -1,8 +1,14 @@
 import AppErrorCode from '../constants/appErrorCode'
 import { NOT_FOUND } from '../constants/http'
-import { Product } from '../dto/product'
 import { ProductModel } from '../models/products'
-import { Filters, InventoryAdjustment, PaginationResult, RegisterInventoryAdjustment, Search } from '../types/types'
+import {
+    Filters,
+    InventoryAdjustment,
+    PaginationResult,
+    Product,
+    RegisterInventoryAdjustment,
+    Search
+} from '../types/types.d'
 import appAssert from '../utils/appAssert'
 import { ApplyInventoryAdjustment } from '../utils/applyInventoryAdjustment'
 

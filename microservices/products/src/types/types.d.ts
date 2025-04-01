@@ -2,6 +2,20 @@ import { UUIDTypes } from 'uuid'
 import { InventoryAdjustmentTypes } from '../constants/inventoryAdjustmentTypes'
 import { Roles } from '../constants/roles'
 import { Product } from '../dto/product'
+import { Category } from '../constants/allowedCategories'
+
+export interface Product {
+    id?: UUIDTypes,
+    name: string,
+    description: string,
+    category: Category,
+    price: number,
+    stock: number,
+    threshold: number,
+    active: boolean,
+    thumbnail: string,
+    code: number
+}
 
 export type Filters = {
     category?: string,

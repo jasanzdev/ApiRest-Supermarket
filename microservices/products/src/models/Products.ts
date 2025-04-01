@@ -1,6 +1,5 @@
 import { db } from '../config/postgres'
-import { Product } from '../dto/product'
-import { Filters, RegisterInventoryAdjustment, Search } from '../types/types.d'
+import { Filters, Product, RegisterInventoryAdjustment, Search } from '../types/types.d'
 interface FindByProps {
     column: string,
     value: string | number

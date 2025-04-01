@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { ValidatePartialProduct, ValidateProduct } from '../schemas/createProductBody'
+import { ValidatePartialProduct, ValidateProduct } from '../dto/createProduct'
 import { validate as uuidValidate } from 'uuid'
 import CatchErrors from '../utils/catchErrors'
 import { BAD_REQUEST, CREATED, NO_CONTENT, NOT_FOUND, OK, UNAUTHORIZED } from '../constants/http'
@@ -7,9 +7,9 @@ import appAssert from '../utils/appAssert'
 import AppErrorCode from '../constants/appErrorCode'
 import ProductServices from '../services/productServices'
 import { PaginationResult, User } from '../types/types'
-import { ValidateFiltersQueryParams } from '../schemas/filtersParams'
-import { ValidateSearchQueryParams } from '../schemas/searchParams'
-import { ValidateInventoryAdjustmentInput } from '../schemas/inventoryAdjustment'
+import { ValidateFiltersQueryParams } from '../dto/filters'
+import { ValidateSearchQueryParams } from '../dto/search'
+import { ValidateInventoryAdjustmentInput } from '../dto/inventoryAdjustment'
 
 export class ProductController {
 
