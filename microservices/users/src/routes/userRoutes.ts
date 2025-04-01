@@ -11,7 +11,7 @@ export const CreateUsersRouter = () => {
 
     router.get('/', UserController.getUsers)
 
-    router.get('/usernameOrEmail/:value',
+    router.get('/username-or-email/:value',
         UserController.getUserByUsernameOrEmail)
 
     router.get('/:id',
@@ -27,7 +27,7 @@ export const CreateUsersRouter = () => {
         validateRequest,
         UserController.updateUser)
 
-    router.patch('/resetPassword/:id',
+    router.patch('/reset-password/:id',
         checkSchema(ResetPassword),
         validateRequest,
         UserController.resetPassword)
