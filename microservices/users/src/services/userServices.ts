@@ -78,7 +78,8 @@ export default class UserServices {
         appAssert(
             user && user?.username !== SuperAdmin.username,
             CONFLICT,
-            'impossible to delete de Super Admin user'
+            'impossible to delete de Super Admin user',
+            AppErrorCode.AccessDenied
         )
 
         return await UserModel.delete(id)
